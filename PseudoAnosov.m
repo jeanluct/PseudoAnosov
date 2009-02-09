@@ -29,6 +29,8 @@ MahlerMeasure::usage = "MahlerMeasure[p,x] returns the Mahler measure of the pol
 
 MinimalPolynomialQ::usage = "MinimalPolynomialQ[p] returns true if the polynomial p cannot be factored.";
 
+IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
+
 
 (*
    Error messages and warnings
@@ -187,6 +189,12 @@ Options[MahlerMeasure] = Options[NSolve]
 
 
 MinimalPolynomialQ[p_] := Factor[p] === Expand[p]
+
+
+IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
+    powmax = n^2 - 2n + 2; (* See Ham and Song paper (2007), p. 172; Seneta 73. Theorem 2.8 *)
+    Fold[#1 && #2 != 0 &, True, Flatten[MatrixPower[M, powmax]]]
+]
 
 
 End[(* "`Private`" *)]
