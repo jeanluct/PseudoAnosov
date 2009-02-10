@@ -193,6 +193,7 @@ MinimalPolynomialQ[p_] := Factor[p] === Expand[p]
 
 IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
     powmax = n^2 - 2n + 2; (* See Ham and Song paper (2007), p. 172; Seneta 73. Theorem 2.8 *)
+    (* I'm not sure it's not better to take the Abs value of the elements.  Depends on what we want. *)
     Fold[#1 && #2 != 0 &, True, Flatten[MatrixPower[M, powmax]]]
 ]
 
