@@ -3,7 +3,7 @@
 #include <jlt/math.hpp>
 #include <jlt/stlio.hpp>
 #include <jlt/exceptions.hpp>
-#include "reciprocal_polynomial.hpp"
+#include <jlt/reciprocal_polynomial.hpp>
 
 #define DOUBLECHECK_SPECTRAL_RADIUS
 
@@ -123,7 +123,7 @@ int main()
   std::ofstream ostr("poly.m");
   ostr << "{";
 
-  while (jlt::increment_vector(a,amin,amax))
+  do
     {
       // If the first nonzero coefficient of an odd x power is
       // negative then we can skip this case using the
@@ -205,7 +205,7 @@ int main()
 	  if (Np++ != 0) ostr << ",\n";
 	  ostr << p.to_polynomial() << std::flush;
 	}
-    }
+    } while (jlt::increment_vector(a,amin,amax));
 
   ostr << "}\n";
   cerr << "Found " << Np << "/" << N << " candidates.\n";
