@@ -31,12 +31,18 @@ MinimalPolynomialQ::usage = "MinimalPolynomialQ[p] returns true if the polynomia
 
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
+StrataList::usage = "StrataList[g,n] gives the list of strata for a hyperbolic surface of genus g with n boundary components (default n=0).  If n>0, we need at least one singularity per boundary component.  Note that a p-pronged singularity on the boundary is really a (p-2)-prong when the boundary components are shrunk to punctures.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.";
+
+OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.  Use Tally/@OrientableStrataList[g] to group by multiplicities.";
+
 
 (*
    Error messages and warnings
 *)
 
-PseudoAnosov::notminimal = "Not a minimal polynomial."
+PseudoAnosov::notminimal = "Warning: Not a minimal polynomial."
+
+PseudoAnosov::nottested = "Warning: This function is not well tested."
 
 
 Begin["`Private`"]
@@ -197,6 +203,26 @@ IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
     Fold[#1 && #2 != 0 &, True, Flatten[MatrixPower[M, powmax]]]
 ]
 
+
+StrataList[g_Integer,n_Integer:0] := Module[{},
+    (* If n>0, we need at least one singularity per boundary
+       component.  Note that a p-pronged singularity on the boundary
+       is really a (p-2)-prong when the boundary components are shrunk
+       to punctures. *)
+    Message[PseudoAnosov::nottested];
+    (* Need to separate out the singularities on punctures and those away from them.  The ones on punctures should get a -2. To support a pA, 1-prongs must be on the boundary. *)
+    Sort /@ Select[IntegerPartitions[2(2g+n-2)],Length[#]>=n&]
+    (* Convert n 3-prongs to 1-prongs on boundaries. *)
+    (* If we don't have enough 3-prongs, convert 4-prongs to 2-prongs on boundaries. *)
+    (* The other cases I care much less about. *)
+    (* For g>0, possible to have orientable foliations with punctures, for instance by putting 2-prongs on each boundary. Use a convention to disinguish singularities on boundaries. *)
+]
+
+
+OrientableStrataList[g_Integer] := Sort /@ 2 IntegerPartitions[2g-2]
+
+
+DegreeToProngs[k_:Integer] := k+2
 
 End[(* "`Private`" *)]
 
