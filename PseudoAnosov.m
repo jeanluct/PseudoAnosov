@@ -33,7 +33,17 @@ IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M 
 
 StrataList::usage = "StrataList[g,n] gives the list of strata for a hyperbolic surface of genus g with n boundary components (default n=0).  If n>0, we need at least one singularity per boundary component.  Note that a p-pronged singularity on the boundary is really a (p-2)-prong when the boundary components are shrunk to punctures.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.";
 
-OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.  Use Tally/@OrientableStrataList[g] to group by multiplicities.";
+OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the (even) degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.  Use Tally/@OrientableStrataList[g] to group by multiplicities.";
+
+StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k_1,...,k_m}."
+
+LefschetzMinimumSingularitiesQ::usage = ""
+
+LefschetzLonelySingularitiesQ::usage = ""
+
+LefschetzSingularityPairsQ::usage = ""
+
+LefschetzNumbersTestQ::usage = ""
 
 
 (*
@@ -43,6 +53,10 @@ OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orienta
 PseudoAnosov::notminimal = "Warning: Not a minimal polynomial."
 
 PseudoAnosov::nottested = "Warning: This function is not well tested."
+
+PseudoAnosov::needpositivePerron = "Error: This test only works for positive Perron root."
+
+PseudoAnosov::neednegativePerron = "Error: This test only works for negative Perron root."
 
 
 Begin["`Private`"]
@@ -198,8 +212,10 @@ MinimalPolynomialQ[p_] := Factor[p] === Expand[p]
 
 
 IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
-    powmax = n^2 - 2n + 2; (* See Ham and Song paper (2007), p. 172; Seneta 73. Theorem 2.8 *)
-    (* I'm not sure it's not better to take the Abs value of the elements.  Depends on what we want. *)
+    (* See Ham and Song paper (2007), p. 172; Seneta 73. Theorem 2.8 *)
+    powmax = n^2 - 2n + 2;
+    (* I'm not sure it's not better to take the Abs value of the
+       elements.  Depends on what we want. *)
     Fold[#1 && #2 != 0 &, True, Flatten[MatrixPower[M, powmax]]]
 ]
 
@@ -210,19 +226,85 @@ StrataList[g_Integer,n_Integer:0] := Module[{},
        is really a (p-2)-prong when the boundary components are shrunk
        to punctures. *)
     Message[PseudoAnosov::nottested];
-    (* Need to separate out the singularities on punctures and those away from them.  The ones on punctures should get a -2. To support a pA, 1-prongs must be on the boundary. *)
+    (* Need to separate out the singularities on punctures and those
+       away from them.  The ones on punctures should get a -2. To
+       support a pA, 1-prongs must be on the boundary. *)
     Sort /@ Select[IntegerPartitions[2(2g+n-2)],Length[#]>=n&]
     (* Convert n 3-prongs to 1-prongs on boundaries. *)
-    (* If we don't have enough 3-prongs, convert 4-prongs to 2-prongs on boundaries. *)
+    (* If we don't have enough 3-prongs, convert 4-prongs to 2-prongs
+       on boundaries. *)
     (* The other cases I care much less about. *)
-    (* For g>0, possible to have orientable foliations with punctures, for instance by putting 2-prongs on each boundary. Use a convention to disinguish singularities on boundaries. *)
+    (* For g>0, possible to have orientable foliations with punctures,
+       for instance by putting 2-prongs on each boundary. Use a
+       convention to disinguish singularities on boundaries.  For
+       instance, list a stratum as a pair of lists: the first list
+       contains the order of the n singularities on the punctures; the
+       second the other singularities. Change "boundaries" to
+       "punctures" later on. *)
 ]
-
+(* Maybe it's better to do this from the partition function directly, by subtracting 2 afterwards. *)
 
 OrientableStrataList[g_Integer] := Sort /@ 2 IntegerPartitions[2g-2]
 
 
-DegreeToProngs[k_:Integer] := k+2
+StratumToGenus[s_List] := (Fold[Plus[#1,#2]&,0,s] + 4)/4
+
+
+(* Test whether there are enough singularities on a stratum to support
+   this pseudo-Anosov (when Perron root is positive). *)
+LefschetzMinimumSingularitiesQ[s_List,p_,x_] := Module[
+    {nmax = 100},
+    If[PerronRoot[p,x] < 0,
+        Message[PseudoAnosov::needpositivePerron]; Return[]];
+    Length[s] >= Max[LefschetzNumbers[p,x,nmax]]
+]
+
+
+(* Test whether a stratum with a "lonely" singularity can support this
+   pseudo-Anosov (when the Perron root is positive. *)
+LefschetzLonelySingularitiesQ[s_List,p_,x_] := Module[
+    {k, Nn = Length[s]},
+    If[PerronRoot[p,x] < 0,
+        Message[PseudoAnosov::needpositivePerron]; Return[]];
+    (* Select the "lonely" singularities *)
+    k = First /@ Select[Tally[s], #[[2]] == 1 &];
+    (* If there are no lonely singularities, return true. *)
+    If[k == {},Return[True]];
+    (* Check if the formula is satisfied for each singularity,
+       logical-And the results. *)
+    Fold[And,True,LefschetzLonelySingularityQ[#/2,Nn,p,x]&/@k]
+]
+
+(* Helper function for LefschetzLonelySingularitiesQ. *)
+LefschetzLonelySingularityQ[d_Integer,Nn_,p_,x_] :=
+    Last[LefschetzNumbers[p,x,d+1]] <= Nn - 2(d+1)
+
+
+(* Test whether a stratum with a "lonely" singularity can support this
+   pseudo-Anosov (when the Perron root is positive. *)
+LefschetzSingularityPairsQ[s_List,p_,x_] := Module[
+    {k, Nn = Length[s]},
+    If[PerronRoot[p,x] < 0,
+        Message[PseudoAnosov::needpositivePerron]; Return[]];
+    (* Select the singularity pairs *)
+    k = First /@ Select[Tally[s], #[[2]] == 2 &];
+    (* If there are no singularity pairs, return true. *)
+    If[k == {},Return[True]];
+    (* Check if the formula is satisfied for each singularity pair,
+       logical-And the results. *)
+    Fold[And,True,LefschetzSingularityPairQ[#/2,Nn,p,x]&/@k]
+]
+
+(* Helper function for LefschetzSingularityPairsQ. *)
+LefschetzSingularityPairQ[d_Integer,Nn_,p_,x_] :=
+    Last[LefschetzNumbers[p,x,2d+2]] <= Nn - 4(d+1)
+
+
+(* Test for everything. *)
+LefschetzNumbersTestQ[s_,p_,x_] :=
+    LefschetzMinimumSingularitiesQ[s,p,q] &&
+    LefschetzLonelySingularitiesQ[s,p,x] &&
+    LefschetzSingularityPairsQ[s,p,x]
 
 End[(* "`Private`" *)]
 
