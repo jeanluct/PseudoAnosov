@@ -49,7 +49,7 @@ int main()
 
   typedef double T;
 
-  const int g = 4;
+  const int g = 6;
   long long int N = 0;
   long long int Np = 0; // Number of candidate polynomials found.
   long long int N_found_positive_root = 0;
@@ -101,6 +101,16 @@ int main()
       amax[3] = 226; amin[3] = -amax[3];
       amax[4] = 273; amin[4] = -amax[4];
       lambdamax = 1.27247673631011;
+    }
+  else if (g == 6)
+    {
+      amax[0] = 10; amin[0] = 0;
+      amax[1] = 10; amin[1] = -amax[1];
+      amax[2] = 10; amin[2] = -amax[2];
+      amax[3] = 10; amin[3] = -amax[3];
+      amax[4] = 10; amin[4] = -amax[4];
+      amax[5] = 10; amin[5] = -amax[4];
+      lambdamax = 1.22571747523471;
     }
   else
     {
