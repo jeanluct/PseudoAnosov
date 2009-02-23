@@ -250,6 +250,21 @@ OrientableStrataList[g_Integer] := Sort /@ 2 IntegerPartitions[2g-2]
 StratumToGenus[s_List] := (Fold[Plus[#1,#2]&,0,s] + 4)/4
 
 
+(*
+
+  The pseudo-Anosov polynomial tests
+  
+  These are based on the Lefschetz numbers calculated from the
+  polynomial.
+  
+  ToDo:
+
+   - If Perronroot<0, then apply the test to phi^2.
+   - Find a way to record the reason.
+   - Find more harmonious names: StratumTest?  PolynomialStratumQ?  pAStratumQ?
+
+ *)
+
 (* Test whether there are enough singularities on a stratum to support
    this pseudo-Anosov (when Perron root is positive). *)
 LefschetzMinimumSingularitiesQ[s_List,p_,x_] := Module[
@@ -302,9 +317,11 @@ LefschetzSingularityPairQ[d_Integer,Nn_,p_,x_] :=
 
 (* Test for everything. *)
 LefschetzNumbersTestQ[s_,p_,x_] :=
-    LefschetzMinimumSingularitiesQ[s,p,q] &&
-    LefschetzLonelySingularitiesQ[s,p,x] &&
-    LefschetzSingularityPairsQ[s,p,x]
+    If[PerronRoot[p,x] > 0,
+        LefschetzMinimumSingularitiesQ[s,p,q] &&
+        LefschetzLonelySingularitiesQ[s,p,x] &&
+        LefschetzSingularityPairsQ[s,p,x]
+    ]
 
 End[(* "`Private`" *)]
 
