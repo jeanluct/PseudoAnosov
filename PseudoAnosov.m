@@ -9,11 +9,15 @@ BeginPackage["PseudoAnosov`", {"Global`"}]
 
 PseudoAnosov::usage = "Functions for manipulating characteristic polynomials of pseudo-Anosov maps."
 
+PolynomialDegree::usage = "PolynomialDegree[p,x] returns the degree of the polynomial p(x)."
+
 TracesPower::usage = "TracesPower[p,x,m], where p(x) is the characteristic polynomial of a matrix M, lists the traces Tr[M^k] for 1 <= k <= m."
 
 LefschetzNumbers::usage = "LefschetzNumbers[p,x,m], where p(x) is the characteristic polynomial of a matrix M, lists the Lefschetz numbers 2-Tr[M^k] for 1 <= k <= m."
 
 ReciprocalPolynomial::usage = "ReciprocalPolynomial[x,n] returns a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1.  ReciprocalPolynomial[x,n,c] uses c as the base name for coefficients.  ReciprocalPolynomial[x,n,{a_1,...,a_(n/2)}] uses a list for the coefficient, where (n/2) denotes Floor[n/2].";
+
+ReciprocalPolynomialFromTraces::usage = "ReciprocalPolynomialFromTraces[x,n,T] creates a reciprocal polynomial of degree n from a list of traces of powers of its associated matrix.  ReciprocalPolynomialFromTraces[x,T] creates a polynomial of degree 2 Length[T]."
 
 ReciprocalPolynomialQ::usage = "ReciprocalPolynomialQ[p,x] returns true if p(x) is a reciprocal polynomial, i.e. of the form a[0] x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + a[0].";
 
@@ -50,6 +54,8 @@ LefschetzNumbersTestQ::usage = ""
    Error messages and warnings
 *)
 
+PseudoAnosov::toofewtraces = "Error: list of traces should ne at least n/2, where n is the degree of the polynomial."
+
 PseudoAnosov::notminimal = "Warning: Not a minimal polynomial."
 
 PseudoAnosov::nottested = "Warning: This function is not well tested."
@@ -60,6 +66,9 @@ PseudoAnosov::neednegativePerron = "Error: This test only works for negative Per
 
 
 Begin["`Private`"]
+
+
+PolynomialDegree[p_,x_] := Length[CoefficientList[Collect[p,x],x]]-1
 
 
 TracesPower[p_,x_,mm_:1] := Module[
@@ -88,6 +97,21 @@ ReciprocalPolynomial[x_,n_,a_List] := Module[{aal},
 
 ReciprocalPolynomial[x_,n_,c_:Global`a] :=
     ReciprocalPolynomial[x,n,Table[c[k],{k,n/2}]]
+
+
+ReciprocalPolynomialFromTraces[x_,T_List] :=
+    ReciprocalPolynomialFromTraces[x,2 Length[T],T]
+
+
+ReciprocalPolynomialFromTraces[x_,n_Integer,T_List] := Module[
+    {tl, a},
+    If[n > 2 Length[T],
+        Message[PseudoAnosov::toofewtraces]; Return[]];
+    tl = TracesPower[ReciprocalPolynomial[x,n,a],x,n/2];
+    ReciprocalPolynomial[x,n,
+        Table[a[k],{k,n/2}] /.
+        Solve[Table[T[[k]] == tl[[k]],{k,n/2}], Table[a[k],{k,n/2}]][[1]]]
+]
 
 
 ReciprocalPolynomialQ[p_,x_] := Module[
@@ -259,7 +283,6 @@ StratumToGenus[s_List] := (Fold[Plus[#1,#2]&,0,s] + 4)/4
   
   ToDo:
 
-   - If Perronroot<0, then apply the test to phi^2.
    - Find a way to record the reason.
    - Find more harmonious names: StratumTest?  PolynomialStratumQ?  pAStratumQ?
 
@@ -316,12 +339,22 @@ LefschetzSingularityPairQ[d_Integer,Nn_,p_,x_] :=
 
 
 (* Test for everything. *)
-LefschetzNumbersTestQ[s_,p_,x_] :=
+LefschetzNumbersTestQ[s_,p_,x_] := Module[
+    {n, tl, p2},
     If[PerronRoot[p,x] > 0,
-        LefschetzMinimumSingularitiesQ[s,p,q] &&
+        LefschetzMinimumSingularitiesQ[s,p,x] &&
         LefschetzLonelySingularitiesQ[s,p,x] &&
         LefschetzSingularityPairsQ[s,p,x]
+    ,
+        (* Compute the polynomial of phi^2 *)
+        n = PolynomialDegree[p,x];
+        tl = TracesPower[p,x,n];
+        tl = Table[tl[[2k]],{k,n/2}]; (* Keep only even traces *)
+        p2 = ReciprocalPolynomialFromTraces[x,tl];
+        (* Do the test with p2, which has positive Perron root. *)
+        LefschetzNumbersTestQ[s,p2,x]
     ]
+]
 
 End[(* "`Private`" *)]
 
