@@ -13,7 +13,7 @@ PolynomialDegree::usage = "PolynomialDegree[p,x] returns the degree of the polyn
 
 TracesPower::usage = "TracesPower[p,x,m], where p(x) is the characteristic polynomial of a matrix M, lists the traces Tr[M^k] for 1 <= k <= m."
 
-LefschetzNumbers::usage = "LefschetzNumbers[p,x,m], where p(x) is the characteristic polynomial of a matrix M, lists the Lefschetz numbers 2-Tr[M^k] for 1 <= k <= m."
+LefschetzNumbers::usage = "LefschetzNumbers[p,x,k], where p(x) is the characteristic polynomial of some matrix M, returns the Lefschetz number 2-Tr[M^k].  LefschetzNumbers[p,x,{k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for 1 <= k <= k2.  LefschetzNumbers[p,x,{k1,k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for k1 <= k <= k2."
 
 ReciprocalPolynomial::usage = "ReciprocalPolynomial[x,n] returns a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1.  ReciprocalPolynomial[x,n,c] uses c as the base name for coefficients.  ReciprocalPolynomial[x,n,{a_1,...,a_(n/2)}] uses a list for the coefficient, where (n/2) denotes Floor[n/2].";
 
@@ -43,11 +43,9 @@ StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface contai
 
 LefschetzMinimumSingularitiesQ::usage = ""
 
-LefschetzLonelySingularitiesQ::usage = ""
-
-LefschetzSingularityPairsQ::usage = ""
-
 LefschetzNumbersTestQ::usage = ""
+
+LefschetzSingularityPermutationsQ::usage = ""
 
 
 (*
@@ -71,20 +69,33 @@ Begin["`Private`"]
 PolynomialDegree[p_,x_] := Length[CoefficientList[Collect[p,x],x]]-1
 
 
-TracesPower[p_,x_,mm_:1] := Module[
+TracesPower[p_,x_,mm_List:{10}] := Module[
     (* Polynomial is x^n + c[1]x^(n-1) + ... + c[n-1]x + c[n] *)
-    {c = Reverse[CoefficientList[Collect[p,x],x]], n, T},
+    {c = Reverse[CoefficientList[Collect[p,x],x]], n, T, ml},
     (* Make sure leading coefficient is 1, then drop it. *)
     c = Drop[c/c[[1]],1];
     n = Length[c]; (* Degree of polynomial *)
-    Table[
+    If[Length[mm] == 1, ml = {1,mm[[1]]}, ml = mm];
+    (* Recursively compute the traces. *)
+    (*   Note that I used to have Table instead of the Do, but
+         Mathematica must sometimes construct tables out of order,
+         because this sometimes caused a crash. *)
+    (* Ideally, the function would not store the T's that are not requested. *)
+    Do[
         T[k] = -Sum[c[[m]] T[k-m], {m,Min[k-1,n]}]
                - If[k > n, 0, k c[[k]]]
-    ,{k,mm}]
+    ,{k,ml[[2]]}];
+    Table[T[k],{k,ml[[1]],ml[[2]]}]
 ]
 
 
-LefschetzNumbers[p_,x_,mm_:1] := (2 - #) & /@ TracesPower[p,x,mm]
+TracesPower[p_,x_,m_Integer:1] := First[TracesPower[p,x,{m,m}]]
+
+
+LefschetzNumbers[p_,x_,mm_List] := (2 - #) & /@ TracesPower[p,x,mm]
+
+
+LefschetzNumbers[p_,x_,m_Integer:1] := 2 - TracesPower[p,x,m]
 
 
 ReciprocalPolynomial[x_,n_,a_List] := Module[{aal},
@@ -107,7 +118,7 @@ ReciprocalPolynomialFromTraces[x_,n_Integer,T_List] := Module[
     {tl, a},
     If[n > 2 Length[T],
         Message[PseudoAnosov::toofewtraces]; Return[]];
-    tl = TracesPower[ReciprocalPolynomial[x,n,a],x,n/2];
+    tl = TracesPower[ReciprocalPolynomial[x,n,a],x,{n/2}];
     ReciprocalPolynomial[x,n,
         Table[a[k],{k,n/2}] /.
         Solve[Table[T[[k]] == tl[[k]],{k,n/2}], Table[a[k],{k,n/2}]][[1]]]
@@ -294,48 +305,28 @@ LefschetzMinimumSingularitiesQ[s_List,p_,x_] := Module[
     {nmax = 100},
     If[PerronRoot[p,x] < 0,
         Message[PseudoAnosov::needpositivePerron]; Return[]];
-    Length[s] >= Max[LefschetzNumbers[p,x,nmax]]
+    Length[s] >= Max[LefschetzNumbers[p,x,{nmax}]]
 ]
 
 
-(* Test whether a stratum with a "lonely" singularity can support this
-   pseudo-Anosov (when the Perron root is positive. *)
-LefschetzLonelySingularitiesQ[s_List,p_,x_] := Module[
-    {k, Nn = Length[s]},
+LefschetzSingularityPermutationsQ[s_List,p_,x_] := Module[
+    {k, m, Nn = Length[s]},
     If[PerronRoot[p,x] < 0,
         Message[PseudoAnosov::needpositivePerron]; Return[]];
-    (* Select the "lonely" singularities *)
-    k = First /@ Select[Tally[s], #[[2]] == 1 &];
-    (* If there are no lonely singularities, return true. *)
-    If[k == {},Return[True]];
-    (* Check if the formula is satisfied for each singularity,
+    (* Group singularities by multiplicity *)
+    k = #[[1]]& /@ Tally[s];
+    m = #[[2]]& /@ Tally[s];
+    (* Check if the formula is satisfied for each singularity type,
        logical-And the results. *)
-    Fold[And,True,LefschetzLonelySingularityQ[#/2,Nn,p,x]&/@k]
+    Fold[And,True,
+        Table[
+            LefschetzSingularityPermutationsQ1[k[[j]]/2,m[[j]],Nn,p,x]
+        ,{j,Length[k]}]
+    ]
 ]
-
-(* Helper function for LefschetzLonelySingularitiesQ. *)
-LefschetzLonelySingularityQ[d_Integer,Nn_,p_,x_] :=
-    Last[LefschetzNumbers[p,x,d+1]] <= Nn - 2(d+1)
-
-
-(* Test whether a stratum with a "lonely" singularity can support this
-   pseudo-Anosov (when the Perron root is positive. *)
-LefschetzSingularityPairsQ[s_List,p_,x_] := Module[
-    {k, Nn = Length[s]},
-    If[PerronRoot[p,x] < 0,
-        Message[PseudoAnosov::needpositivePerron]; Return[]];
-    (* Select the singularity pairs *)
-    k = First /@ Select[Tally[s], #[[2]] == 2 &];
-    (* If there are no singularity pairs, return true. *)
-    If[k == {},Return[True]];
-    (* Check if the formula is satisfied for each singularity pair,
-       logical-And the results. *)
-    Fold[And,True,LefschetzSingularityPairQ[#/2,Nn,p,x]&/@k]
-]
-
-(* Helper function for LefschetzSingularityPairsQ. *)
-LefschetzSingularityPairQ[d_Integer,Nn_,p_,x_] :=
-    Last[LefschetzNumbers[p,x,2d+2]] <= Nn - 4(d+1)
+(* Private helper function for LefschetzSingularityPermutationsQ. *)
+LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,p_,x_] :=
+    LefschetzNumbers[p,x,m!(d+1)] <= Nn - 2m(d+1)
 
 
 (* Test for everything. *)
@@ -343,12 +334,11 @@ LefschetzNumbersTestQ[s_,p_,x_] := Module[
     {n, tl, p2},
     If[PerronRoot[p,x] > 0,
         LefschetzMinimumSingularitiesQ[s,p,x] &&
-        LefschetzLonelySingularitiesQ[s,p,x] &&
-        LefschetzSingularityPairsQ[s,p,x]
+        LefschetzSingularityPermutationsQ[s,p,x]
     ,
         (* Compute the polynomial of phi^2 *)
         n = PolynomialDegree[p,x];
-        tl = TracesPower[p,x,n];
+        tl = TracesPower[p,x,{n}];
         tl = Table[tl[[2k]],{k,n/2}]; (* Keep only even traces *)
         p2 = ReciprocalPolynomialFromTraces[x,tl];
         (* Do the test with p2, which has positive Perron root. *)
