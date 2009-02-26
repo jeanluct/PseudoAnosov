@@ -327,12 +327,13 @@ LefschetzSingularityPermutationsQ[s_List,p_,x_] := Module[
 ]
 (* Private helper function for LefschetzSingularityPermutationsQ. *)
 LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,p_,x_] := Module[
-    (* Compute the LCMs of integer partitions of m *)
-    {mf = Union[Fold[LCM,1,#]& /@ IntegerPartitions[m]]},
-    (* Now take the LCM of the LCMs! *)
-    (* This is often smaller than m!, for m largish, which makes the
-       test more stringent. *)
-    LefschetzNumbers[p,x,Fold[LCM,1,mf](d+1)] <= Nn - 2m(d+1)
+    (* Compute the (unique) LCMs of integer partitions of m *)
+    {lcm = Union[Fold[LCM,1,#]& /@ IntegerPartitions[m]]},
+    (* Test for each LCM in the list and Or the result, since at least
+       one of them has to be true. *)
+    Fold[Or,False,
+        LefschetzNumbers[p,x,#(d+1)] <= Nn - 2m(d+1) & /@ lcm
+    ]
 ]
 
 
