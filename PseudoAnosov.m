@@ -35,7 +35,8 @@ MinimalPolynomialQ::usage = "MinimalPolynomialQ[p] returns true if the polynomia
 
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
-StrataList::usage = "StrataList[g,n] gives the list of strata for a hyperbolic surface of genus g with n boundary components (default n=0).  If n>0, we need at least one singularity per boundary component.  Note that a p-pronged singularity on the boundary is really a (p-2)-prong when the boundary components are shrunk to punctures.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.";
+(* StrataList::usage = "StrataList[g,n] gives the list of strata for a ...
+ hyperbolic surface of genus g with n boundary components (default n=0).  If n>0, we need at least one singularity per boundary component.  Note that a p-pronged singularity on the boundary is really a (p-2)-prong when the boundary components are shrunk to punctures.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity."; *)
 
 OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the (even) degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.  Use Tally/@OrientableStrataList[g] to group by multiplicities.";
 
@@ -279,7 +280,7 @@ StrataList[g_Integer,n_Integer:0] := Module[{},
 ]
 (* Maybe it's better to do this from the partition function directly, by subtracting 2 afterwards. *)
 
-OrientableStrataList[g_Integer] := Sort /@ 2 IntegerPartitions[2g-2]
+OrientableStrataList[g_Integer] := 2 IntegerPartitions[2g-2]
 
 
 StratumToGenus[s_List] := (Fold[Plus[#1,#2]&,0,s] + 4)/4
@@ -325,8 +326,14 @@ LefschetzSingularityPermutationsQ[s_List,p_,x_] := Module[
     ]
 ]
 (* Private helper function for LefschetzSingularityPermutationsQ. *)
-LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,p_,x_] :=
-    LefschetzNumbers[p,x,m!(d+1)] <= Nn - 2m(d+1)
+LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,p_,x_] := Module[
+    (* Compute the LCMs of integer partitions of m *)
+    {mf = Union[Fold[LCM,1,#]& /@ IntegerPartitions[m]]},
+    (* Now take the LCM of the LCMs! *)
+    (* This is often smaller than m!, for m largish, which makes the
+       test more stringent. *)
+    LefschetzNumbers[p,x,Fold[LCM,1,mf](d+1)] <= Nn - 2m(d+1)
+]
 
 
 (* Test for everything. *)
