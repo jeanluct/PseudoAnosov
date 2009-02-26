@@ -49,7 +49,7 @@ int main()
 
   typedef double T;
 
-  const int g = 6;
+  const int g = 4;
   long long int N = 0;
   long long int Np = 0; // Number of candidate polynomials found.
   long long int N_found_positive_root = 0;
@@ -66,7 +66,14 @@ int main()
 
   std::vector<int> amin(g), amax(g), a(g);
 
-  if (g == 3)
+  if (g == 2)
+    {
+      // 75 cases
+      amax[0] = 4; amin[0] = 0;
+      amax[1] = 7; amin[1] = -amax[1];
+      lambdamax = 1.72208380573904;
+    }
+  else if (g == 3)
     {
       // 12,765 cases
       amax[0] = 6; amin[0] = 0;
