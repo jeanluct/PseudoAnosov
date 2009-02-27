@@ -296,7 +296,7 @@ StratumToGenus[s_List] := (Plus @@ s + 4)/4
   
   ToDo:
 
-   - Find a way to record the reason.
+   - Include the Perron root as a test: >1, nondegen, etc.
    - Find more harmonious names: StratumTest?  PolynomialStratumQ?  pAStratumQ?
 
  *)
@@ -369,7 +369,7 @@ LefschetzAlmostPureStratumQ[s_List,p_,x_] := Module[
 
 (* Test for everything. *)
 LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
-    {tests, pass = True, reason = "", n, tl, p2},
+    {tests, pass = True, reason = "Allowable", n, tl, p2},
     If[PerronRoot[p,x] > 0,
         tests =
             {LefschetzMinimumSingularitiesQ,
