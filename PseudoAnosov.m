@@ -297,6 +297,8 @@ StratumToGenus[s_List] := (Plus @@ s + 4)/4
   ToDo:
 
    - Include the Perron root as a test: >1, nondegen, etc.
+   - Work with list of Lefschetz so we can "skip" entries to apply
+     test to powers of phi.
    - Find more harmonious names: StratumTest?  PolynomialStratumQ?  pAStratumQ?
 
  *)
@@ -334,7 +336,7 @@ LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,p_,x_] := Module[
 ]
 
 
-LefschetzPureStratumQ[s_List,p_,x_] := Module[
+LefschetzPureStratumQa[s_List,p_,x_] := Module[
     {d, m, t = Tally[s]},
     If[PerronRoot[p,x] < 0,
         Message[PseudoAnosov::needpositivePerron]; Return[]];
@@ -347,8 +349,23 @@ LefschetzPureStratumQ[s_List,p_,x_] := Module[
 ]
 
 
-LefschetzAlmostPureStratumQ[s_List,p_,x_] := Module[
-    {d2, m, f, Nn = Length[s],
+LefschetzPureStratumQb[s_List,p_,x_] := Module[
+    {d, m, f = LefschetzNumbers[p,x,1], t = Tally[s], k},
+    If[PerronRoot[p,x] < 0,
+        Message[PseudoAnosov::needpositivePerron]; Return[]];
+    (* If there is more than one singularity type, return True. *)
+    If[Length[t] > 1, Return[True]];
+    (* Group singularities by multiplicity *)
+    d = t[[1,1]]/2;
+    m = t[[1,2]];
+    If[m-f < 1, Return[True]];
+    k = Union[LCM @@ # & /@ IntegerPartitions[m-f]];
+    Or @@ (LefschetzNumbers[p,x,#(d+1)] <= m - 2m(d+1) & /@ k)
+]
+
+
+LefschetzAlmostPureStratumQa[s_List,p_,x_] := Module[
+    {d2, m2, f, Nn = Length[s],
      (* Group and sort strata by increasing multiplicity *)
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
     If[PerronRoot[p,x] < 0,
@@ -367,26 +384,50 @@ LefschetzAlmostPureStratumQ[s_List,p_,x_] := Module[
 ]
 
 
+LefschetzAlmostPureStratumQb[s_List,p_,x_] := Module[
+    {d2, m2, f, Nn = Length[s], k,
+     (* Group and sort strata by increasing multiplicity *)
+     t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
+    If[PerronRoot[p,x] < 0,
+        Message[PseudoAnosov::needpositivePerron]; Return[]];
+    (* If there aren't exactly two singularity types, return True. *)
+    If[Length[t] != 2, Return[True]];
+    (* If the first singularity type doesn't have multiplicity 1,
+       return True. *)
+    If[t[[1,2]] > 1, Return[True]];
+    f = LefschetzNumbers[p,x,1] - 1;
+    (* The repeated singularity is in the second slot, since we sorted. *)
+    d2 = t[[2,1]]/2;
+    m2 = t[[2,2]];
+    If[f <= 0 || m2-f < 1, Return[True]];
+    k = Union[LCM @@ # & /@ IntegerPartitions[m2-f]];
+    Or @@ (LefschetzNumbers[p,x,#(d2+1)] <= Nn - 2m2 (d2+1) & /@ k)
+]
+
+
 (* Test for everything. *)
 LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
-    {tests, pass = True, reason = "Allowable", n, tl, p2},
+    {tests, reason = "Allowable", n, tl, p2},
     If[PerronRoot[p,x] > 0,
         tests =
             {LefschetzMinimumSingularitiesQ,
              LefschetzSingularityPermutationsQ,
-             LefschetzPureStratumQ,
-             LefschetzAlmostPureStratumQ};
+             LefschetzPureStratumQa,
+             LefschetzPureStratumQb,
+             LefschetzAlmostPureStratumQa,
+             LefschetzAlmostPureStratumQb};
         Do[
             (* If False once, exit the loop to avoid the other tests *)
-            If[!(pass = tests[[k]][s,p,x]),
-                If[OptionValue[GiveReasonForRejection],
-                    reason = SymbolName[tests[[k]]]];
+            If[!tests[[k]][s,p,x],
+                reason = SymbolName[tests[[k]]];
                 Break[]
             ];
         , {k,Length[tests]}];
         If[OptionValue[GiveReasonForRejection],
-            Return[{pass,reason}],
-            Return[pass]]
+            Return[{reason == "Allowable",reason}]
+        ,
+            Return[reason == "Allowable"]
+        ]
     ,
         (* Compute the polynomial of phi^2 *)
         n = PolynomialDegree[p,x];
