@@ -46,6 +46,13 @@ LefschetzNumbersTestQ::usage = ""
 
 
 (*
+   Options
+*)
+
+GiveReasonForRejection::usage = "Option to LefschetzNumbersTestQ.  Set to True to return the reason for rejecting a stratum."
+
+
+(*
    Error messages and warnings
 *)
 
@@ -361,8 +368,8 @@ LefschetzAlmostPureStratumQ[s_List,p_,x_] := Module[
 
 
 (* Test for everything. *)
-LefschetzNumbersTestQ[s_List,p_,x_] := Module[
-    {tests, pass = True, n, tl, p2},
+LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
+    {tests, pass = True, reason = "", n, tl, p2},
     If[PerronRoot[p,x] > 0,
         tests =
             {LefschetzMinimumSingularitiesQ,
@@ -370,10 +377,16 @@ LefschetzNumbersTestQ[s_List,p_,x_] := Module[
              LefschetzPureStratumQ,
              LefschetzAlmostPureStratumQ};
         Do[
-            (* Exit the loop to avoid the other tests *)
-            If[!(pass = tests[[k]][s,p,x]), Break[]];
+            (* If False once, exit the loop to avoid the other tests *)
+            If[!(pass = tests[[k]][s,p,x]),
+                If[OptionValue[GiveReasonForRejection],
+                    reason = SymbolName[tests[[k]]]];
+                Break[]
+            ];
         , {k,Length[tests]}];
-        Return[pass]
+        If[OptionValue[GiveReasonForRejection],
+            Return[{pass,reason}],
+            Return[pass]]
     ,
         (* Compute the polynomial of phi^2 *)
         n = PolynomialDegree[p,x];
@@ -381,9 +394,11 @@ LefschetzNumbersTestQ[s_List,p_,x_] := Module[
         tl = Table[tl[[2k]],{k,n/2}]; (* Keep only even traces *)
         p2 = ReciprocalPolynomialFromTraces[x,tl];
         (* Do the test with p2, which has positive Perron root. *)
-        LefschetzNumbersTestQ[s,p2,x]
+        LefschetzNumbersTestQ[s,p2,x,opts]
     ]
 ]
+Options[LefschetzNumbersTestQ] = {GiveReasonForRejection -> False}
+
 
 End[(* "`Private`" *)]
 

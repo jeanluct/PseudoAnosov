@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     12355,        369]
-NotebookOptionsPosition[     11222,        332]
-NotebookOutlinePosition[     11579,        348]
-CellTagsIndexPosition[     11536,        345]
+NotebookDataLength[     12719,        375]
+NotebookOptionsPosition[     11585,        338]
+NotebookOutlinePosition[     11942,        354]
+CellTagsIndexPosition[     11899,        351]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -105,13 +105,17 @@ Cell[BoxData[
       RowBox[{"LefschetzNumbersTestQ", "[", 
        RowBox[{"#", ",", 
         RowBox[{"P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], 
-        ",", "x"}], "]"}], "&"}], "/@", "s"}], ",", 
+        ",", "x", ",", 
+        RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], "&"}],
+      "/@", "s"}], ",", 
     RowBox[{"{", 
      RowBox[{"k", ",", 
       RowBox[{"Length", "[", "P", "]"}]}], "}"}]}], "]"}], "//", 
   "MatrixForm"}]], "Input",
  CellChangeTimes->{{3.444335917110114*^9, 3.4443359294098577`*^9}, {
-  3.4447345083688*^9, 3.4447345130146646`*^9}}],
+  3.4447345083688*^9, 3.4447345130146646`*^9}, {3.4447409276269293`*^9, 
+  3.444740936515313*^9}, {3.444741028710244*^9, 3.444741035167807*^9}, {
+  3.444741764262958*^9, 3.444741764713605*^9}}],
 
 Cell["\<\
 For negative dilatation, the first two polynomials should be eliminated (not \
@@ -131,14 +135,16 @@ Cell[BoxData[
          RowBox[{"P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], 
          "/.", 
          RowBox[{"x", "\[Rule]", 
-          RowBox[{"-", "x"}]}]}], ",", "x"}], "]"}], "&"}], "/@", "s"}], ",", 
-    
+          RowBox[{"-", "x"}]}]}], ",", "x", ",", 
+        RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], "&"}],
+      "/@", "s"}], ",", 
     RowBox[{"{", 
      RowBox[{"k", ",", 
       RowBox[{"Length", "[", "P", "]"}]}], "}"}]}], "]"}], "//", 
   "MatrixForm"}]], "Input",
  CellChangeTimes->{{3.444335917110114*^9, 3.4443359294098577`*^9}, {
-   3.4447337127260323`*^9, 3.444733713874075*^9}, 3.444734525018655*^9}],
+   3.4447337127260323`*^9, 3.444733713874075*^9}, 3.444734525018655*^9, 
+   3.444741615807007*^9, {3.444741789068287*^9, 3.444741789472301*^9}}],
 
 Cell["Now try the Lehmer polynomial for genus 5 :", "Text",
  CellChangeTimes->{{3.444733611399207*^9, 3.444733620310625*^9}}],
@@ -355,22 +361,22 @@ Cell[1700, 55, 250, 5, 31, "Text"],
 Cell[1953, 62, 666, 18, 55, "Input"],
 Cell[2622, 82, 468, 8, 55, "Input"],
 Cell[3093, 92, 196, 4, 31, "Text"],
-Cell[3292, 98, 542, 15, 32, "Input"],
-Cell[3837, 115, 196, 4, 31, "Text"],
-Cell[4036, 121, 666, 19, 55, "Input"],
-Cell[4705, 142, 125, 1, 31, "Text"],
-Cell[4833, 145, 275, 5, 55, "Input"],
-Cell[5111, 152, 392, 10, 32, "Input"],
-Cell[5506, 164, 158, 3, 32, "Input"],
-Cell[5667, 169, 142, 1, 31, "Text"],
-Cell[5812, 172, 387, 10, 32, "Input"],
-Cell[6202, 184, 152, 3, 31, "Text"],
-Cell[6357, 189, 480, 13, 32, "Input"],
-Cell[6840, 204, 116, 1, 31, "Text"],
-Cell[6959, 207, 2494, 71, 77, "Input"],
-Cell[9456, 280, 273, 5, 55, "Input"],
-Cell[9732, 287, 693, 19, 55, "Input"],
-Cell[10428, 308, 790, 22, 55, "Input"]
+Cell[3292, 98, 763, 19, 55, "Input"],
+Cell[4058, 119, 196, 4, 31, "Text"],
+Cell[4257, 125, 808, 21, 55, "Input"],
+Cell[5068, 148, 125, 1, 31, "Text"],
+Cell[5196, 151, 275, 5, 55, "Input"],
+Cell[5474, 158, 392, 10, 32, "Input"],
+Cell[5869, 170, 158, 3, 32, "Input"],
+Cell[6030, 175, 142, 1, 31, "Text"],
+Cell[6175, 178, 387, 10, 32, "Input"],
+Cell[6565, 190, 152, 3, 31, "Text"],
+Cell[6720, 195, 480, 13, 32, "Input"],
+Cell[7203, 210, 116, 1, 31, "Text"],
+Cell[7322, 213, 2494, 71, 77, "Input"],
+Cell[9819, 286, 273, 5, 55, "Input"],
+Cell[10095, 293, 693, 19, 55, "Input"],
+Cell[10791, 314, 790, 22, 55, "Input"]
 }
 ]
 *)
