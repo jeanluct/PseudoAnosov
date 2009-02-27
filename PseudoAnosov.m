@@ -42,11 +42,7 @@ OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orienta
 
 StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k_1,...,k_m}."
 
-LefschetzMinimumSingularitiesQ::usage = ""
-
 LefschetzNumbersTestQ::usage = ""
-
-LefschetzSingularityPermutationsQ::usage = ""
 
 
 (*
@@ -350,8 +346,8 @@ LefschetzAlmostPureStratumQ[s_List,p_,x_] := Module[
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
     If[PerronRoot[p,x] < 0,
         Message[PseudoAnosov::needpositivePerron]; Return[]];
-    (* If there is more than two singularity types, return True. *)
-    If[Length[t] > 2, Return[True]];
+    (* If there aren't exactly two singularity types, return True. *)
+    If[Length[t] != 2, Return[True]];
     (* If the first singularity type doesn't have multiplicity 1,
        return True. *)
     If[t[[1,2]] > 1, Return[True]];
@@ -365,13 +361,19 @@ LefschetzAlmostPureStratumQ[s_List,p_,x_] := Module[
 
 
 (* Test for everything. *)
-LefschetzNumbersTestQ[s_,p_,x_] := Module[
-    {n, tl, p2},
+LefschetzNumbersTestQ[s_List,p_,x_] := Module[
+    {tests, pass = True, n, tl, p2},
     If[PerronRoot[p,x] > 0,
-        LefschetzMinimumSingularitiesQ[s,p,x] &&
-        LefschetzSingularityPermutationsQ[s,p,x] &&
-        LefschetzPureStratumQ[s,p,x] &&
-        LefschetzAlmostPureStratumQ[s,p,x]
+        tests =
+            {LefschetzMinimumSingularitiesQ,
+             LefschetzSingularityPermutationsQ,
+             LefschetzPureStratumQ,
+             LefschetzAlmostPureStratumQ};
+        Do[
+            (* Exit the loop to avoid the other tests *)
+            If[!(pass = tests[[k]][s,p,x]), Break[]];
+        , {k,Length[tests]}];
+        Return[pass]
     ,
         (* Compute the polynomial of phi^2 *)
         n = PolynomialDegree[p,x];
