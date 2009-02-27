@@ -225,21 +225,19 @@ ReciprocalPolynomialBoundedList[x_,8,h_Real] := Module[
 
 PolynomialRoots[p_,x_,opts:OptionsPattern[]] :=
     Sort[x/.NSolve[p == 0, x, opts], Abs[#2] < Abs[#1] &]
-
 (* PolynomialRoots inherits the options for NSolve *)
 Options[PolynomialRoots] = Options[NSolve]
 
 
 PerronRoot[p_,x_,opts:OptionsPattern[]] := First[PolynomialRoots[p,x,opts]]
-
 (* PerronRoot inherits the options for NSolve *)
 Options[PerronRoot] = Options[NSolve]
 
 
 MahlerMeasure[p_,x_,opts:OptionsPattern[]] := Module[{},
     If[!MinimalPolynomialQ[p],Message[PseudoAnosov::notminimal]];
-    Fold[Times,1,Select[Abs/@PolynomialRoots[p,x,opts],#>1&]]]
-
+    Times @@ Select[Abs/@PolynomialRoots[p,x,opts],#>1&]
+]
 (* MahlerMeasure inherits the options for NSolve *)
 Options[MahlerMeasure] = Options[NSolve]
 
@@ -283,7 +281,7 @@ StrataList[g_Integer,n_Integer:0] := Module[{},
 OrientableStrataList[g_Integer] := 2 IntegerPartitions[2g-2]
 
 
-StratumToGenus[s_List] := (Fold[Plus[#1,#2]&,0,s] + 4)/4
+StratumToGenus[s_List] := (Plus @@ s + 4)/4
 
 
 (*
@@ -319,21 +317,17 @@ LefschetzSingularityPermutationsQ[s_List,p_,x_] := Module[
     m = #[[2]]& /@ Tally[s];
     (* Check if the formula is satisfied for each singularity type,
        logical-And the results. *)
-    Fold[And,True,
-        Table[
-            LefschetzSingularityPermutationsQ1[k[[j]]/2,m[[j]],Nn,p,x]
-        ,{j,Length[k]}]
-    ]
+    And @@ Table[
+        LefschetzSingularityPermutationsQ1[k[[j]]/2,m[[j]],Nn,p,x]
+    ,{j,Length[k]}]
 ]
 (* Private helper function for LefschetzSingularityPermutationsQ. *)
 LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,p_,x_] := Module[
     (* Compute the (unique) LCMs of integer partitions of m *)
-    {lcm = Union[Fold[LCM,1,#]& /@ IntegerPartitions[m]]},
+    {lcm = Union[LCM @@ # & /@ IntegerPartitions[m]]},
     (* Test for each LCM in the list and Or the result, since at least
        one of them has to be true. *)
-    Fold[Or,False,
-        LefschetzNumbers[p,x,#(d+1)] <= Nn - 2m(d+1) & /@ lcm
-    ]
+    Or @@ (LefschetzNumbers[p,x,#(d+1)] <= Nn - 2m(d+1) & /@ lcm)
 ]
 
 
