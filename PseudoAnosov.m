@@ -337,12 +337,47 @@ LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,p_,x_] := Module[
 ]
 
 
+LefschetzPureStratumQ[s_List,p_,x_] := Module[
+    {d, m, t = Tally[s]},
+    If[PerronRoot[p,x] < 0,
+        Message[PseudoAnosov::needpositivePerron]; Return[]];
+    (* If there is more than one singularity type, return True. *)
+    If[Length[t] > 1, Return[True]];
+    (* Group singularities by multiplicity *)
+    d = t[[1,1]]/2;
+    m = t[[1,2]];
+    LefschetzNumbers[p,x,d+1] <= m - 2 (d+1) LefschetzNumbers[p,x,1]
+]
+
+
+LefschetzAlmostPureStratumQ[s_List,p_,x_] := Module[
+    {d2, m, f, Nn = Length[s],
+     (* Group and sort strata by increasing multiplicity *)
+     t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
+    If[PerronRoot[p,x] < 0,
+        Message[PseudoAnosov::needpositivePerron]; Return[]];
+    (* If there is more than two singularity types, return True. *)
+    If[Length[t] > 2, Return[True]];
+    (* If the first singularity type doesn't have multiplicity 1,
+       return True. *)
+    If[t[[1,2]] > 1, Return[True]];
+    f = LefschetzNumbers[p,x,1] - 1;
+    If[f <= 0, Return[True]];
+    (* The repeated singularity is in the second slot, since we sorted. *)
+    d2 = t[[2,1]]/2;
+    m2 = t[[2,2]];
+    LefschetzNumbers[p,x,d2+1] <= Nn - 2f (d2+1) 
+]
+
+
 (* Test for everything. *)
 LefschetzNumbersTestQ[s_,p_,x_] := Module[
     {n, tl, p2},
     If[PerronRoot[p,x] > 0,
         LefschetzMinimumSingularitiesQ[s,p,x] &&
-        LefschetzSingularityPermutationsQ[s,p,x]
+        LefschetzSingularityPermutationsQ[s,p,x] &&
+        LefschetzPureStratumQ[s,p,x] &&
+        LefschetzAlmostPureStratumQ[s,p,x]
     ,
         (* Compute the polynomial of phi^2 *)
         n = PolynomialDegree[p,x];
