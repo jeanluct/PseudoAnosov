@@ -66,6 +66,8 @@ PseudoAnosov::needpositivePerron = "Error: This test only works for positive Per
 
 PseudoAnosov::neednegativePerron = "Error: This test only works for negative Perron root."
 
+PseudoAnosov::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th power."
+
 
 Begin["`Private`"]
 
@@ -303,142 +305,161 @@ StratumToGenus[s_List] := (Plus @@ s + 4)/4
 
  *)
 
+(*
+   Tests for positive Perron root
+*)
+
 (* Test whether there are enough singularities on a stratum to support
    this pseudo-Anosov (when Perron root is positive). *)
-LefschetzMinimumSingularitiesQ[s_List,p_,x_] := Module[
-    {nmax = 100},
-    If[PerronRoot[p,x] < 0,
-        Message[PseudoAnosov::needpositivePerron]; Return[]];
-    Length[s] >= Max[LefschetzNumbers[p,x,{nmax}]]
-]
+LefschetzMinimumSingularitiesQ[s_List,L_List] := Length[s] >= Max[L]
 
 
-LefschetzSingularityPermutationsQ[s_List,p_,x_] := Module[
+LefschetzSingularityPermutationsQ[s_List,L_List] := Module[
     {k, m, Nn = Length[s]},
-    If[PerronRoot[p,x] < 0,
-        Message[PseudoAnosov::needpositivePerron]; Return[]];
     (* Group singularities by multiplicity *)
     k = #[[1]]& /@ Tally[s];
     m = #[[2]]& /@ Tally[s];
     (* Check if the formula is satisfied for each singularity type,
        logical-And the results. *)
     And @@ Table[
-        LefschetzSingularityPermutationsQ1[k[[j]]/2,m[[j]],Nn,p,x]
+        LefschetzSingularityPermutationsQ1[k[[j]]/2,m[[j]],Nn,L]
     ,{j,Length[k]}]
 ]
 (* Private helper function for LefschetzSingularityPermutationsQ. *)
-LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,p_,x_] := Module[
+LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,L_] := Module[
     (* Compute the (unique) LCMs of integer partitions of m *)
     {lcm = Union[LCM @@ # & /@ IntegerPartitions[m]]},
     (* Test for each LCM in the list and Or the result, since at least
        one of them has to be true. *)
-    Or @@ (LefschetzNumbers[p,x,#(d+1)] <= Nn - 2m(d+1) & /@ lcm)
+    If[Max[lcm](d+1) > Length[L], Throw[Max[lcm](d+1), oor]];
+    Or @@ (L[[#(d+1)]] <= Nn - 2m(d+1) & /@ lcm)
 ]
 
 
-LefschetzPureStratumQa[s_List,p_,x_] := Module[
+LefschetzPureStratumQa[s_List,L_List] := Module[
     {d, m, t = Tally[s]},
-    If[PerronRoot[p,x] < 0,
-        Message[PseudoAnosov::needpositivePerron]; Return[]];
+    (* If there is more than one singularity type, return True. *)
+    If[Length[t] > 1, Return[True]];
+    (* Need positive Lefschetz number L[[1]] *)
+    If[L[[1]] <= 0, Return[True]];
+    (* Group singularities by multiplicity *)
+    d = t[[1,1]]/2;
+    m = t[[1,2]];
+    If[(d+1) > Length[L], Throw[d+1, oor]];
+    L[[d+1]] <= m - 2 (d+1) L[[1]]
+]
+
+
+LefschetzPureStratumQb[s_List,L_List] := Module[
+    {d, m, t = Tally[s], k},
     (* If there is more than one singularity type, return True. *)
     If[Length[t] > 1, Return[True]];
     (* Group singularities by multiplicity *)
     d = t[[1,1]]/2;
     m = t[[1,2]];
-    LefschetzNumbers[p,x,d+1] <= m - 2 (d+1) LefschetzNumbers[p,x,1]
+    (* Need positive Lefschetz number L[[1]] and enough singularities *)
+    If[m-L[[1]] < 1 || L[[1]] <= 0, Return[True]];
+    k = Union[LCM @@ # & /@ IntegerPartitions[m-L[[1]]]];
+    If[Max[k](d+1) > Length[L], Throw[Max[k](d+1), oor]];
+    Or @@ (L[[#(d+1)]] <= m - 2m(d+1) & /@ k)
 ]
 
 
-LefschetzPureStratumQb[s_List,p_,x_] := Module[
-    {d, m, f = LefschetzNumbers[p,x,1], t = Tally[s], k},
-    If[PerronRoot[p,x] < 0,
-        Message[PseudoAnosov::needpositivePerron]; Return[]];
-    (* If there is more than one singularity type, return True. *)
-    If[Length[t] > 1, Return[True]];
-    (* Group singularities by multiplicity *)
-    d = t[[1,1]]/2;
-    m = t[[1,2]];
-    If[m-f < 1, Return[True]];
-    k = Union[LCM @@ # & /@ IntegerPartitions[m-f]];
-    Or @@ (LefschetzNumbers[p,x,#(d+1)] <= m - 2m(d+1) & /@ k)
-]
-
-
-LefschetzAlmostPureStratumQa[s_List,p_,x_] := Module[
+LefschetzAlmostPureStratumQa[s_List,L_List] := Module[
     {d2, m2, f, Nn = Length[s],
      (* Group and sort strata by increasing multiplicity *)
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
-    If[PerronRoot[p,x] < 0,
-        Message[PseudoAnosov::needpositivePerron]; Return[]];
     (* If there aren't exactly two singularity types, return True. *)
     If[Length[t] != 2, Return[True]];
     (* If the first singularity type doesn't have multiplicity 1,
        return True. *)
     If[t[[1,2]] > 1, Return[True]];
-    f = LefschetzNumbers[p,x,1] - 1;
+    f = L[[1]]-1;
     If[f <= 0, Return[True]];
     (* The repeated singularity is in the second slot, since we sorted. *)
     d2 = t[[2,1]]/2;
     m2 = t[[2,2]];
-    LefschetzNumbers[p,x,d2+1] <= Nn - 2f (d2+1) 
+    If[(d2+1) > Length[L], Throw[d2+1, oor]];
+    L[[d2+1]] <= Nn - 2f (d2+1) 
 ]
 
 
-LefschetzAlmostPureStratumQb[s_List,p_,x_] := Module[
+LefschetzAlmostPureStratumQb[s_List,L_List] := Module[
     {d2, m2, f, Nn = Length[s], k,
      (* Group and sort strata by increasing multiplicity *)
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
-    If[PerronRoot[p,x] < 0,
-        Message[PseudoAnosov::needpositivePerron]; Return[]];
     (* If there aren't exactly two singularity types, return True. *)
     If[Length[t] != 2, Return[True]];
     (* If the first singularity type doesn't have multiplicity 1,
        return True. *)
     If[t[[1,2]] > 1, Return[True]];
-    f = LefschetzNumbers[p,x,1] - 1;
     (* The repeated singularity is in the second slot, since we sorted. *)
     d2 = t[[2,1]]/2;
     m2 = t[[2,2]];
+    f = L[[1]]-1;
     If[f <= 0 || m2-f < 1, Return[True]];
     k = Union[LCM @@ # & /@ IntegerPartitions[m2-f]];
-    Or @@ (LefschetzNumbers[p,x,#(d2+1)] <= Nn - 2m2 (d2+1) & /@ k)
+    If[Max[k](d2+1) > Length[L], Throw[Max[k](d2+1), oor]];
+    Or @@ (L[[#(d2+1)]] <= Nn - 2m2 (d2+1) & /@ k)
 ]
 
 
 (* Test for everything. *)
-LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
-    {tests, reason = "Allowable", n, tl, p2},
+LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[{},
     If[PerronRoot[p,x] > 0,
-        tests =
-            {LefschetzMinimumSingularitiesQ,
-             LefschetzSingularityPermutationsQ,
-             LefschetzPureStratumQa,
-             LefschetzPureStratumQb,
-             LefschetzAlmostPureStratumQa,
-             LefschetzAlmostPureStratumQb};
-        Do[
-            (* If False once, exit the loop to avoid the other tests *)
-            If[!tests[[k]][s,p,x],
-                reason = SymbolName[tests[[k]]];
-                Break[]
-            ];
-        , {k,Length[tests]}];
-        If[OptionValue[GiveReasonForRejection],
-            Return[{reason == "Allowable",reason}]
-        ,
-            Return[reason == "Allowable"]
-        ]
+        Return[LefschetzNumbersTestQpositive[s,p,x,opts]]
     ,
-        (* Compute the polynomial of phi^2 *)
-        n = PolynomialDegree[p,x];
-        tl = TracesPower[p,x,{n}];
-        tl = Table[tl[[2k]],{k,n/2}]; (* Keep only even traces *)
-        p2 = ReciprocalPolynomialFromTraces[x,tl];
-        (* Do the test with p2, which has positive Perron root. *)
-        LefschetzNumbersTestQ[s,p2,x,opts]
+        Return[LefschetzNumbersTestQnegative[s,p,x,opts]]
     ]
 ]
 Options[LefschetzNumbersTestQ] = {GiveReasonForRejection -> False}
+
+(* Private helper function for LefschetzNumbersTestQ *)
+LefschetzNumbersTestQpositive[s_List,p_,x_, opts:OptionsPattern[]] := Module[
+    {L, Lmax = 600, Lm, powmax = 10, tests, reason = "Allowable"},
+    L = LefschetzNumbers[p,x,{Lmax}];
+    tests =
+        {LefschetzMinimumSingularitiesQ,
+         LefschetzSingularityPermutationsQ,
+         LefschetzPureStratumQa,
+         LefschetzPureStratumQb,
+         LefschetzAlmostPureStratumQa,
+         LefschetzAlmostPureStratumQb};
+    Do[
+        Do[
+            (* The testing functions throw an exception if there
+               are nout enough Lefschetz numbers *)
+            Catch[
+                (* Make a list of Lefschetz numbers fpr phi^m *)
+                Lm = Table[L[[k]], {k,m,Length[L],m}];
+                (* If False once, exit the loop to avoid the other tests *)
+                If[!tests[[k]][s,Lm],
+                    reason = SymbolName[tests[[k]]];
+                    Break[]
+                ];
+            , oor, Message[PseudoAnosov::moreLefschetz,#1,m] &]
+        , {m,powmax}]
+    , {k,Length[tests]}];
+    If[OptionValue[GiveReasonForRejection],
+        Return[{reason == "Allowable",reason}]
+    ,
+        Return[reason == "Allowable"]
+    ]
+]
+Options[LefschetzNumbersTestQpositive] = Options[LefschetzNumbersTestQ]
+
+(* Private helper function for LefschetzNumbersTestQ *)
+LefschetzNumbersTestQnegative[s_List,p_,x_, opts:OptionsPattern[]] := Module[
+    {n, tl, p2},
+    (* Compute the polynomial of phi^2 *)
+    n = PolynomialDegree[p,x];
+    tl = TracesPower[p,x,{n}];
+    tl = Table[tl[[2k]],{k,n/2}]; (* Keep only even traces *)
+    p2 = ReciprocalPolynomialFromTraces[x,tl];
+    (* Do the test with p2, which has positive Perron root. *)
+    LefschetzNumbersTestQ[s,p2,x,opts]
+]
+Options[LefschetzNumbersTestQnegative] = Options[LefschetzNumbersTestQ]
 
 
 End[(* "`Private`" *)]
