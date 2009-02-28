@@ -303,8 +303,7 @@ StratumToGenus[s_List] := (Plus @@ s + 4)/4
   ToDo:
 
    - Include the Perron root as a test: >1, nondegen, etc.
-   - Work with list of Lefschetz so we can "skip" entries to apply
-     test to powers of phi.
+   - Give more detailed reason, customized for each test.
    - Find more harmonious names: StratumTest?  PolynomialStratumQ?  pAStratumQ?
 
  *)
@@ -439,7 +438,12 @@ LefschetzNumbersTestQpositive[s_List,p_,x_, opts:OptionsPattern[]] := Module[
                 Lm = Table[L[[k]], {k,m,Length[L],m}];
                 (* If False once, exit the loop to avoid the other tests *)
                 If[!tests[[k]][s,Lm],
-                    reason = SymbolName[tests[[k]]];
+                    reason = StringReplace[SymbolName[tests[[k]]],
+                        {"Lefschetz" -> "",
+                         RegularExpression["Q$"] -> "",
+                         RegularExpression["Qa$"] -> "(a)",
+                         RegularExpression["Qb$"] -> "(b)"}
+                    ];
                     Break[]
                 ];
             , oor, Message[PseudoAnosov::moreLefschetz,#1,m] &]

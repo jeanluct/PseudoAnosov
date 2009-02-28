@@ -10,14 +10,19 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     24607,        693]
-NotebookOptionsPosition[     23296,        652]
-NotebookOutlinePosition[     23655,        668]
-CellTagsIndexPosition[     23612,        665]
+NotebookDataLength[     22707,        637]
+NotebookOptionsPosition[     21125,        587]
+NotebookOutlinePosition[     21483,        603]
+CellTagsIndexPosition[     21440,        600]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
+
+Cell[CellGroupData[{
+Cell["Initialization", "Subsection",
+ CellChangeTimes->{{3.444822455534054*^9, 3.444822457592043*^9}}],
+
 Cell[BoxData[
  RowBox[{"SetDirectory", "[", 
   "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole\>\"", 
@@ -29,6 +34,212 @@ Cell[BoxData[
  CellChangeTimes->{
   3.44276975660726*^9, {3.442795192458606*^9, 3.442795195156436*^9}, {
    3.442834863802482*^9, 3.442834864300197*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"scoretable", "[", "t_", "]"}], ":=", 
+  RowBox[{"Framed", "[", 
+   RowBox[{
+    RowBox[{"TableForm", "[", 
+     RowBox[{"Tally", "[", 
+      RowBox[{"Sort", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+         "&"}], "/@", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}], ",", 
+    RowBox[{"Background", "\[Rule]", "LightRed"}], ",", 
+    RowBox[{"FrameStyle", "\[Rule]", "None"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.444819312081152*^9, 3.444819328945385*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"resultstable", "[", 
+   RowBox[{"P_", ",", "s_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "r", "}"}], ",", 
+    RowBox[{"TabView", "[", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}],
+           "\[Rule]", 
+          RowBox[{"Grid", "[", 
+           RowBox[{
+            RowBox[{"Table", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{
+                "s", "\[LeftDoubleBracket]", "j", "\[RightDoubleBracket]"}], 
+                ",", 
+                RowBox[{"If", "[", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"(", 
+                    RowBox[{"r", "=", 
+                    RowBox[{"t", "\[LeftDoubleBracket]", 
+                    RowBox[{"k", ",", "j", ",", "2"}], 
+                    "\[RightDoubleBracket]"}]}], ")"}], "\[Equal]", 
+                   "\"\<Allowable\>\""}], ",", 
+                  RowBox[{"Style", "[", 
+                   RowBox[{"r", ",", "Bold"}], "]"}], ",", "r"}], "]"}]}], 
+               "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"j", ",", 
+                RowBox[{"Length", "[", "s", "]"}]}], "}"}]}], "]"}], ",", 
+            RowBox[{"Alignment", "\[Rule]", "Left"}]}], "]"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", 
+          RowBox[{"Length", "[", "P", "]"}]}], "}"}]}], "]"}], "]"}], "]"}]}],
+    "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.4448185769134912`*^9, 3.444818620796167*^9}, {
+  3.444819283288286*^9, 3.4448192872337027`*^9}, {3.444819511451982*^9, 
+  3.444819530445219*^9}, {3.44482141856257*^9, 3.444821507410432*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"allowablestrata", "[", 
+   RowBox[{"P_", ",", "s_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "st", "}"}], ",", 
+    RowBox[{"Framed", "[", 
+     RowBox[{
+      RowBox[{"Grid", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+            "P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], ",", 
+            
+            RowBox[{"Column", "[", 
+             RowBox[{
+              RowBox[{"st", "=", 
+               RowBox[{"Pick", "[", 
+                RowBox[{"s", ",", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{
+                   "#", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], "&"}], "/@", 
+                  RowBox[{
+                  "t", "\[LeftDoubleBracket]", "k", 
+                   "\[RightDoubleBracket]"}]}]}], "]"}]}], ";", 
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{"st", "\[Equal]", 
+                 RowBox[{"{", "}"}]}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"Style", "[", 
+                  RowBox[{"\"\<none\>\"", ",", "Italic"}], "]"}], "}"}], ",", 
+                "st"}], "]"}]}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k", ",", 
+            RowBox[{"Length", "[", "t", "]"}]}], "}"}]}], "]"}], ",", 
+        RowBox[{"Spacings", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]}], ",", 
+        RowBox[{"Alignment", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"Left", ",", "Top"}], "}"}]}]}], "]"}], ",", 
+      RowBox[{"Background", "\[Rule]", "LightGreen"}], ",", 
+      RowBox[{"FrameStyle", "\[Rule]", "None"}]}], "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.444820355590103*^9, 3.4448203671205463`*^9}, {
+   3.444820403543923*^9, 3.444820404080968*^9}, {3.444820445897664*^9, 
+   3.444820458293314*^9}, {3.444820502186372*^9, 3.444820503315258*^9}, {
+   3.444820570017824*^9, 3.444820606958001*^9}, {3.4448206589467173`*^9, 
+   3.444820694121529*^9}, {3.4448207554017687`*^9, 3.444820781330755*^9}, {
+   3.444820815050661*^9, 3.444820850197412*^9}, {3.444821217469034*^9, 
+   3.444821311379854*^9}, {3.444821353175932*^9, 3.444821359218094*^9}, {
+   3.4448220467555428`*^9, 3.44482206304154*^9}, {3.444822096535431*^9, 
+   3.4448221027539663`*^9}, 3.4448222562855597`*^9, {3.444822288997514*^9, 
+   3.44482228922269*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"fulltreatment", "[", 
+   RowBox[{"P_", ",", "s_", ",", " ", 
+    RowBox[{"opts", ":", 
+     RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"t", ",", "rt"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"t", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"LefschetzNumbersTestQ", "[", 
+           RowBox[{"#", ",", 
+            RowBox[{
+            "P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], ",", 
+            "x", ",", 
+            RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
+            RowBox[{"FilterRules", "[", 
+             RowBox[{
+              RowBox[{"{", "opts", "}"}], ",", 
+              RowBox[{"Options", "[", "LefschetzNumbersTestQ", "]"}]}], 
+             "]"}]}], "]"}], "&"}], "/@", "s"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", 
+          RowBox[{"Length", "[", "P", "]"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"OptionValue", "[", "ResultsByPolynomial", "]"}], ",", 
+       RowBox[{"rt", "=", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"allowablestrata", "[", 
+           RowBox[{"P", ",", "s", ",", "t"}], "]"}], ",", 
+          RowBox[{"resultstable", "[", 
+           RowBox[{"P", ",", "s", ",", "t"}], "]"}], ",", 
+          RowBox[{"scoretable", "[", "t", "]"}]}], "}"}]}], ",", 
+       RowBox[{"rt", "=", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"allowablestrata", "[", 
+           RowBox[{"P", ",", "s", ",", "t"}], "]"}], ",", 
+          RowBox[{"scoretable", "[", "t", "]"}]}], "}"}]}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Column", "[", 
+      RowBox[{"rt", ",", "Left", ",", "1.5"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ResultsByPolynomial", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Options", "[", "fulltreatment", "]"}], "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"ResultsByPolynomial", "\[Rule]", "True"}], "}"}], ",", 
+     RowBox[{"Options", "[", "LefschetzNumbersTestQ", "]"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.444822464200306*^9, 3.444822507246949*^9}, {
+   3.444822541086905*^9, 3.4448226592879267`*^9}, {3.444822741521229*^9, 
+   3.44482276111549*^9}, 3.444822921069412*^9, {3.444823372623472*^9, 
+   3.444823401899185*^9}, {3.444823437366678*^9, 3.444823465633163*^9}, {
+   3.444823507377571*^9, 3.444823624530134*^9}, {3.4448236621401463`*^9, 
+   3.444823682577997*^9}, {3.444823729028623*^9, 3.4448237625505743`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Main", "Subsection",
+ CellChangeTimes->{{3.44482449050348*^9, 3.4448244907408123`*^9}}],
 
 Cell["For genus 3, these are the cases that should be eliminated.", "Text",
  CellChangeTimes->{{3.444733516061398*^9, 3.444733523669318*^9}}],
@@ -96,39 +307,11 @@ For positive dilatation, can eliminate everything but the appropriate, (4, 2, \
 \>", "Text",
  CellChangeTimes->{{3.4447339166061974`*^9, 3.4447339365811853`*^9}}],
 
-Cell[BoxData[{
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"t", "=", 
-   RowBox[{"Table", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{
-       RowBox[{"LefschetzNumbersTestQ", "[", 
-        RowBox[{"#", ",", 
-         RowBox[{"P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], 
-         ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], 
-       "&"}], "/@", "s"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"k", ",", 
-       RowBox[{"Length", "[", "P", "]"}]}], "}"}]}], "]"}]}], 
-  "]"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Tally", "[", 
-   RowBox[{"Sort", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
-      "&"}], "/@", 
-     RowBox[{"Flatten", "[", 
-      RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}]}], "Input",
- CellChangeTimes->{{3.444335917110114*^9, 3.4443359294098577`*^9}, {
-  3.4447345083688*^9, 3.4447345130146646`*^9}, {3.4447409276269293`*^9, 
-  3.444740936515313*^9}, {3.444741028710244*^9, 3.444741035167807*^9}, {
-  3.444741764262958*^9, 3.444741764713605*^9}, {3.444742435342846*^9, 
-  3.444742457410165*^9}, {3.444742923575914*^9, 3.444742924033319*^9}, {
-  3.444743427887499*^9, 3.4447434319908333`*^9}, {3.444788131352351*^9, 
-  3.444788158378283*^9}, {3.444788270659378*^9, 3.4447882809463377`*^9}}],
+Cell[BoxData[
+ RowBox[{"fulltreatment", "[", 
+  RowBox[{"P", ",", "s"}], "]"}]], "Input",
+ CellChangeTimes->{{3.4448226368816347`*^9, 3.444822672420779*^9}, {
+   3.444823632138281*^9, 3.4448236378309803`*^9}, 3.4448237874949093`*^9}],
 
 Cell["\<\
 For negative dilatation, the first two polynomials should be eliminated (not \
@@ -136,42 +319,13 @@ sure about the third one) :\
 \>", "Text",
  CellChangeTimes->{{3.444733948279311*^9, 3.444733971321538*^9}}],
 
-Cell[BoxData[{
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"t", "=", 
-   RowBox[{"Table", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{
-       RowBox[{"LefschetzNumbersTestQ", "[", 
-        RowBox[{"#", ",", 
-         RowBox[{
-          RowBox[{"P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}],
-           "/.", 
-          RowBox[{"x", "\[Rule]", 
-           RowBox[{"-", "x"}]}]}], ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], 
-       "&"}], "/@", "s"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"k", ",", 
-       RowBox[{"Length", "[", "P", "]"}]}], "}"}]}], "]"}]}], 
-  "]"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Tally", "[", 
-   RowBox[{"Sort", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
-      "&"}], "/@", 
-     RowBox[{"Flatten", "[", 
-      RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}]}], "Input",
- CellChangeTimes->{{3.444335917110114*^9, 3.4443359294098577`*^9}, {
-   3.4447337127260323`*^9, 3.444733713874075*^9}, 3.444734525018655*^9, 
-   3.444741615807007*^9, {3.444741789068287*^9, 3.444741789472301*^9}, {
-   3.4447425838742857`*^9, 3.444742590183267*^9}, {3.444742933849372*^9, 
-   3.444742934157712*^9}, {3.444743421466584*^9, 3.444743425240263*^9}, {
-   3.4447881668970747`*^9, 3.44478819987813*^9}, {3.444788290027397*^9, 
-   3.444788301031246*^9}}],
+Cell[BoxData[
+ RowBox[{"fulltreatment", "[", 
+  RowBox[{
+   RowBox[{"P", "/.", 
+    RowBox[{"x", "\[Rule]", 
+     RowBox[{"-", "x"}]}]}], ",", "s"}], "]"}]], "Input",
+ CellChangeTimes->{{3.4448228474725513`*^9, 3.444822848669339*^9}}],
 
 Cell["Now try the Lehmer polynomial for genus 5 :", "Text",
  CellChangeTimes->{{3.444733611399207*^9, 3.444733620310625*^9}}],
@@ -184,89 +338,41 @@ Cell[BoxData[{
   3.444734938374177*^9, 3.444734938710763*^9}}],
 
 Cell[BoxData[
- RowBox[{"PLehmer", "=", 
-  RowBox[{
-   SuperscriptBox["x", "10"], "+", 
-   SuperscriptBox["x", "9"], "-", 
-   SuperscriptBox["x", "7"], "-", 
-   SuperscriptBox["x", "6"], "-", 
-   SuperscriptBox["x", "5"], "-", 
-   SuperscriptBox["x", "4"], "-", 
-   SuperscriptBox["x", "3"], "+", "x", "+", "1"}]}]], "Input",
- CellChangeTimes->{{3.4444261520862913`*^9, 3.444426152806209*^9}}],
-
-Cell[BoxData[
- RowBox[{"PerronRoot", "[", 
-  RowBox[{"PLehmer", ",", "x"}], "]"}]], "Input",
- CellChangeTimes->{{3.444426239151514*^9, 3.444426245898641*^9}}],
+ RowBox[{"P", "=", 
+  RowBox[{"{", 
+   RowBox[{
+    SuperscriptBox["x", "10"], "+", 
+    SuperscriptBox["x", "9"], "-", 
+    SuperscriptBox["x", "7"], "-", 
+    SuperscriptBox["x", "6"], "-", 
+    SuperscriptBox["x", "5"], "-", 
+    SuperscriptBox["x", "4"], "-", 
+    SuperscriptBox["x", "3"], "+", "x", "+", "1"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.4444261520862913`*^9, 3.444426152806209*^9}, {
+  3.444821705830997*^9, 3.444821709749008*^9}}],
 
 Cell["For the positive Perron root, there are no possible strata :", "Text",
  CellChangeTimes->{{3.444733630512706*^9, 3.444733663871092*^9}}],
 
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"t", "=", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"LefschetzNumbersTestQ", "[", 
-      RowBox[{"#", ",", "PLehmer", ",", "x", ",", 
-       RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", " ", 
-       RowBox[{"MaxLefschetz", "\[Rule]", "150"}]}], "]"}], "&"}], "/@", 
-    "s"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"Pick", "[", 
-  RowBox[{"s", ",", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
-     "&"}], "/@", "t"}]}], "]"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Tally", "[", 
-   RowBox[{"Sort", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
-      "&"}], "/@", "t"}], "]"}], "]"}], "]"}]}], "Input",
- CellChangeTimes->{{3.444426233901552*^9, 3.44442626072902*^9}, {
-   3.4444281155498734`*^9, 3.444428117478013*^9}, {3.444428159162332*^9, 
-   3.444428165833596*^9}, {3.444742672742214*^9, 3.4447427310319977`*^9}, {
-   3.444742764702366*^9, 3.4447427665401783`*^9}, {3.444742803154627*^9, 
-   3.44474280888623*^9}, 3.4447428476463737`*^9, {3.444743399514696*^9, 
-   3.444743416141959*^9}, {3.4447883255297537`*^9, 3.444788339648109*^9}}],
+Cell[BoxData[
+ RowBox[{"fulltreatment", "[", 
+  RowBox[{"P", ",", "s", ",", " ", 
+   RowBox[{"MaxLefschetz", "\[Rule]", "150"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.4448229370897512`*^9, 3.444822964752674*^9}}],
 
 Cell["\<\
 For the negative case, should be left with (16) and (4,4,4,4):\
 \>", "Text",
  CellChangeTimes->{{3.444733650930694*^9, 3.444733684749897*^9}}],
 
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"t", "=", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"LefschetzNumbersTestQ", "[", 
-      RowBox[{"#", ",", 
-       RowBox[{"PLehmer", "/.", 
-        RowBox[{"x", "\[Rule]", 
-         RowBox[{"-", "x"}]}]}], ",", "x", ",", 
-       RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
-       RowBox[{"MaxLefschetz", "\[Rule]", "150"}]}], "]"}], "&"}], "/@", 
-    "s"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"Pick", "[", 
-  RowBox[{"s", ",", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
-     "&"}], "/@", "t"}]}], "]"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Tally", "[", 
-   RowBox[{"Sort", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
-      "&"}], "/@", "t"}], "]"}], "]"}], "]"}]}], "Input",
- CellChangeTimes->{{3.4447428392561283`*^9, 3.444742853071127*^9}, {
-  3.444743392948341*^9, 3.444743410454069*^9}, {3.4447883495089703`*^9, 
-  3.444788353662212*^9}}],
+Cell[BoxData[
+ RowBox[{"fulltreatment", "[", 
+  RowBox[{
+   RowBox[{"P", "/.", 
+    RowBox[{"x", "\[Rule]", 
+     RowBox[{"-", "x"}]}]}], ",", "s", ",", " ", 
+   RowBox[{"MaxLefschetz", "\[Rule]", "150"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.444822981162518*^9, 3.44482298255271*^9}}],
 
 Cell["\<\
 These are the cases between Lehmer and our \"old\" minimizer  for genus 5:\
@@ -275,7 +381,7 @@ These are the cases between Lehmer and our \"old\" minimizer  for genus 5:\
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"P5", "=", 
+  RowBox[{"P", "=", 
    RowBox[{"{", 
     RowBox[{
      RowBox[{
@@ -354,111 +460,32 @@ Cell[BoxData[
       SuperscriptBox["x", "8"], "-", 
       SuperscriptBox["x", "9"], "+", 
       SuperscriptBox["x", "10"]}]}], "}"}]}], ";"}]], "Input",
- CellChangeTimes->{{3.444757031106664*^9, 3.444757051284956*^9}}],
+ CellChangeTimes->{{3.444757031106664*^9, 3.444757051284956*^9}, 
+   3.4448218960086393`*^9}],
 
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"t", "=", 
-   RowBox[{"Table", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{
-       RowBox[{"LefschetzNumbersTestQ", "[", 
-        RowBox[{"#", ",", 
-         RowBox[{"P5", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}],
-          ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
-         RowBox[{"MaxLefschetz", "\[Rule]", "200"}]}], "]"}], "&"}], "/@", 
-      "s"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"k", ",", 
-       RowBox[{"Length", "[", "P5", "]"}]}], "}"}]}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Table", "[", 
-   RowBox[{
-    RowBox[{"Pick", "[", 
-     RowBox[{"s", ",", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
-        "&"}], "/@", 
-       RowBox[{
-       "t", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}]}]}], "]"}],
-     ",", 
-    RowBox[{"{", 
-     RowBox[{"k", ",", 
-      RowBox[{"Length", "[", "P5", "]"}]}], "}"}]}], "]"}], 
-  "]"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Tally", "[", 
-   RowBox[{"Sort", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
-      "&"}], "/@", 
-     RowBox[{"Flatten", "[", 
-      RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}]}], "Input",
- CellChangeTimes->{{3.444757079263394*^9, 3.444757087182585*^9}, {
-  3.4447883735155487`*^9, 3.44478838023151*^9}}],
+Cell[BoxData[
+ RowBox[{"fulltreatment", "[", 
+  RowBox[{"P", ",", "s", ",", " ", 
+   RowBox[{"MaxLefschetz", "\[Rule]", "200"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.4448229370897512`*^9, 3.444822964752674*^9}, {
+  3.444823014841474*^9, 3.444823015673218*^9}}],
 
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"t", "=", 
-   RowBox[{"Table", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{
-       RowBox[{"LefschetzNumbersTestQ", "[", 
-        RowBox[{"#", ",", 
-         RowBox[{
-          RowBox[{
-          "P5", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], "/.", 
-          
-          RowBox[{"x", "\[Rule]", 
-           RowBox[{"-", "x"}]}]}], ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
-         RowBox[{"MaxLefschetz", "\[Rule]", "200"}]}], "]"}], "&"}], "/@", 
-      "s"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"k", ",", 
-       RowBox[{"Length", "[", "P5", "]"}]}], "}"}]}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Table", "[", 
-   RowBox[{
-    RowBox[{"Pick", "[", 
-     RowBox[{"s", ",", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
-        "&"}], "/@", 
-       RowBox[{
-       "t", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}]}]}], "]"}],
-     ",", 
-    RowBox[{"{", 
-     RowBox[{"k", ",", 
-      RowBox[{"Length", "[", "P5", "]"}]}], "}"}]}], "]"}], 
-  "]"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Tally", "[", 
-   RowBox[{"Sort", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
-      "&"}], "/@", 
-     RowBox[{"Flatten", "[", 
-      RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}]}], "Input",
- CellChangeTimes->{{3.444757079263394*^9, 3.444757087182585*^9}, {
-  3.444757137566451*^9, 3.444757139468655*^9}, {3.444788393156332*^9, 
-  3.4447884586397543`*^9}}],
+Cell[BoxData[
+ RowBox[{"fulltreatment", "[", 
+  RowBox[{
+   RowBox[{"P", "/.", 
+    RowBox[{"x", "\[Rule]", 
+     RowBox[{"-", "x"}]}]}], ",", "s", ",", " ", 
+   RowBox[{"MaxLefschetz", "\[Rule]", "200"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.4448229370897512`*^9, 3.444822964752674*^9}, {
+  3.444823029157939*^9, 3.444823032313073*^9}}],
 
 Cell["The \"Lehmer\" cases for genus 6 :", "Text",
  CellChangeTimes->{{3.444659296727528*^9, 3.444659304500119*^9}}],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"Pl", "=", 
+  RowBox[{"P", "=", 
    RowBox[{"{", 
     RowBox[{
      RowBox[{
@@ -527,7 +554,7 @@ Cell[BoxData[
         SuperscriptBox["x", "9"], "+", 
         SuperscriptBox["x", "10"]}], ")"}]}]}], "}"}]}], ";"}]], "Input",
  CellChangeTimes->{{3.444659123217706*^9, 3.444659172932392*^9}, 
-   3.444659309874596*^9}],
+   3.444659309874596*^9, 3.4448219367172318`*^9}],
 
 Cell[BoxData[{
  RowBox[{"s", "=", 
@@ -536,122 +563,30 @@ Cell[BoxData[{
  CellChangeTimes->{{3.444733458599819*^9, 3.444733458915876*^9}, {
   3.444734931716041*^9, 3.444734931957156*^9}}],
 
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"t", "=", 
-   RowBox[{"Table", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{
-       RowBox[{"LefschetzNumbersTestQ", "[", 
-        RowBox[{"#", ",", 
-         RowBox[{"Pl", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}],
-          ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
-         RowBox[{"CheckIterates", "\[Rule]", "15"}], ",", 
-         RowBox[{"MaxLefschetz", "\[Rule]", "900"}]}], "]"}], "&"}], "/@", 
-      "s"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"k", ",", 
-       RowBox[{"Length", "[", "Pl", "]"}]}], "}"}]}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Table", "[", 
-   RowBox[{
-    RowBox[{"Pick", "[", 
-     RowBox[{"s", ",", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
-        "&"}], "/@", 
-       RowBox[{
-       "t", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}]}]}], "]"}],
-     ",", 
-    RowBox[{"{", 
-     RowBox[{"k", ",", 
-      RowBox[{"Length", "[", "Pl", "]"}]}], "}"}]}], "]"}], 
-  "]"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Tally", "[", 
-   RowBox[{"Sort", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
-      "&"}], "/@", 
-     RowBox[{"Flatten", "[", 
-      RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}]}], "Input",
- CellChangeTimes->{{3.444335917110114*^9, 3.4443359294098577`*^9}, {
-   3.4447345083688*^9, 3.4447345130146646`*^9}, {3.4447409276269293`*^9, 
-   3.444740936515313*^9}, {3.444741028710244*^9, 3.444741035167807*^9}, {
-   3.444741764262958*^9, 3.444741764713605*^9}, {3.444742435342846*^9, 
-   3.444742457410165*^9}, {3.444742923575914*^9, 3.444742924033319*^9}, 
-   3.4447429543502502`*^9, {3.444742998176359*^9, 3.444743139185814*^9}, {
-   3.444743171259246*^9, 3.444743264577692*^9}, {3.444743384266281*^9, 
-   3.444743388233654*^9}, {3.4447884968387823`*^9, 3.444788517640698*^9}, {
-   3.444788635793627*^9, 3.444788638401586*^9}, {3.4447886716056767`*^9, 
-   3.444788684350923*^9}, {3.444788752764861*^9, 3.444788767174802*^9}, {
-   3.444788864672826*^9, 3.4447889134567747`*^9}}],
+Cell[BoxData[
+ RowBox[{"fulltreatment", "[", 
+  RowBox[{"P", ",", "s", ",", " ", 
+   RowBox[{"MaxLefschetz", "\[Rule]", "900"}], ",", 
+   RowBox[{"ResultsByPolynomial", "\[Rule]", "False"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.4448229370897512`*^9, 3.444822964752674*^9}, {
+   3.444823014841474*^9, 3.444823015673218*^9}, {3.4448230767107964`*^9, 
+   3.4448230768921137`*^9}, 3.4448238185923223`*^9}],
 
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"t", "=", 
-   RowBox[{"Table", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{
-       RowBox[{"LefschetzNumbersTestQ", "[", 
-        RowBox[{"#", ",", 
-         RowBox[{
-          RowBox[{
-          "Pl", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], "/.", 
-          
-          RowBox[{"x", "\[Rule]", 
-           RowBox[{"-", "x"}]}]}], ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
-         RowBox[{"CheckIterates", "\[Rule]", "15"}], ",", 
-         RowBox[{"MaxLefschetz", "\[Rule]", "900"}]}], "]"}], "&"}], "/@", 
-      "s"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"k", ",", 
-       RowBox[{"Length", "[", "Pl", "]"}]}], "}"}]}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Table", "[", 
-   RowBox[{
-    RowBox[{"Pick", "[", 
-     RowBox[{"s", ",", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
-        "&"}], "/@", 
-       RowBox[{
-       "t", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}]}]}], "]"}],
-     ",", 
-    RowBox[{"{", 
-     RowBox[{"k", ",", 
-      RowBox[{"Length", "[", "Pl", "]"}]}], "}"}]}], "]"}], 
-  "]"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Tally", "[", 
-   RowBox[{"Sort", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
-      "&"}], "/@", 
-     RowBox[{"Flatten", "[", 
-      RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}]}], "Input",
- CellChangeTimes->{{3.444335917110114*^9, 3.4443359294098577`*^9}, {
-   3.4447345083688*^9, 3.4447345130146646`*^9}, {3.4447409276269293`*^9, 
-   3.444740936515313*^9}, {3.444741028710244*^9, 3.444741035167807*^9}, {
-   3.444741764262958*^9, 3.444741764713605*^9}, {3.444742435342846*^9, 
-   3.444742457410165*^9}, {3.444742923575914*^9, 3.444742924033319*^9}, 
-   3.4447429543502502`*^9, {3.444742998176359*^9, 3.444743139185814*^9}, {
-   3.444743171259246*^9, 3.4447432769284697`*^9}, {3.444743374518386*^9, 
-   3.444743381561194*^9}, {3.4447888249590187`*^9, 3.4447888280533667`*^9}, {
-   3.444788951305359*^9, 3.4447889543027067`*^9}}]
+Cell[BoxData[
+ RowBox[{"fulltreatment", "[", 
+  RowBox[{
+   RowBox[{"P", "/.", 
+    RowBox[{"x", "\[Rule]", 
+     RowBox[{"-", "x"}]}]}], ",", "s", ",", 
+   RowBox[{"CheckIterates", "\[Rule]", "15"}], ",", " ", 
+   RowBox[{"MaxLefschetz", "\[Rule]", "900"}], ",", 
+   RowBox[{"ResultsByPolynomial", "\[Rule]", "False"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.444823110516636*^9, 3.444823115414341*^9}, 
+   3.444823823123805*^9}]
+}, Open  ]]
 },
 WindowSize->{836, 750},
-WindowMargins->{{Automatic, 48}, {Automatic, 101}},
+WindowMargins->{{35, Automatic}, {Automatic, 28}},
 ShowSelection->True,
 FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
 StyleDefinitions->"Default.nb"
@@ -667,34 +602,43 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[545, 20, 199, 4, 32, "Input"],
-Cell[747, 26, 198, 4, 32, "Input"],
-Cell[948, 32, 141, 1, 31, "Text"],
-Cell[1092, 35, 605, 18, 32, "Input"],
-Cell[1700, 55, 250, 5, 31, "Text"],
-Cell[1953, 62, 666, 18, 55, "Input"],
-Cell[2622, 82, 468, 8, 55, "Input"],
-Cell[3093, 92, 196, 4, 31, "Text"],
-Cell[3292, 98, 1366, 32, 99, "Input"],
-Cell[4661, 132, 196, 4, 31, "Text"],
-Cell[4860, 138, 1420, 35, 99, "Input"],
-Cell[6283, 175, 125, 1, 31, "Text"],
-Cell[6411, 178, 275, 5, 55, "Input"],
-Cell[6689, 185, 392, 10, 32, "Input"],
-Cell[7084, 197, 158, 3, 32, "Input"],
-Cell[7245, 202, 142, 1, 31, "Text"],
-Cell[7390, 205, 1236, 28, 121, "Input"],
-Cell[8629, 235, 152, 3, 31, "Text"],
-Cell[8784, 240, 1050, 28, 121, "Input"],
-Cell[9837, 270, 163, 3, 31, "Text"],
-Cell[10003, 275, 2785, 81, 77, "Input"],
-Cell[12791, 358, 1506, 44, 143, "Input"],
-Cell[14300, 404, 1664, 49, 143, "Input"],
-Cell[15967, 455, 116, 1, 31, "Text"],
-Cell[16086, 458, 2494, 71, 77, "Input"],
-Cell[18583, 531, 273, 5, 55, "Input"],
-Cell[18859, 538, 2233, 54, 143, "Input"],
-Cell[21095, 594, 2197, 56, 143, "Input"]
+Cell[CellGroupData[{
+Cell[567, 22, 102, 1, 39, "Subsection"],
+Cell[672, 25, 199, 4, 32, "Input"],
+Cell[874, 31, 198, 4, 32, "Input"],
+Cell[1075, 37, 626, 16, 55, "Input"],
+Cell[1704, 55, 1855, 46, 187, "Input"],
+Cell[3562, 103, 2553, 60, 187, "Input"],
+Cell[6118, 165, 2811, 70, 297, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8966, 240, 93, 1, 39, "Subsection"],
+Cell[9062, 243, 141, 1, 31, "Text"],
+Cell[9206, 246, 605, 18, 32, "Input"],
+Cell[9814, 266, 250, 5, 31, "Text"],
+Cell[10067, 273, 666, 18, 55, "Input"],
+Cell[10736, 293, 468, 8, 55, "Input"],
+Cell[11207, 303, 196, 4, 31, "Text"],
+Cell[11406, 309, 233, 4, 32, "Input"],
+Cell[11642, 315, 196, 4, 31, "Text"],
+Cell[11841, 321, 234, 6, 32, "Input"],
+Cell[12078, 329, 125, 1, 31, "Text"],
+Cell[12206, 332, 275, 5, 55, "Input"],
+Cell[12484, 339, 466, 12, 32, "Input"],
+Cell[12953, 353, 142, 1, 31, "Text"],
+Cell[13098, 356, 215, 4, 32, "Input"],
+Cell[13316, 362, 152, 3, 31, "Text"],
+Cell[13471, 367, 289, 7, 32, "Input"],
+Cell[13763, 376, 163, 3, 31, "Text"],
+Cell[13929, 381, 2812, 82, 77, "Input"],
+Cell[16744, 465, 264, 5, 32, "Input"],
+Cell[17011, 472, 341, 8, 32, "Input"],
+Cell[17355, 482, 116, 1, 31, "Text"],
+Cell[17474, 485, 2517, 71, 77, "Input"],
+Cell[19994, 558, 273, 5, 55, "Input"],
+Cell[20270, 565, 405, 7, 32, "Input"],
+Cell[20678, 574, 431, 10, 55, "Input"]
+}, Open  ]]
 }
 ]
 *)
