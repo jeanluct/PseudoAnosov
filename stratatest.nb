@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     23389,        675]
-NotebookOptionsPosition[     22079,        634]
-NotebookOutlinePosition[     22439,        650]
-CellTagsIndexPosition[     22396,        647]
+NotebookDataLength[     24607,        693]
+NotebookOptionsPosition[     23296,        652]
+NotebookOutlinePosition[     23655,        668]
+CellTagsIndexPosition[     23612,        665]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -127,7 +127,8 @@ Cell[BoxData[{
   3.444740936515313*^9}, {3.444741028710244*^9, 3.444741035167807*^9}, {
   3.444741764262958*^9, 3.444741764713605*^9}, {3.444742435342846*^9, 
   3.444742457410165*^9}, {3.444742923575914*^9, 3.444742924033319*^9}, {
-  3.444743427887499*^9, 3.4447434319908333`*^9}}],
+  3.444743427887499*^9, 3.4447434319908333`*^9}, {3.444788131352351*^9, 
+  3.444788158378283*^9}, {3.444788270659378*^9, 3.4447882809463377`*^9}}],
 
 Cell["\<\
 For negative dilatation, the first two polynomials should be eliminated (not \
@@ -168,7 +169,9 @@ Cell[BoxData[{
    3.4447337127260323`*^9, 3.444733713874075*^9}, 3.444734525018655*^9, 
    3.444741615807007*^9, {3.444741789068287*^9, 3.444741789472301*^9}, {
    3.4447425838742857`*^9, 3.444742590183267*^9}, {3.444742933849372*^9, 
-   3.444742934157712*^9}, {3.444743421466584*^9, 3.444743425240263*^9}}],
+   3.444742934157712*^9}, {3.444743421466584*^9, 3.444743425240263*^9}, {
+   3.4447881668970747`*^9, 3.44478819987813*^9}, {3.444788290027397*^9, 
+   3.444788301031246*^9}}],
 
 Cell["Now try the Lehmer polynomial for genus 5 :", "Text",
  CellChangeTimes->{{3.444733611399207*^9, 3.444733620310625*^9}}],
@@ -207,8 +210,9 @@ Cell[BoxData[{
     RowBox[{
      RowBox[{"LefschetzNumbersTestQ", "[", 
       RowBox[{"#", ",", "PLehmer", ",", "x", ",", 
-       RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], "&"}], 
-    "/@", "s"}]}], ";"}], "\[IndentingNewLine]", 
+       RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", " ", 
+       RowBox[{"MaxLefschetz", "\[Rule]", "150"}]}], "]"}], "&"}], "/@", 
+    "s"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"Pick", "[", 
   RowBox[{"s", ",", 
    RowBox[{
@@ -227,7 +231,7 @@ Cell[BoxData[{
    3.444428165833596*^9}, {3.444742672742214*^9, 3.4447427310319977`*^9}, {
    3.444742764702366*^9, 3.4447427665401783`*^9}, {3.444742803154627*^9, 
    3.44474280888623*^9}, 3.4447428476463737`*^9, {3.444743399514696*^9, 
-   3.444743416141959*^9}}],
+   3.444743416141959*^9}, {3.4447883255297537`*^9, 3.444788339648109*^9}}],
 
 Cell["\<\
 For the negative case, should be left with (16) and (4,4,4,4):\
@@ -244,8 +248,9 @@ Cell[BoxData[{
        RowBox[{"PLehmer", "/.", 
         RowBox[{"x", "\[Rule]", 
          RowBox[{"-", "x"}]}]}], ",", "x", ",", 
-       RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], "&"}], 
-    "/@", "s"}]}], ";"}], "\[IndentingNewLine]", 
+       RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
+       RowBox[{"MaxLefschetz", "\[Rule]", "150"}]}], "]"}], "&"}], "/@", 
+    "s"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"Pick", "[", 
   RowBox[{"s", ",", 
    RowBox[{
@@ -260,7 +265,8 @@ Cell[BoxData[{
       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
       "&"}], "/@", "t"}], "]"}], "]"}], "]"}]}], "Input",
  CellChangeTimes->{{3.4447428392561283`*^9, 3.444742853071127*^9}, {
-  3.444743392948341*^9, 3.444743410454069*^9}}],
+  3.444743392948341*^9, 3.444743410454069*^9}, {3.4447883495089703`*^9, 
+  3.444788353662212*^9}}],
 
 Cell["\<\
 These are the cases between Lehmer and our \"old\" minimizer  for genus 5:\
@@ -361,56 +367,9 @@ Cell[BoxData[{
         RowBox[{"#", ",", 
          RowBox[{"P5", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}],
           ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], 
-       "&"}], "/@", "s"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"k", ",", 
-       RowBox[{"Length", "[", "P5", "]"}]}], "}"}]}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Table", "[", 
-   RowBox[{
-    RowBox[{"Pick", "[", 
-     RowBox[{"s", ",", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
-        "&"}], "/@", 
-       RowBox[{
-       "t", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}]}]}], "]"}],
-     ",", 
-    RowBox[{"{", 
-     RowBox[{"k", ",", 
-      RowBox[{"Length", "[", "P5", "]"}]}], "}"}]}], "]"}], 
-  "]"}], "\[IndentingNewLine]", 
- RowBox[{"MatrixForm", "[", 
-  RowBox[{"Tally", "[", 
-   RowBox[{"Sort", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
-      "&"}], "/@", 
-     RowBox[{"Flatten", "[", 
-      RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}]}], "Input",
- CellChangeTimes->{{3.444757079263394*^9, 3.444757087182585*^9}}],
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"t", "=", 
-   RowBox[{"Table", "[", 
-    RowBox[{
-     RowBox[{
-      RowBox[{
-       RowBox[{"LefschetzNumbersTestQ", "[", 
-        RowBox[{"#", ",", 
-         RowBox[{
-          RowBox[{
-          "P5", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], "/.", 
-          
-          RowBox[{"x", "\[Rule]", 
-           RowBox[{"-", "x"}]}]}], ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], 
-       "&"}], "/@", "s"}], ",", 
+         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
+         RowBox[{"MaxLefschetz", "\[Rule]", "200"}]}], "]"}], "&"}], "/@", 
+      "s"}], ",", 
      RowBox[{"{", 
       RowBox[{"k", ",", 
        RowBox[{"Length", "[", "P5", "]"}]}], "}"}]}], "]"}]}], 
@@ -441,7 +400,58 @@ Cell[BoxData[{
      RowBox[{"Flatten", "[", 
       RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}]}], "Input",
  CellChangeTimes->{{3.444757079263394*^9, 3.444757087182585*^9}, {
-  3.444757137566451*^9, 3.444757139468655*^9}}],
+  3.4447883735155487`*^9, 3.44478838023151*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"t", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"LefschetzNumbersTestQ", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{
+          RowBox[{
+          "P5", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], "/.", 
+          
+          RowBox[{"x", "\[Rule]", 
+           RowBox[{"-", "x"}]}]}], ",", "x", ",", 
+         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
+         RowBox[{"MaxLefschetz", "\[Rule]", "200"}]}], "]"}], "&"}], "/@", 
+      "s"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", 
+       RowBox[{"Length", "[", "P5", "]"}]}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"MatrixForm", "[", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"Pick", "[", 
+     RowBox[{"s", ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+        "&"}], "/@", 
+       RowBox[{
+       "t", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}]}]}], "]"}],
+     ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", 
+      RowBox[{"Length", "[", "P5", "]"}]}], "}"}]}], "]"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"MatrixForm", "[", 
+  RowBox[{"Tally", "[", 
+   RowBox[{"Sort", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+      "&"}], "/@", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"t", ",", "1"}], "]"}]}], "]"}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.444757079263394*^9, 3.444757087182585*^9}, {
+  3.444757137566451*^9, 3.444757139468655*^9}, {3.444788393156332*^9, 
+  3.4447884586397543`*^9}}],
 
 Cell["The \"Lehmer\" cases for genus 6 :", "Text",
  CellChangeTimes->{{3.444659296727528*^9, 3.444659304500119*^9}}],
@@ -537,8 +547,10 @@ Cell[BoxData[{
         RowBox[{"#", ",", 
          RowBox[{"Pl", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}],
           ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], 
-       "&"}], "/@", "s"}], ",", 
+         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
+         RowBox[{"CheckIterates", "\[Rule]", "15"}], ",", 
+         RowBox[{"MaxLefschetz", "\[Rule]", "900"}]}], "]"}], "&"}], "/@", 
+      "s"}], ",", 
      RowBox[{"{", 
       RowBox[{"k", ",", 
        RowBox[{"Length", "[", "Pl", "]"}]}], "}"}]}], "]"}]}], 
@@ -575,7 +587,10 @@ Cell[BoxData[{
    3.444742457410165*^9}, {3.444742923575914*^9, 3.444742924033319*^9}, 
    3.4447429543502502`*^9, {3.444742998176359*^9, 3.444743139185814*^9}, {
    3.444743171259246*^9, 3.444743264577692*^9}, {3.444743384266281*^9, 
-   3.444743388233654*^9}}],
+   3.444743388233654*^9}, {3.4447884968387823`*^9, 3.444788517640698*^9}, {
+   3.444788635793627*^9, 3.444788638401586*^9}, {3.4447886716056767`*^9, 
+   3.444788684350923*^9}, {3.444788752764861*^9, 3.444788767174802*^9}, {
+   3.444788864672826*^9, 3.4447889134567747`*^9}}],
 
 Cell[BoxData[{
  RowBox[{
@@ -592,8 +607,10 @@ Cell[BoxData[{
           
           RowBox[{"x", "\[Rule]", 
            RowBox[{"-", "x"}]}]}], ",", "x", ",", 
-         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}]}], "]"}], 
-       "&"}], "/@", "s"}], ",", 
+         RowBox[{"GiveReasonForRejection", "\[Rule]", "True"}], ",", 
+         RowBox[{"CheckIterates", "\[Rule]", "15"}], ",", 
+         RowBox[{"MaxLefschetz", "\[Rule]", "900"}]}], "]"}], "&"}], "/@", 
+      "s"}], ",", 
      RowBox[{"{", 
       RowBox[{"k", ",", 
        RowBox[{"Length", "[", "Pl", "]"}]}], "}"}]}], "]"}]}], 
@@ -630,12 +647,13 @@ Cell[BoxData[{
    3.444742457410165*^9}, {3.444742923575914*^9, 3.444742924033319*^9}, 
    3.4447429543502502`*^9, {3.444742998176359*^9, 3.444743139185814*^9}, {
    3.444743171259246*^9, 3.4447432769284697`*^9}, {3.444743374518386*^9, 
-   3.444743381561194*^9}}]
+   3.444743381561194*^9}, {3.4447888249590187`*^9, 3.4447888280533667`*^9}, {
+   3.444788951305359*^9, 3.4447889543027067`*^9}}]
 },
 WindowSize->{836, 750},
-WindowMargins->{{352, Automatic}, {Automatic, 126}},
+WindowMargins->{{Automatic, 48}, {Automatic, 101}},
 ShowSelection->True,
-FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -649,34 +667,34 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[545, 20, 199, 4, 31, "Input"],
-Cell[747, 26, 198, 4, 31, "Input"],
-Cell[948, 32, 141, 1, 30, "Text"],
-Cell[1092, 35, 605, 18, 39, "Input"],
-Cell[1700, 55, 250, 5, 30, "Text"],
-Cell[1953, 62, 666, 18, 60, "Input"],
-Cell[2622, 82, 468, 8, 52, "Input"],
-Cell[3093, 92, 196, 4, 30, "Text"],
-Cell[3292, 98, 1269, 31, 92, "Input"],
-Cell[4564, 131, 196, 4, 30, "Text"],
-Cell[4763, 137, 1319, 33, 132, "Input"],
-Cell[6085, 172, 125, 1, 30, "Text"],
-Cell[6213, 175, 275, 5, 52, "Input"],
-Cell[6491, 182, 392, 10, 35, "Input"],
-Cell[6886, 194, 158, 3, 31, "Input"],
-Cell[7047, 199, 142, 1, 30, "Text"],
-Cell[7192, 202, 1126, 27, 72, "Input"],
-Cell[8321, 231, 152, 3, 30, "Text"],
-Cell[8476, 236, 942, 26, 112, "Input"],
-Cell[9421, 264, 163, 3, 30, "Text"],
-Cell[9587, 269, 2785, 81, 123, "Input"],
-Cell[12375, 352, 1398, 42, 92, "Input"],
-Cell[13776, 396, 1555, 47, 132, "Input"],
-Cell[15334, 445, 116, 1, 30, "Text"],
-Cell[15453, 448, 2494, 71, 151, "Input"],
-Cell[17950, 521, 273, 5, 52, "Input"],
-Cell[18226, 528, 1868, 49, 92, "Input"],
-Cell[20097, 579, 1978, 53, 132, "Input"]
+Cell[545, 20, 199, 4, 32, "Input"],
+Cell[747, 26, 198, 4, 32, "Input"],
+Cell[948, 32, 141, 1, 31, "Text"],
+Cell[1092, 35, 605, 18, 32, "Input"],
+Cell[1700, 55, 250, 5, 31, "Text"],
+Cell[1953, 62, 666, 18, 55, "Input"],
+Cell[2622, 82, 468, 8, 55, "Input"],
+Cell[3093, 92, 196, 4, 31, "Text"],
+Cell[3292, 98, 1366, 32, 99, "Input"],
+Cell[4661, 132, 196, 4, 31, "Text"],
+Cell[4860, 138, 1420, 35, 99, "Input"],
+Cell[6283, 175, 125, 1, 31, "Text"],
+Cell[6411, 178, 275, 5, 55, "Input"],
+Cell[6689, 185, 392, 10, 32, "Input"],
+Cell[7084, 197, 158, 3, 32, "Input"],
+Cell[7245, 202, 142, 1, 31, "Text"],
+Cell[7390, 205, 1236, 28, 121, "Input"],
+Cell[8629, 235, 152, 3, 31, "Text"],
+Cell[8784, 240, 1050, 28, 121, "Input"],
+Cell[9837, 270, 163, 3, 31, "Text"],
+Cell[10003, 275, 2785, 81, 77, "Input"],
+Cell[12791, 358, 1506, 44, 143, "Input"],
+Cell[14300, 404, 1664, 49, 143, "Input"],
+Cell[15967, 455, 116, 1, 31, "Text"],
+Cell[16086, 458, 2494, 71, 77, "Input"],
+Cell[18583, 531, 273, 5, 55, "Input"],
+Cell[18859, 538, 2233, 54, 143, "Input"],
+Cell[21095, 594, 2197, 56, 143, "Input"]
 }
 ]
 *)

@@ -49,7 +49,11 @@ LefschetzNumbersTestQ::usage = ""
    Options
 *)
 
-GiveReasonForRejection::usage = "Option to LefschetzNumbersTestQ.  Set to True to return the reason for rejecting a stratum."
+GiveReasonForRejection::usage = "Option to LefschetzNumbersTestQ: Set to True to return the reason for rejecting a stratum (default False)."
+
+CheckIterates::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving the largest power of the map to test (default 10)."
+
+MaxLefschetz::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving how many of Lefschetz numbers to compute for the test."
 
 
 (*
@@ -407,17 +411,18 @@ LefschetzAlmostPureStratumQb[s_List,L_List] := Module[
 (* Test for everything. *)
 LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[{},
     If[PerronRoot[p,x] > 0,
-        Return[LefschetzNumbersTestQpositive[s,p,x,opts]]
+        LefschetzNumbersTestQpositive[s,p,x,opts]
     ,
-        Return[LefschetzNumbersTestQnegative[s,p,x,opts]]
+        LefschetzNumbersTestQnegative[s,p,x,opts]
     ]
 ]
-Options[LefschetzNumbersTestQ] = {GiveReasonForRejection -> False}
+Options[LefschetzNumbersTestQ] =
+    {GiveReasonForRejection -> False, CheckIterates -> 5, MaxLefschetz -> 100}
 
 (* Private helper function for LefschetzNumbersTestQ *)
 LefschetzNumbersTestQpositive[s_List,p_,x_, opts:OptionsPattern[]] := Module[
-    {L, Lmax = 600, Lm, powmax = 10, tests, reason = "Allowable"},
-    L = LefschetzNumbers[p,x,{Lmax}];
+    {L, Lm, tests, reason = "Allowable"},
+    L = LefschetzNumbers[p,x,{OptionValue[MaxLefschetz]}];
     tests =
         {LefschetzMinimumSingularitiesQ,
          LefschetzSingularityPermutationsQ,
@@ -428,7 +433,7 @@ LefschetzNumbersTestQpositive[s_List,p_,x_, opts:OptionsPattern[]] := Module[
     Do[
         Do[
             (* The testing functions throw an exception if there
-               are nout enough Lefschetz numbers *)
+               are not enough Lefschetz numbers *)
             Catch[
                 (* Make a list of Lefschetz numbers fpr phi^m *)
                 Lm = Table[L[[k]], {k,m,Length[L],m}];
@@ -438,7 +443,7 @@ LefschetzNumbersTestQpositive[s_List,p_,x_, opts:OptionsPattern[]] := Module[
                     Break[]
                 ];
             , oor, Message[PseudoAnosov::moreLefschetz,#1,m] &]
-        , {m,powmax}]
+        , {m, OptionValue[CheckIterates]}]
     , {k,Length[tests]}];
     If[OptionValue[GiveReasonForRejection],
         Return[{reason == "Allowable",reason}]
@@ -457,7 +462,7 @@ LefschetzNumbersTestQnegative[s_List,p_,x_, opts:OptionsPattern[]] := Module[
     tl = Table[tl[[2k]],{k,n/2}]; (* Keep only even traces *)
     p2 = ReciprocalPolynomialFromTraces[x,tl];
     (* Do the test with p2, which has positive Perron root. *)
-    LefschetzNumbersTestQ[s,p2,x,opts]
+    LefschetzNumbersTestQpositive[s,p2,x,opts]
 ]
 Options[LefschetzNumbersTestQnegative] = Options[LefschetzNumbersTestQ]
 
