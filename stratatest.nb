@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     31703,        914]
-NotebookOptionsPosition[     29270,        834]
-NotebookOutlinePosition[     29628,        850]
-CellTagsIndexPosition[     29585,        847]
+NotebookDataLength[     32200,        927]
+NotebookOptionsPosition[     29564,        840]
+NotebookOutlinePosition[     29924,        856]
+CellTagsIndexPosition[     29881,        853]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -256,13 +256,15 @@ Cell["Test strata", "Section",
 
 Cell[CellGroupData[{
 
-Cell[TextData[{
- "Systole in genus 3 ",
- StyleBox["(Table 1 in systole paper)",
-  FontSlant->"Italic"]
-}], "Subsection",
+Cell["genus 3", "Subsection",
  CellChangeTimes->{{3.4448420185167427`*^9, 3.444842028138886*^9}, {
-  3.444842857765862*^9, 3.444842863459113*^9}}],
+   3.444842857765862*^9, 3.444842863459113*^9}, {3.444844127645734*^9, 
+   3.444844138316798*^9}, 3.444844170191144*^9}],
+
+Cell[CellGroupData[{
+
+Cell["Table 1 in systole paper", "Subsubsection",
+ CellChangeTimes->{{3.44484417891229*^9, 3.4448442039642467`*^9}}],
 
 Cell["\<\
 For genus 3, the first two elements of P are the cases that should be \
@@ -338,18 +340,17 @@ Cell[BoxData[
     RowBox[{"x", "\[Rule]", 
      RowBox[{"-", "x"}]}]}], ",", "s"}], "]"}]], "Input",
  CellChangeTimes->{{3.4448228474725513`*^9, 3.444822848669339*^9}}]
-}, Closed]],
+}, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell[TextData[{
- "Systole in genus 2 ",
- StyleBox["(Table 2 in systole paper \[LongDash] nonorientable case)",
-  FontSlant->"Italic"]
-}], "Subsection",
- CellChangeTimes->{{3.444842470569783*^9, 3.444842493305728*^9}, {
-  3.4448428890900917`*^9, 3.444842914600523*^9}, {3.4448434996389112`*^9, 
-  3.444843506683797*^9}}],
+Cell["\<\
+Table 2 in systole paper \[LongDash] nonorientable case in genus 2\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.4448442308722057`*^9, 3.444844232087859*^9}}],
+
+Cell["This requires testing polynomials for genus 3.", "Text",
+ CellChangeTimes->{{3.444844237887794*^9, 3.444844248351185*^9}}],
 
 Cell[BoxData[
  RowBox[{"P", "=", 
@@ -446,18 +447,20 @@ Cell[BoxData[
    RowBox[{"ResultsByPolynomial", "\[Rule]", "False"}]}], "]"}]], "Input",
  CellChangeTimes->{{3.4448428417107286`*^9, 3.444842842937825*^9}, 
    3.444843009634226*^9}]
+}, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
 
-Cell[TextData[{
- "Systole in genus 4 ",
- StyleBox["(Table 4 in systole paper)",
-  FontSlant->"Italic"]
-}], "Subsection",
+Cell["genus 4", "Subsection",
  CellChangeTimes->{{3.4448420185167427`*^9, 3.444842028138886*^9}, {
-  3.444842247720079*^9, 3.444842247787632*^9}, {3.444842919562825*^9, 
-  3.444842922699901*^9}}],
+   3.444842247720079*^9, 3.444842247787632*^9}, {3.444842919562825*^9, 
+   3.444842922699901*^9}, 3.444844143624495*^9, 3.444844270092781*^9}],
+
+Cell[CellGroupData[{
+
+Cell["Table 4 in systole paper", "Subsubsection",
+ CellChangeTimes->{{3.444844278530365*^9, 3.444844279571*^9}}],
 
 Cell[BoxData[
  RowBox[{"P", "=", 
@@ -544,13 +547,14 @@ Cell[BoxData[
    RowBox[{"ResultsByPolynomial", "\[Rule]", "False"}]}], "]"}]], "Input",
  CellChangeTimes->{{3.444842950958647*^9, 3.4448429524069147`*^9}, 
    3.444843151522685*^9}]
+}, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
 
-Cell["Systole in genus 5", "Subsection",
+Cell["genus 5", "Subsection",
  CellChangeTimes->{{3.4448420185167427`*^9, 3.444842028138886*^9}, {
-  3.444842246772585*^9, 3.444842246889783*^9}}],
+   3.444842246772585*^9, 3.444842246889783*^9}, 3.444844145883678*^9}],
 
 Cell[CellGroupData[{
 
@@ -703,9 +707,10 @@ Cell[BoxData[
  RowBox[{"fulltreatment", "[", 
   RowBox[{"P", ",", "s", ",", " ", 
    RowBox[{"MaxLefschetz", "\[Rule]", "200"}], ",", 
-   RowBox[{"ResultsByPolynomial", "\[Rule]", "False"}]}], "]"}]], "Input",
+   RowBox[{"ResultsByPolynomial", "\[Rule]", "True"}]}], "]"}]], "Input",
  CellChangeTimes->{{3.4448229370897512`*^9, 3.444822964752674*^9}, {
-   3.444823014841474*^9, 3.444823015673218*^9}, 3.444843874722116*^9}],
+   3.444823014841474*^9, 3.444823015673218*^9}, 3.444843874722116*^9, {
+   3.444844582878237*^9, 3.444844583347602*^9}}],
 
 Cell[BoxData[
  RowBox[{"fulltreatment", "[", 
@@ -722,8 +727,9 @@ Cell[BoxData[
 
 Cell[CellGroupData[{
 
-Cell["Systole in genus 6", "Subsection",
- CellChangeTimes->{{3.444843463942903*^9, 3.444843466935066*^9}}],
+Cell["genus 6", "Subsection",
+ CellChangeTimes->{{3.444843463942903*^9, 3.444843466935066*^9}, 
+   3.444844148531447*^9}],
 
 Cell["The \"Lehmer\" cases for genus 6 :", "Text",
  CellChangeTimes->{{3.444659296727528*^9, 3.444659304500119*^9}}],
@@ -833,7 +839,7 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{836, 750},
-WindowMargins->{{30, Automatic}, {Automatic, 25}},
+WindowMargins->{{145, Automatic}, {116, Automatic}},
 ShowSelection->True,
 FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
 StyleDefinitions->"Default.nb"
@@ -863,56 +869,63 @@ Cell[6622, 174, 3044, 73, 275, "Input"]
 Cell[CellGroupData[{
 Cell[9703, 252, 148, 2, 43, "Section"],
 Cell[CellGroupData[{
-Cell[9876, 258, 237, 6, 39, "Subsection"],
-Cell[10116, 266, 337, 6, 51, "Text"],
-Cell[10456, 274, 947, 29, 32, "Input"],
-Cell[11406, 305, 468, 8, 55, "Input"],
-Cell[11877, 315, 196, 4, 31, "Text"],
-Cell[12076, 321, 233, 4, 32, "Input"],
-Cell[12312, 327, 196, 4, 31, "Text"],
-Cell[12511, 333, 234, 6, 32, "Input"]
-}, Closed]],
+Cell[9876, 258, 219, 3, 39, "Subsection"],
 Cell[CellGroupData[{
-Cell[12782, 344, 319, 7, 31, "Subsection"],
-Cell[13104, 353, 2380, 72, 77, "Input"],
-Cell[15487, 427, 224, 4, 55, "Input"],
-Cell[15714, 433, 193, 4, 32, "Input"],
-Cell[15910, 439, 322, 8, 32, "Input"]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[16269, 452, 286, 7, 31, "Subsection"],
-Cell[16558, 461, 2074, 62, 77, "Input"],
-Cell[18635, 525, 224, 4, 55, "Input"],
-Cell[18862, 531, 193, 4, 32, "Input"],
-Cell[19058, 537, 322, 8, 32, "Input"]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[19417, 550, 157, 2, 31, "Subsection"],
-Cell[CellGroupData[{
-Cell[19599, 556, 96, 1, 29, "Subsubsection"],
-Cell[19698, 559, 125, 1, 31, "Text"],
-Cell[19826, 562, 275, 5, 55, "Input"],
-Cell[20104, 569, 466, 12, 32, "Input"],
-Cell[20573, 583, 142, 1, 31, "Text"],
-Cell[20718, 586, 215, 4, 32, "Input"],
-Cell[20936, 592, 152, 3, 31, "Text"],
-Cell[21091, 597, 289, 7, 32, "Input"]
+Cell[10120, 265, 116, 1, 29, "Subsubsection"],
+Cell[10239, 268, 337, 6, 51, "Text"],
+Cell[10579, 276, 947, 29, 32, "Input"],
+Cell[11529, 307, 468, 8, 55, "Input"],
+Cell[12000, 317, 196, 4, 31, "Text"],
+Cell[12199, 323, 233, 4, 32, "Input"],
+Cell[12435, 329, 196, 4, 31, "Text"],
+Cell[12634, 335, 234, 6, 32, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[21417, 609, 137, 1, 29, "Subsubsection"],
-Cell[21557, 612, 163, 3, 31, "Text"],
-Cell[21723, 617, 2812, 82, 77, "Input"],
-Cell[24538, 701, 349, 6, 32, "Input"],
-Cell[24890, 709, 428, 9, 32, "Input"]
+Cell[12905, 346, 167, 3, 29, "Subsubsection"],
+Cell[13075, 351, 128, 1, 31, "Text"],
+Cell[13206, 354, 2380, 72, 77, "Input"],
+Cell[15589, 428, 224, 4, 55, "Input"],
+Cell[15816, 434, 193, 4, 32, "Input"],
+Cell[16012, 440, 322, 8, 32, "Input"]
 }, Open  ]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[25367, 724, 106, 1, 31, "Subsection"],
-Cell[25476, 727, 116, 1, 31, "Text"],
-Cell[25595, 730, 2517, 71, 77, "Input"],
-Cell[28115, 803, 273, 5, 55, "Input"],
-Cell[28391, 810, 405, 7, 32, "Input"],
-Cell[28799, 819, 431, 10, 55, "Input"]
+Cell[16383, 454, 241, 3, 31, "Subsection"],
+Cell[CellGroupData[{
+Cell[16649, 461, 112, 1, 29, "Subsubsection"],
+Cell[16764, 464, 2074, 62, 77, "Input"],
+Cell[18841, 528, 224, 4, 55, "Input"],
+Cell[19068, 534, 193, 4, 32, "Input"],
+Cell[19264, 540, 322, 8, 32, "Input"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[19635, 554, 169, 2, 31, "Subsection"],
+Cell[CellGroupData[{
+Cell[19829, 560, 96, 1, 29, "Subsubsection"],
+Cell[19928, 563, 125, 1, 31, "Text"],
+Cell[20056, 566, 275, 5, 55, "Input"],
+Cell[20334, 573, 466, 12, 32, "Input"],
+Cell[20803, 587, 142, 1, 31, "Text"],
+Cell[20948, 590, 215, 4, 32, "Input"],
+Cell[21166, 596, 152, 3, 31, "Text"],
+Cell[21321, 601, 289, 7, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21647, 613, 137, 1, 29, "Subsubsection"],
+Cell[21787, 616, 163, 3, 31, "Text"],
+Cell[21953, 621, 2812, 82, 77, "Input"],
+Cell[24768, 705, 398, 7, 32, "Input"],
+Cell[25169, 714, 428, 9, 32, "Input"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25646, 729, 121, 2, 31, "Subsection"],
+Cell[25770, 733, 116, 1, 31, "Text"],
+Cell[25889, 736, 2517, 71, 77, "Input"],
+Cell[28409, 809, 273, 5, 55, "Input"],
+Cell[28685, 816, 405, 7, 32, "Input"],
+Cell[29093, 825, 431, 10, 55, "Input"]
 }, Closed]]
 }, Open  ]]
 }, Open  ]]

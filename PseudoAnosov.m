@@ -429,26 +429,29 @@ LefschetzNumbersTestQpositive[s_List,p_,x_, opts:OptionsPattern[]] := Module[
          LefschetzPureStratumQb,
          LefschetzAlmostPureStratumQa,
          LefschetzAlmostPureStratumQb};
-    Do[
+    Catch[
         Do[
-            (* The testing functions throw an exception if there
-               are not enough Lefschetz numbers *)
-            Catch[
-                (* Make a list of Lefschetz numbers fpr phi^m *)
-                Lm = Table[L[[k]], {k,m,Length[L],m}];
-                (* If False once, exit the loop to avoid the other tests *)
-                If[!tests[[k]][s,Lm],
-                    reason = StringReplace[SymbolName[tests[[k]]],
-                        {"Lefschetz" -> "",
-                         RegularExpression["Q$"] -> "",
-                         RegularExpression["Qa$"] -> "(a)",
-                         RegularExpression["Qb$"] -> "(b)"}
+            Do[
+                (* The testing functions throw an exception if there
+                   are not enough Lefschetz numbers *)
+                Catch[
+                    (* Make a list of Lefschetz numbers fpr phi^m *)
+                    Lm = Table[L[[k]], {k,m,Length[L],m}];
+                    (* If False once, exit the loop to avoid the other tests *)
+                    If[!tests[[k]][s,Lm],
+                        reason = StringReplace[SymbolName[tests[[k]]],
+                            {"Lefschetz" -> "",
+                             RegularExpression["Q$"] -> "",
+                             RegularExpression["Qa$"] -> "(a)",
+                             RegularExpression["Qb$"] -> "(b)"}
+                        ];
+                        (* Throw exception to escape both loops *)
+                        Throw[k, testfailed];
                     ];
-                    Break[]
-                ];
-            , oor, Message[PseudoAnosov::moreLefschetz,#1,m] &]
-        , {m, OptionValue[CheckIterates]}]
-    , {k,Length[tests]}];
+                , oor, Message[PseudoAnosov::moreLefschetz,#1,m] &]
+            , {m, OptionValue[CheckIterates]}]
+        , {k,Length[tests]}];
+    , testfailed];
     If[OptionValue[GiveReasonForRejection],
         Return[{reason == "Allowable",reason}]
     ,
