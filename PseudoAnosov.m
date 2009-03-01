@@ -46,6 +46,10 @@ StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface contai
 
 LefschetzNumbersTestQ::usage = ""
 
+(* Test for everything: first call pseudoAnosovPerronRootQ, then
+LefschetzNumbersTestQ by strata (for even power). *)
+(* pseudoAnosovPolynomialQ::usage = "" *)
+
 
 (*
    Options
@@ -304,7 +308,6 @@ StratumToGenus[s_List] := (Plus @@ s + 4)/4
   
   ToDo:
 
-   - Include the Perron root as a test: >1, nondegen, etc.
    - Give more detailed reason, customized for each test.
    - Find more harmonious names: StratumTest?  PolynomialStratumQ?  pAStratumQ?
 
@@ -316,7 +319,7 @@ pseudoAnosovPerronRootQ[p_,x_,lmax_:0,opts:OptionsPattern[]] := Module[
     {prl, pr, degen, testdegen},
     If[!ReciprocalPolynomialQ[p,x], Return[False]];
     If[PolynomialDegree[p,x] < 2, Return[False]];
-    degen = OptionValue[DegeneracyError];
+    degen = OptionValue[DegeneracyTolerance];
     testdegen[diff_] := Module[{},
         If[diff < degen, Return[False]];
         If[degen/2 < diff < degen, Message[PseudoAnosov::tooclose]];
@@ -336,7 +339,7 @@ pseudoAnosovPerronRootQ[p_,x_,lmax_:0,opts:OptionsPattern[]] := Module[
     Return[True];
 ]
 Options[pseudoAnosovPerronRootQ] =
-    {WorkingPrecision -> $MachinePrecision, DegeneracyError -> 10^-8}
+    {WorkingPrecision -> $MachinePrecision, DegeneracyTolerance -> 10^-8}
 
 
 (*
@@ -370,7 +373,7 @@ LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,L_] := Module[
 ]
 
 
-LefschetzPureStratumQa[s_List,L_List] := Module[
+LefschetzPureStratumAQ[s_List,L_List] := Module[
     {d, m, t = Tally[s]},
     (* If there is more than one singularity type, return True. *)
     If[Length[t] > 1, Return[True]];
@@ -384,7 +387,7 @@ LefschetzPureStratumQa[s_List,L_List] := Module[
 ]
 
 
-LefschetzPureStratumQb[s_List,L_List] := Module[
+LefschetzPureStratumBQ[s_List,L_List] := Module[
     {d, m, t = Tally[s], k},
     (* If there is more than one singularity type, return True. *)
     If[Length[t] > 1, Return[True]];
@@ -399,7 +402,7 @@ LefschetzPureStratumQb[s_List,L_List] := Module[
 ]
 
 
-LefschetzAlmostPureStratumQa[s_List,L_List] := Module[
+LefschetzAlmostPureStratumAQ[s_List,L_List] := Module[
     {d2, m2, f, Nn = Length[s],
      (* Group and sort strata by increasing multiplicity *)
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
@@ -418,7 +421,7 @@ LefschetzAlmostPureStratumQa[s_List,L_List] := Module[
 ]
 
 
-LefschetzAlmostPureStratumQb[s_List,L_List] := Module[
+LefschetzAlmostPureStratumBQ[s_List,L_List] := Module[
     {d2, m2, f, Nn = Length[s], k,
      (* Group and sort strata by increasing multiplicity *)
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
@@ -438,28 +441,57 @@ LefschetzAlmostPureStratumQb[s_List,L_List] := Module[
 ]
 
 
-(* Test for everything. *)
-LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[{},
+(*
+   Lefschetz tests for negative Perron root
+*)
+
+LefschetzSingularityPermutationsNegativeQ[s_List,L_List] := Module[
+    {d, m, Nn = Length[s], pow, idx},
+    (* Group singularities by multiplicity *)
+    d = #[[1]]/2& /@ Tally[s];
+    m = #[[2]]& /@ Tally[s];
+    (* Check if the formula is satisfied for each singularity type,
+       logical-And the results. *)
+    pow = (#[[2]])! (#[[1]]/2+1) & /@ Tally[s];
+    (* Only apply the test to even powers of phi, and don't go past
+       the end of L for this test (no complaints -- factorial is just
+       too big). *)
+    idx = Pick[Range[Length[d]], (# <= Length[L] && EvenQ[#]) & /@ pow];
+    If[idx != {},
+        Return[And @@ (L[[pow[[#]]]] <= Nn - 2m[[#]](d[[#]]+1) & /@ idx)]
+    ];
+    Return[True]
+]
+
+
+(*
+   Test for everything together
+*)
+
+LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[{t},
     If[PerronRoot[p,x] > 0,
-        LefschetzNumbersTestQpositive[s,p,x,opts]
+        L = LefschetzNumbers[p,x,{OptionValue[MaxLefschetz]}];
+        t = LefschetzNumbersTestPositiveQ[s,L,opts]
     ,
-        LefschetzNumbersTestQnegative[s,p,x,opts]
+        (* Generate twice as many Lefschetz numbers, since we need to
+           apply the even tests to half the list *)
+        L = LefschetzNumbers[p,x,{2 OptionValue[MaxLefschetz]}];
+        t = LefschetzNumbersTestNegativeQ[s,L,opts]
+    ];
+    If[OptionValue[GiveReasonForRejection],
+        Return[{t == "Allowable",t}]
+    ,
+        Return[t == "Allowable"]
     ]
 ]
 Options[LefschetzNumbersTestQ] =
     {GiveReasonForRejection -> False, CheckIterates -> 5, MaxLefschetz -> 100}
 
+
 (* Private helper function for LefschetzNumbersTestQ *)
-LefschetzNumbersTestQpositive[s_List,p_,x_, opts:OptionsPattern[]] := Module[
-    {L, Lm, tests, reason = "Allowable"},
-    L = LefschetzNumbers[p,x,{OptionValue[MaxLefschetz]}];
-    tests =
-        {LefschetzMinimumSingularitiesQ,
-         LefschetzSingularityPermutationsQ,
-         LefschetzPureStratumQa,
-         LefschetzPureStratumQb,
-         LefschetzAlmostPureStratumQa,
-         LefschetzAlmostPureStratumQb};
+LefschetzNumbersTestListQ[s_List,L_List,tests_List, opts:OptionsPattern[]] :=
+Module[
+    {Lm, reason = "Allowable"},
     Catch[
         Do[
             Do[
@@ -467,14 +499,14 @@ LefschetzNumbersTestQpositive[s_List,p_,x_, opts:OptionsPattern[]] := Module[
                    are not enough Lefschetz numbers *)
                 Catch[
                     (* Make a list of Lefschetz numbers fpr phi^m *)
-                    Lm = Table[L[[k]], {k,m,Length[L],m}];
+                    Lm = L[[#]]& /@ Range[m,Length[L],m];
                     (* If False once, exit the loop to avoid the other tests *)
                     If[!tests[[k]][s,Lm],
                         reason = StringReplace[SymbolName[tests[[k]]],
                             {"Lefschetz" -> "",
                              RegularExpression["Q$"] -> "",
-                             RegularExpression["Qa$"] -> "(a)",
-                             RegularExpression["Qb$"] -> "(b)"}
+                             RegularExpression["AQ$"] -> "(a)",
+                             RegularExpression["BQ$"] -> "(b)"}
                         ];
                         (* Throw exception to escape both loops *)
                         Throw[k, testfailed];
@@ -483,26 +515,37 @@ LefschetzNumbersTestQpositive[s_List,p_,x_, opts:OptionsPattern[]] := Module[
             , {m, OptionValue[CheckIterates]}]
         , {k,Length[tests]}];
     , testfailed];
-    If[OptionValue[GiveReasonForRejection],
-        Return[{reason == "Allowable",reason}]
-    ,
-        Return[reason == "Allowable"]
-    ]
+    Return[reason]
 ]
-Options[LefschetzNumbersTestQpositive] = Options[LefschetzNumbersTestQ]
+Options[LefschetzNumbersTestListQ] = Options[LefschetzNumbersTestQ]
+
 
 (* Private helper function for LefschetzNumbersTestQ *)
-LefschetzNumbersTestQnegative[s_List,p_,x_, opts:OptionsPattern[]] := Module[
-    {n, tl, p2},
-    (* Compute the polynomial of phi^2 *)
-    n = PolynomialDegree[p,x];
-    tl = TracesPower[p,x,{n}];
-    tl = Table[tl[[2k]],{k,n/2}]; (* Keep only even traces *)
-    p2 = ReciprocalPolynomialFromTraces[x,tl];
-    (* Do the test with p2, which has positive Perron root. *)
-    LefschetzNumbersTestQpositive[s,p2,x,opts]
+LefschetzNumbersTestPositiveQ[s_List,L_, opts:OptionsPattern[]] := Module[
+    {tests =
+        {LefschetzMinimumSingularitiesQ,
+         LefschetzSingularityPermutationsQ,
+         LefschetzPureStratumAQ,
+         LefschetzPureStratumBQ,
+         LefschetzAlmostPureStratumAQ,
+         LefschetzAlmostPureStratumBQ}},
+    LefschetzNumbersTestListQ[s,L,tests,opts]
 ]
-Options[LefschetzNumbersTestQnegative] = Options[LefschetzNumbersTestQ]
+Options[LefschetzNumbersTestPositiveQ] = Options[LefschetzNumbersTestQ]
+
+
+(* Private helper function for LefschetzNumbersTestQ *)
+LefschetzNumbersTestNegativeQ[s_List,L_, opts:OptionsPattern[]] := Module[
+    {L2, t,
+    tests = {LefschetzSingularityPermutationsNegativeQ}},
+    t = LefschetzNumbersTestListQ[s,L,tests,opts,CheckIterates->1];
+    If[t != "Allowable", Return[t]];
+    (* List of Lefschetz numbers of phi^2 *)
+    L2 = L[[#]] & /@ Range[2,Length[L],2];
+    (* Do the test with p2, which has positive Perron root. *)
+    LefschetzNumbersTestPositiveQ[s,L2,opts]
+]
+Options[LefschetzNumbersTestNegativeQ] = Options[LefschetzNumbersTestQ]
 
 
 End[(* "`Private`" *)]
