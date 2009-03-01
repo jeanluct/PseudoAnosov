@@ -29,6 +29,8 @@ PolynomialRoots::usage = "PolynomialRoots[p,x] returns the roots of the polynomi
 
 PerronRoot::usage = "PerronRoot[p,x] returns the largest root (in magnitute) of the polynomial p(x).";
 
+pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[p,x] returns True if the largest root of the polynomial p(x) is nondegenerate (in magnitute) and real.  pseudoAnosovPerronRootQ[p,x,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
+
 MahlerMeasure::usage = "MahlerMeasure[p,x] returns the Mahler measure of the polynomial p(x), which is the absolute value of the product of roots outside the unit circle.";
 
 MinimalPolynomialQ::usage = "MinimalPolynomialQ[p] returns true if the polynomial p cannot be factored.";
@@ -308,8 +310,37 @@ StratumToGenus[s_List] := (Plus @@ s + 4)/4
 
  *)
 
+
+(* Test for the Perron root *)
+pseudoAnosovPerronRootQ[p_,x_,lmax_:0,opts:OptionsPattern[]] := Module[
+    {prl, pr, degen, testdegen},
+    If[!ReciprocalPolynomialQ[p,x], Return[False]];
+    If[PolynomialDegree[p,x] < 2, Return[False]];
+    degen = OptionValue[DegeneracyError];
+    testdegen[diff_] := Module[{},
+        If[diff < degen, Return[False]];
+        If[degen/2 < diff < degen, Message[PseudoAnosov::tooclose]];
+        Return[True]
+    ];
+    (* Take the first two roots (presorted by magnitude) *)
+    prl = Take[PolynomialRoots[p,x,opts], 2];
+    pr = Abs[prl[[1]]];
+    (* First criterion: largest eigenvalue is greater than 1 *)
+    If[!testdegen[Abs[pr-1]], Return[False]];
+    (* Second criterion: largest eigenvalue is separated from the second *)
+    If[!testdegen[pr - Abs[prl[[2]]]], Return[False]];
+    If[lmax != 0,
+        (* Third criterion: largest eigenvalue is less than lmax *)
+        If[!testdegen[Abs[lmax] - pr], Return[False]];
+    ];
+    Return[True];
+]
+Options[pseudoAnosovPerronRootQ] =
+    {WorkingPrecision -> $MachinePrecision, DegeneracyError -> 10^-8}
+
+
 (*
-   Tests for positive Perron root
+   Lefschetz tests for positive Perron root
 *)
 
 (* Test whether there are enough singularities on a stratum to support
