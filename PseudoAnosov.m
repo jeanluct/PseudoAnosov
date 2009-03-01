@@ -57,7 +57,7 @@ LefschetzNumbersTestQ by strata (for even power). *)
 
 GiveReasonForRejection::usage = "Option to LefschetzNumbersTestQ: Set to True to return the reason for rejecting a stratum (default False)."
 
-CheckIterates::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving the largest power of the map to test (default 10)."
+MaxIterate::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving the largest power of the map to test (default 10)."
 
 MaxLefschetz::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving how many of Lefschetz numbers to compute for the test."
 
@@ -319,7 +319,7 @@ pseudoAnosovPerronRootQ[p_,x_,lmax_:0,opts:OptionsPattern[]] := Module[
     {prl, pr, degen, testdegen},
     If[!ReciprocalPolynomialQ[p,x], Return[False]];
     If[PolynomialDegree[p,x] < 2, Return[False]];
-    degen = OptionValue[DegeneracyTolerance];
+    degen = OptionValue[EqualityTolerance];
     testdegen[diff_] := Module[{},
         If[diff < degen, Return[False]];
         If[degen/2 < diff < degen, Message[PseudoAnosov::tooclose]];
@@ -339,7 +339,7 @@ pseudoAnosovPerronRootQ[p_,x_,lmax_:0,opts:OptionsPattern[]] := Module[
     Return[True];
 ]
 Options[pseudoAnosovPerronRootQ] =
-    {WorkingPrecision -> $MachinePrecision, DegeneracyTolerance -> 10^-8}
+    {WorkingPrecision -> $MachinePrecision, EqualityTolerance -> 10^-8}
 
 
 (*
@@ -468,15 +468,16 @@ LefschetzSingularityPermutationsNegativeQ[s_List,L_List] := Module[
    Test for everything together
 *)
 
-LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[{t},
+LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
+    {t, opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
     If[PerronRoot[p,x] > 0,
         L = LefschetzNumbers[p,x,{OptionValue[MaxLefschetz]}];
-        t = LefschetzNumbersTestPositiveQ[s,L,opts]
+        t = LefschetzNumbersTestPositiveQ[s,L,opts2]
     ,
         (* Generate twice as many Lefschetz numbers, since we need to
            apply the even tests to half the list *)
         L = LefschetzNumbers[p,x,{2 OptionValue[MaxLefschetz]}];
-        t = LefschetzNumbersTestNegativeQ[s,L,opts]
+        t = LefschetzNumbersTestNegativeQ[s,L,opts2]
     ];
     If[OptionValue[GiveReasonForRejection],
         Return[{t == "Allowable",t}]
@@ -485,13 +486,14 @@ LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[{t},
     ]
 ]
 Options[LefschetzNumbersTestQ] =
-    {GiveReasonForRejection -> False, CheckIterates -> 5, MaxLefschetz -> 100}
+    {GiveReasonForRejection -> False, MaxIterate -> 5, MaxLefschetz -> 100}
 
 
 (* Private helper function for LefschetzNumbersTestQ *)
-LefschetzNumbersTestListQ[s_List,L_List,tests_List, opts:OptionsPattern[]] :=
+LefschetzNumbersTestListQ[s_List,L_List,tests_List, OptionsPattern[]] :=
 Module[
-    {Lm, reason = "Allowable"},
+    {Lm, reason = "Allowable", dm = 1},
+    If[OptionValue[OnlyOddIterates], dm = 2];
     Catch[
         Do[
             Do[
@@ -512,12 +514,14 @@ Module[
                         Throw[k, testfailed];
                     ];
                 , oor, Message[PseudoAnosov::moreLefschetz,#1,m] &]
-            , {m, OptionValue[CheckIterates]}]
+            , {m, 1, OptionValue[MaxIterate], dm}]
         , {k,Length[tests]}];
     , testfailed];
     Return[reason]
 ]
-Options[LefschetzNumbersTestListQ] = Options[LefschetzNumbersTestQ]
+Options[LefschetzNumbersTestListQ] =
+    Append[FilterRules[Options[LefschetzNumbersTestQ], MaxIterate],
+           OnlyOddIterates -> False]
 
 
 (* Private helper function for LefschetzNumbersTestQ *)
@@ -529,23 +533,24 @@ LefschetzNumbersTestPositiveQ[s_List,L_, opts:OptionsPattern[]] := Module[
          LefschetzPureStratumBQ,
          LefschetzAlmostPureStratumAQ,
          LefschetzAlmostPureStratumBQ}},
-    LefschetzNumbersTestListQ[s,L,tests,opts]
+    LefschetzNumbersTestListQ[s,L,tests,
+        FilterRules[{opts},Options[LefschetzNumbersTestListQ]]]
 ]
-Options[LefschetzNumbersTestPositiveQ] = Options[LefschetzNumbersTestQ]
+Options[LefschetzNumbersTestPositiveQ] = Options[LefschetzNumbersTestListQ]
 
 
 (* Private helper function for LefschetzNumbersTestQ *)
 LefschetzNumbersTestNegativeQ[s_List,L_, opts:OptionsPattern[]] := Module[
     {L2, t,
     tests = {LefschetzSingularityPermutationsNegativeQ}},
-    t = LefschetzNumbersTestListQ[s,L,tests,opts,CheckIterates->1];
+    t = LefschetzNumbersTestListQ[s,L,tests,opts,OnlyOddIterates->True];
     If[t != "Allowable", Return[t]];
     (* List of Lefschetz numbers of phi^2 *)
     L2 = L[[#]] & /@ Range[2,Length[L],2];
     (* Do the test with p2, which has positive Perron root. *)
     LefschetzNumbersTestPositiveQ[s,L2,opts]
 ]
-Options[LefschetzNumbersTestNegativeQ] = Options[LefschetzNumbersTestQ]
+Options[LefschetzNumbersTestNegativeQ] = Options[LefschetzNumbersTestListQ]
 
 
 End[(* "`Private`" *)]
