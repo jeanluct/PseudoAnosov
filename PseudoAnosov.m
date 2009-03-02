@@ -342,25 +342,52 @@ Options[pseudoAnosovPerronRootQ] =
     {WorkingPrecision -> $MachinePrecision, EqualityTolerance -> 10^-8}
 
 
+(* General helper functions and definitions for the tests *)
+
+SingularityToString[k_Integer, m_Integer] :=
+    ToString[k] <> "^" <> ToString[m]
+
+LefschetzToString[L_Integer, n_Integer] :=
+    "L(phi^" <> ToString[n] <> ")=" <> ToString[L]
+
+Allowable = "Allowable:"
+
 (*
    Lefschetz tests for positive Perron root
 *)
 
 (* Test whether there are enough singularities on a stratum to support
    this pseudo-Anosov (when Perron root is positive). *)
-LefschetzMinimumSingularitiesQ[s_List,L_List] := Length[s] >= Max[L]
+LefschetzMinimumSingularitiesQ[s_List,L_List] := Module[{idx},
+    idx = Flatten[Position[# >= 0 & /@ (Length[s] - L), False]];
+    If[idx == {},
+        Return[Allowable]
+    ,
+        idx = First[idx];
+        Return["Not enough singularities for " <>
+               LefschetzToString[L[[idx]],idx]]
+    ]
+]
 
 
 LefschetzSingularityPermutationsQ[s_List,L_List] := Module[
-    {k, m, Nn = Length[s]},
+    {k, m, Nn = Length[s], idx},
     (* Group singularities by multiplicity *)
     k = #[[1]]& /@ Tally[s];
     m = #[[2]]& /@ Tally[s];
     (* Check if the formula is satisfied for each singularity type,
        logical-And the results. *)
-    And @@ Table[
-        LefschetzSingularityPermutationsQ1[k[[j]]/2,m[[j]],Nn,L]
-    ,{j,Length[k]}]
+    idx = Flatten[Position[Table[
+            LefschetzSingularityPermutationsQ1[k[[j]]/2,m[[j]],Nn,L]
+        ,{j,Length[k]}], False]];
+    If[idx == {},
+        Return[Allowable]
+    ,
+        idx = First[idx];
+        Return["Singularity " <> SingularityToString[k[[idx]],m[[idx]]] <>
+            " incompatible with " <> LefschetzToString[L[[idx]],idx] <>
+            " and LCM of partition of " <> ToString[m[[idx]]]]
+    ]
 ]
 (* Private helper function for LefschetzSingularityPermutationsQ. *)
 LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,L_] := Module[
@@ -375,30 +402,40 @@ LefschetzSingularityPermutationsQ1[d_Integer,m_Integer,Nn_,L_] := Module[
 
 LefschetzPureStratumAQ[s_List,L_List] := Module[
     {d, m, t = Tally[s]},
-    (* If there is more than one singularity type, return True. *)
-    If[Length[t] > 1, Return[True]];
+    (* If there is more than one singularity type, return Allowable. *)
+    If[Length[t] > 1, Return[Allowable]];
     (* Need positive Lefschetz number L[[1]] *)
-    If[L[[1]] <= 0, Return[True]];
-    (* Group singularities by multiplicity *)
+    If[L[[1]] <= 0, Return[Allowable]];
     d = t[[1,1]]/2;
     m = t[[1,2]];
     If[(d+1) > Length[L], Throw[d+1, oor]];
-    L[[d+1]] <= m - 2 (d+1) L[[1]]
+    If[L[[d+1]] <= m - 2 (d+1) L[[1]],
+        Return[Allowable]
+    ,
+        Return["Singularity " <> SingularityToString[2d,m] <>
+            " incompatible with " <> LefschetzToString[L[[1]],1] <> " and " <>
+            LefschetzToString[L[[d+1]],d+1]]
+    ]
 ]
 
 
 LefschetzPureStratumBQ[s_List,L_List] := Module[
     {d, m, t = Tally[s], k},
-    (* If there is more than one singularity type, return True. *)
-    If[Length[t] > 1, Return[True]];
-    (* Group singularities by multiplicity *)
+    (* If there is more than one singularity type, return Allowable. *)
+    If[Length[t] > 1, Return[Allowable]];
     d = t[[1,1]]/2;
     m = t[[1,2]];
     (* Need positive Lefschetz number L[[1]] and enough singularities *)
-    If[m-L[[1]] < 1 || L[[1]] <= 0, Return[True]];
+    If[m-L[[1]] < 1 || L[[1]] <= 0, Return[Allowable]];
     k = Union[LCM @@ # & /@ IntegerPartitions[m-L[[1]]]];
     If[Max[k](d+1) > Length[L], Throw[Max[k](d+1), oor]];
-    Or @@ (L[[#(d+1)]] <= m - 2m(d+1) & /@ k)
+    If[Or @@ (L[[#(d+1)]] <= m - 2m(d+1) & /@ k),
+        Return[Allowable]
+    ,
+        Return["Singularity " <> SingularityToString[2d,m] <>
+            " incompatible with " <> LefschetzToString[L[[1]],1] <>
+            " and LCM of partition of " <> ToString[m-L[[1]]]]
+    ]
 ]
 
 
@@ -406,18 +443,24 @@ LefschetzAlmostPureStratumAQ[s_List,L_List] := Module[
     {d2, m2, f, Nn = Length[s],
      (* Group and sort strata by increasing multiplicity *)
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
-    (* If there aren't exactly two singularity types, return True. *)
-    If[Length[t] != 2, Return[True]];
+    (* If there aren't exactly two singularity types, return Allowable. *)
+    If[Length[t] != 2, Return[Allowable]];
     (* If the first singularity type doesn't have multiplicity 1,
-       return True. *)
-    If[t[[1,2]] > 1, Return[True]];
+       return Allowable. *)
+    If[t[[1,2]] > 1, Return[Allowable]];
     f = L[[1]]-1;
-    If[f <= 0, Return[True]];
+    If[f <= 0, Return[Allowable]];
     (* The repeated singularity is in the second slot, since we sorted. *)
     d2 = t[[2,1]]/2;
     m2 = t[[2,2]];
     If[(d2+1) > Length[L], Throw[d2+1, oor]];
-    L[[d2+1]] <= Nn - 2f (d2+1) 
+    If[L[[d2+1]] <= Nn - 2f (d2+1),
+        Return[Allowable]
+    ,
+        Return["Singularity " <> SingularityToString[2d2,m2] <>
+            " incompatible with " <> LefschetzToString[L[[1]],1] <> " and " <>
+            LefschetzToString[L[[d2+1]],d2+1]]
+    ]
 ]
 
 
@@ -425,19 +468,25 @@ LefschetzAlmostPureStratumBQ[s_List,L_List] := Module[
     {d2, m2, f, Nn = Length[s], k,
      (* Group and sort strata by increasing multiplicity *)
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
-    (* If there aren't exactly two singularity types, return True. *)
-    If[Length[t] != 2, Return[True]];
+    (* If there aren't exactly two singularity types, return Allowable. *)
+    If[Length[t] != 2, Return[Allowable]];
     (* If the first singularity type doesn't have multiplicity 1,
-       return True. *)
-    If[t[[1,2]] > 1, Return[True]];
+       return Allowable. *)
+    If[t[[1,2]] > 1, Return[Allowable]];
     (* The repeated singularity is in the second slot, since we sorted. *)
     d2 = t[[2,1]]/2;
     m2 = t[[2,2]];
     f = L[[1]]-1;
-    If[f <= 0 || m2-f < 1, Return[True]];
+    If[f <= 0 || m2-f < 1, Return[Allowable]];
     k = Union[LCM @@ # & /@ IntegerPartitions[m2-f]];
     If[Max[k](d2+1) > Length[L], Throw[Max[k](d2+1), oor]];
-    Or @@ (L[[#(d2+1)]] <= Nn - 2m2 (d2+1) & /@ k)
+    If[Or @@ (L[[#(d2+1)]] <= Nn - 2m2 (d2+1) & /@ k),
+        Return[Allowable]
+    ,
+        Return["Singularity " <> SingularityToString[2d2,m] <>
+            " incompatible with " <> LefschetzToString[L[[1]],1] <>
+            " and LCM of partition of " <> ToString[m2-L[[1]]+1]]
+    ]
 ]
 
 
@@ -458,9 +507,17 @@ LefschetzSingularityPermutationsNegativeQ[s_List,L_List] := Module[
        too big). *)
     idx = Pick[Range[Length[d]], (# <= Length[L] && EvenQ[#]) & /@ pow];
     If[idx != {},
-        Return[And @@ (L[[pow[[#]]]] <= Nn - 2m[[#]](d[[#]]+1) & /@ idx)]
+        idx = Pick[idx, Not/@(L[[pow[[#]]]] <= Nn-2m[[#]](d[[#]]+1) & /@ idx)];
+        If[idx == {},
+            Return[Allowable]
+        ,
+            idx = First[idx];
+            Return["Singularity " <> SingularityToString[2d[[idx]],m[[idx]]] <>
+                " incompatible with " <>
+                LefschetzToString[L[[pow[[idx]]]],1]]
+        ]
     ];
-    Return[True]
+    Return[Allowable]
 ]
 
 
@@ -480,9 +537,9 @@ LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
         t = LefschetzNumbersTestNegativeQ[s,L,opts2]
     ];
     If[OptionValue[GiveReasonForRejection],
-        Return[{t == "Allowable",t}]
+        Return[{t == Allowable,t}]
     ,
-        Return[t == "Allowable"]
+        Return[t == Allowable]
     ]
 ]
 Options[LefschetzNumbersTestQ] =
@@ -492,7 +549,7 @@ Options[LefschetzNumbersTestQ] =
 (* Private helper function for LefschetzNumbersTestQ *)
 LefschetzNumbersTestListQ[s_List,L_List,tests_List, OptionsPattern[]] :=
 Module[
-    {Lm, reason = "Allowable", dm = 1},
+    {Lm, reason = Allowable, dm = 1},
     If[OptionValue[OnlyOddIterates], dm = 2];
     Catch[
         Do[
@@ -502,14 +559,18 @@ Module[
                 Catch[
                     (* Make a list of Lefschetz numbers fpr phi^m *)
                     Lm = L[[#]]& /@ Range[m,Length[L],m];
-                    (* If False once, exit the loop to avoid the other tests *)
-                    If[!tests[[k]][s,Lm],
+                    (* If fails once, exit loops to avoid the other tests *)
+                    reason = tests[[k]][s,Lm];
+                    If[reason != Allowable,
+                        (* For the reason string, append the reason
+                           returned by the test to the test's function
+                           name. *)
                         reason = StringReplace[SymbolName[tests[[k]]],
                             {"Lefschetz" -> "",
                              RegularExpression["Q$"] -> "",
                              RegularExpression["AQ$"] -> "(a)",
-                             RegularExpression["BQ$"] -> "(b)"}
-                        ];
+                             RegularExpression["BQ$"] -> "(b)"}]
+                             <> ": " <> reason;
                         (* Throw exception to escape both loops *)
                         Throw[k, testfailed];
                     ];
@@ -544,7 +605,7 @@ LefschetzNumbersTestNegativeQ[s_List,L_, opts:OptionsPattern[]] := Module[
     {L2, t,
     tests = {LefschetzSingularityPermutationsNegativeQ}},
     t = LefschetzNumbersTestListQ[s,L,tests,opts,OnlyOddIterates->True];
-    If[t != "Allowable", Return[t]];
+    If[t != Allowable, Return[t]];
     (* List of Lefschetz numbers of phi^2 *)
     L2 = L[[#]] & /@ Range[2,Length[L],2];
     (* Do the test with p2, which has positive Perron root. *)
