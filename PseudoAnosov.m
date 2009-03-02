@@ -352,7 +352,7 @@ SingularityToString[k_Integer, m_Integer] :=
 LefschetzToString[L_Integer, n_Integer] :=
     "L[" <> ToString[n] <> "]=" <> ToString[L]
 
-Allowable = "Allowable:"
+Allowable = "Allowable"
 
 (*
    Lefschetz tests for positive Perron root
