@@ -352,6 +352,9 @@ SingularityToString[k_Integer, m_Integer] :=
 LefschetzToString[L_Integer, n_Integer] :=
     "L[" <> ToString[n] <> "]=" <> ToString[L]
 
+LCMToString[k_Integer] := "LCM(partitions of " <> ToString[k] <> ")"
+
+
 Allowable = "Allowable"
 
 (*
@@ -393,7 +396,7 @@ LefschetzSingularityPermutationsAQ[s_List,L_List, OptionsPattern[]] := Module[
             idx = First[idx];
             Return[SingularityToString[2d[[idx]],m[[idx]]] <>
                 " incompatible with " <>
-                LefschetzToString[L[[pow[[idx]]]],1]]
+                LefschetzToString[L[[pow[[idx]]]],pow[[idx]]]]
         ]
     ];
     Return[Allowable]
@@ -417,7 +420,7 @@ LefschetzSingularityPermutationsBQ[s_List,L_List] := Module[
         idx = First[idx];
         Return[SingularityToString[k[[idx]],m[[idx]]] <>
             " incompatible with " <> LefschetzToString[L[[idx]],idx] <>
-            " and LCM(partitions of " <> ToString[m[[idx]]] <> ")"]
+            " and " <> LCMToString[m]]
     ]
 ]
 (* Private helper function for LefschetzSingularityPermutationsQ. *)
@@ -465,7 +468,7 @@ LefschetzPureStratumBQ[s_List,L_List] := Module[
     ,
         Return[SingularityToString[2d,m] <>
             " incompatible with " <> LefschetzToString[L[[1]],1] <>
-            " and LCM(partitions of " <> ToString[m-L[[1]]] <> ")"]
+            " and " <> LCMToString[m-L[[1]]]]
     ]
 ]
 
@@ -516,7 +519,7 @@ LefschetzAlmostPureStratumBQ[s_List,L_List] := Module[
     ,
         Return[SingularityToString[2d2,m] <>
             " incompatible with " <> LefschetzToString[L[[1]],1] <>
-            " and LCM(partitions of " <> ToString[m2-L[[1]]+1] <> ")"]
+            " and " <> LCMToString[m2-L[[1]]+1]]
     ]
 ]
 
