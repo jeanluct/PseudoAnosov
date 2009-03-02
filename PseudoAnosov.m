@@ -350,7 +350,7 @@ SingularityToString[k_Integer, m_Integer] :=
     ToString[k] <> "^" <> ToString[m]
 
 LefschetzToString[L_Integer, n_Integer] :=
-    "L(phi^" <> ToString[n] <> ")=" <> ToString[L]
+    "L[" <> ToString[n] <> "]=" <> ToString[L]
 
 Allowable = "Allowable:"
 
@@ -386,7 +386,7 @@ LefschetzSingularityPermutationsQ[s_List,L_List] := Module[
         Return[Allowable]
     ,
         idx = First[idx];
-        Return["Singularity " <> SingularityToString[k[[idx]],m[[idx]]] <>
+        Return[SingularityToString[k[[idx]],m[[idx]]] <>
             " incompatible with " <> LefschetzToString[L[[idx]],idx] <>
             " and LCM of partition of " <> ToString[m[[idx]]]]
     ]
@@ -414,7 +414,7 @@ LefschetzPureStratumAQ[s_List,L_List] := Module[
     If[L[[d+1]] <= m - 2 (d+1) L[[1]],
         Return[Allowable]
     ,
-        Return["Singularity " <> SingularityToString[2d,m] <>
+        Return[SingularityToString[2d,m] <>
             " incompatible with " <> LefschetzToString[L[[1]],1] <> " and " <>
             LefschetzToString[L[[d+1]],d+1]]
     ]
@@ -434,7 +434,7 @@ LefschetzPureStratumBQ[s_List,L_List] := Module[
     If[Or @@ (L[[#(d+1)]] <= m - 2m(d+1) & /@ k),
         Return[Allowable]
     ,
-        Return["Singularity " <> SingularityToString[2d,m] <>
+        Return[SingularityToString[2d,m] <>
             " incompatible with " <> LefschetzToString[L[[1]],1] <>
             " and LCM of partition of " <> ToString[m-L[[1]]]]
     ]
@@ -459,7 +459,7 @@ LefschetzAlmostPureStratumAQ[s_List,L_List] := Module[
     If[L[[d2+1]] <= Nn - 2f (d2+1),
         Return[Allowable]
     ,
-        Return["Singularity " <> SingularityToString[2d2,m2] <>
+        Return[SingularityToString[2d2,m2] <>
             " incompatible with " <> LefschetzToString[L[[1]],1] <> " and " <>
             LefschetzToString[L[[d2+1]],d2+1]]
     ]
@@ -485,7 +485,7 @@ LefschetzAlmostPureStratumBQ[s_List,L_List] := Module[
     If[Or @@ (L[[#(d2+1)]] <= Nn - 2m2 (d2+1) & /@ k),
         Return[Allowable]
     ,
-        Return["Singularity " <> SingularityToString[2d2,m] <>
+        Return[SingularityToString[2d2,m] <>
             " incompatible with " <> LefschetzToString[L[[1]],1] <>
             " and LCM of partition of " <> ToString[m2-L[[1]]+1]]
     ]
@@ -514,7 +514,7 @@ LefschetzSingularityPermutationsNegativeQ[s_List,L_List] := Module[
             Return[Allowable]
         ,
             idx = First[idx];
-            Return["Singularity " <> SingularityToString[2d[[idx]],m[[idx]]] <>
+            Return[SingularityToString[2d[[idx]],m[[idx]]] <>
                 " incompatible with " <>
                 LefschetzToString[L[[pow[[idx]]]],1]]
         ]
