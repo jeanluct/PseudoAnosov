@@ -78,6 +78,8 @@ PseudoAnosov::neednegativePerron = "Error: This test only works for negative Per
 
 PseudoAnosov::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th power."
 
+PseudoAnosov::notastring = "Function `1` did not return a proper string."
+
 
 Begin["`Private`"]
 
@@ -561,6 +563,8 @@ Module[
                     Lm = L[[#]]& /@ Range[m,Length[L],m];
                     (* If fails once, exit loops to avoid the other tests *)
                     reason = tests[[k]][s,Lm];
+                    If[!StringQ[reason], Message[PseudoAnosov::notastring,
+                        SymbolName[tests[[k]]]]; Abort[]];
                     If[reason != Allowable,
                         (* For the reason string, append the reason
                            returned by the test to the test's function
