@@ -2,6 +2,8 @@
 
 BeginPackage["PseudoAnosov`", {"Global`"}]
 
+Needs["Combinatorica`"]
+
 
 (*
    Command usage messages
@@ -47,6 +49,8 @@ StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface contai
 SumOrbits::usage = "SumOrbits[p,l] with p an integer and l a list of nonnegative integers, returns the sum of (k l[[k]]), where k is a divisor of p."
 
 LefschetzRegularOrbits::usage = ""
+
+LefschetzSingularityPermutations::usage = ""
 
 LefschetzNumbersTestQ::usage = ""
 
@@ -562,6 +566,35 @@ LefschetzRegularOrbits[L_List] := Module[
     ,{p, 2, Length[L]}];
     rpo
 ]
+
+
+LefschetzSingularityPermutations[p_, m_, OptionsPattern[]] := Module[
+  {blen, sepp, L, P0, P, Pm, Pm0},
+  Pm = RotateLeft[Table[j, {j, m}], 1];
+  Pm0 = Pm;
+  P = RotateLeft[Table[j, {j, p/2}], 1];
+  P0 = P;
+  sepp = m Times @@ Union[Length /@ ToCycles[P]];
+  If[! OptionValue[PositivePerronRoot],
+   blen = If[OddQ[sepp], 2 sepp, sepp];
+   L = Table[0, {blen}];
+   Do[
+    Print[j, "\t", P, "\t", Pm];
+    If[Pm == Table[j2, {j2, m}],
+     If[P == Table[j2, {j2, p/2}],
+      L[[j]] = If[EvenQ[j], m (1 - p), 1],
+      L[[j]] = 1
+      ];
+     P = Permute[P, P0];
+     ,
+     L[[j]] = 0
+     ];
+    Pm = Permute[Pm, Pm0];
+    , {j, blen}]
+   ];
+  L
+  ]
+Options[LefschetzSingularity] = {PositivePerronRoot -> False};
 
 
 (*
