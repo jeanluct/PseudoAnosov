@@ -44,6 +44,10 @@ OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orienta
 
 StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k_1,...,k_m}."
 
+SumOrbits::usage = "SumOrbits[p,l] with p an integer and l a list of nonnegative integers, returns the sum of (k l[[k]]), where k is a divisor of p."
+
+LefschetzOddOrbits::usage = ""
+
 LefschetzNumbersTestQ::usage = ""
 
 (* Test for everything: first call pseudoAnosovPerronRootQ, then
@@ -61,6 +65,10 @@ MaxIterate::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving t
 
 MaxLefschetz::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving how many of Lefschetz numbers to compute for the test."
 
+OddIterates::usage = "Option to SumOrbits: set to True if a list of only odd iterates is provided, and the sum to an odd iterate is desired (default False)."
+
+IncludeLast::usage = "Option to SumOrbits: set to True to include the final iterate's contribution to the sum from (default True)."
+
 
 (*
    Error messages and warnings
@@ -72,13 +80,15 @@ PseudoAnosov::notminimal = "Warning: Not a minimal polynomial."
 
 PseudoAnosov::nottested = "Warning: This function is not well tested."
 
-PseudoAnosov::needpositivePerron = "Error: This test only works for positive Perron root."
+PseudoAnosov::needpositivePerron = "Error: This function only applies to positive Perron root."
 
-PseudoAnosov::neednegativePerron = "Error: This test only works for negative Perron root."
+PseudoAnosov::neednegativePerron = "Error: This function only applies to negative Perron root."
 
 PseudoAnosov::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th power."
 
 PseudoAnosov::notastring = "Function `1` did not return a proper string."
+
+PseudoAnosov::notodd = "Need even iterate, not `1`, with option OddIterates."
 
 
 Begin["`Private`"]
@@ -531,6 +541,45 @@ LefschetzAlmostPureStratumBQ[s_List,L_List] := Module[
 LefschetzSingularityPermutationsNegativeQ[s_List,L_List] :=
     (* Call the normal test but only apply to even iterates *)
     LefschetzSingularityPermutationsAQ[s,L, IterateTest->EvenQ]
+
+
+SumOrbits[p_Integer, rpo_List, OptionsPattern[]] := Module[
+    {dl = Divisors[p]},
+    If[!OptionValue[IncludeLast], dl = Most[dl]];
+    If[OptionValue[OddIterates],
+        (* If a list containing only odd iterates is provided, need p to
+           be odd as well. *)
+        dl = Select[dl, OddQ];
+        Plus @@ (# rpo[[(#+1)/2]] & /@ dl)
+        (*
+        If[OddQ[p],
+            Plus @@ (# rpo[[(#+1)/2]] & /@ dl)
+        ,
+            Message[PseudoAnosov::notodd, p]; Abort[]
+        ]
+        *)
+    ,
+        Plus @@ (# rpo[[#]] & /@ dl)
+    ]
+]
+Options[SumOrbits] = {OddIterates -> False, IncludeLast -> True}
+
+
+LefschetzOddOrbits[L_List] := Module[{},
+    orpo = {L[[1]]};
+    If[Times @@ Take[L,-2] > 0,
+        Message[PseudoAnosov::neednegativePerron]; Abort[]
+    ];
+    Do[
+        def = L[[p]] - SumOrbits[p,orpo,OddIterates->True, IncludeLast->False];
+        If[IntegerQ[def/p],
+            AppendTo[orpo, def/p]
+        ,
+            Message[PseudoAnosov::problem]
+        ]
+    ,{p, 3, Length[L], 2}];
+    orpo
+]
 
 
 (*
