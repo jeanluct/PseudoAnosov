@@ -46,7 +46,7 @@ StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface contai
 
 SumOrbits::usage = "SumOrbits[p,l] with p an integer and l a list of nonnegative integers, returns the sum of (k l[[k]]), where k is a divisor of p."
 
-LefschetzOddOrbits::usage = ""
+LefschetzRegularOrbits::usage = ""
 
 LefschetzNumbersTestQ::usage = ""
 
@@ -64,8 +64,6 @@ GiveReasonForRejection::usage = "Option to LefschetzNumbersTestQ: Set to True to
 MaxIterate::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving the largest power of the map to test (default 10)."
 
 MaxLefschetz::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving how many of Lefschetz numbers to compute for the test."
-
-OddIterates::usage = "Option to SumOrbits: set to True if a list of only odd iterates is provided, and the sum to an odd iterate is desired (default False)."
 
 IncludeLast::usage = "Option to SumOrbits: set to True to include the final iterate's contribution to the sum from (default True)."
 
@@ -87,8 +85,6 @@ PseudoAnosov::neednegativePerron = "Error: This function only applies to negativ
 PseudoAnosov::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th power."
 
 PseudoAnosov::notastring = "Function `1` did not return a proper string."
-
-PseudoAnosov::notodd = "Need even iterate, not `1`, with option OddIterates."
 
 
 Begin["`Private`"]
@@ -546,39 +542,25 @@ LefschetzSingularityPermutationsNegativeQ[s_List,L_List] :=
 SumOrbits[p_Integer, rpo_List, OptionsPattern[]] := Module[
     {dl = Divisors[p]},
     If[!OptionValue[IncludeLast], dl = Most[dl]];
-    If[OptionValue[OddIterates],
-        (* If a list containing only odd iterates is provided, need p to
-           be odd as well. *)
-        dl = Select[dl, OddQ];
-        Plus @@ (# rpo[[(#+1)/2]] & /@ dl)
-        (*
-        If[OddQ[p],
-            Plus @@ (# rpo[[(#+1)/2]] & /@ dl)
-        ,
-            Message[PseudoAnosov::notodd, p]; Abort[]
-        ]
-        *)
-    ,
-        Plus @@ (# rpo[[#]] & /@ dl)
-    ]
+    Plus @@ (# rpo[[#]] & /@ dl)
 ]
-Options[SumOrbits] = {OddIterates -> False, IncludeLast -> True}
+Options[SumOrbits] = {IncludeLast -> True}
 
 
-LefschetzOddOrbits[L_List] := Module[{},
-    orpo = {L[[1]]};
+LefschetzRegularOrbits[L_List] := Module[
+    {rpo = {L[[1]]}, def},
     If[Times @@ Take[L,-2] > 0,
         Message[PseudoAnosov::neednegativePerron]; Abort[]
     ];
     Do[
-        def = L[[p]] - SumOrbits[p,orpo,OddIterates->True, IncludeLast->False];
+        def = (-1)^(p+1) L[[p]] - SumOrbits[p,rpo,IncludeLast->False];
         If[IntegerQ[def/p],
-            AppendTo[orpo, def/p]
+            AppendTo[rpo, def/p]
         ,
-            Message[PseudoAnosov::problem]
+            Message[PseudoAnosov::problem]; Abort[]
         ]
-    ,{p, 3, Length[L], 2}];
-    orpo
+    ,{p, 2, Length[L]}];
+    rpo
 ]
 
 
