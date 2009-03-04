@@ -50,7 +50,9 @@ SumOrbits::usage = "SumOrbits[p,l] with p an integer and l a list of nonnegative
 
 LefschetzRegularOrbits::usage = ""
 
-LefschetzSingularityPermutations::usage = ""
+LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[k,Pk,Pm] returns a list of Lefschetz numbers corresponding to singularity of degree k with m-fold degeneracy.  Pk is a permutation on the separatrices of k, and Pm a permutation on the m singularities (default {1}).  Note that Pk must be a power of a cyclic permutation."
+
+LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz number lists.  If they are not the same length, then the blocks are repeated to the length of the longest list."
 
 LefschetzNumbersTestQ::usage = ""
 
@@ -89,6 +91,8 @@ PseudoAnosov::neednegativePerron = "Error: This function only applies to negativ
 PseudoAnosov::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th power."
 
 PseudoAnosov::notastring = "Function `1` did not return a proper string."
+
+PseudoAnosov::badLefschetz = "Bad sequence of Lefschetz numbers."
 
 
 Begin["`Private`"]
@@ -433,7 +437,7 @@ LefschetzSingularityPermutationsBQ[s_List,L_List] := Module[
             " and " <> LCMToString[m]]
     ]
 ]
-(* Private helper function for LefschetzSingularityPermutationsQ. *)
+(* Private helper function for LefschetzSingularityPermutationsBQ. *)
 LefschetzSingularityPermutationsBQ1[d_Integer,m_Integer,Nn_,L_] := Module[
     (* Compute the (unique) LCMs of integer partitions of m *)
     {lcm = Union[LCM @@ # & /@ IntegerPartitions[m]]},
@@ -553,48 +557,57 @@ Options[SumOrbits] = {IncludeLast -> True}
 
 LefschetzRegularOrbits[L_List] := Module[
     {rpo = {L[[1]]}, def},
+    If[L[[1]] < 0, Message[PseudoAnosov::badLefschetz]; Return[rpo]];
     If[Times @@ Take[L,-2] > 0,
         Message[PseudoAnosov::neednegativePerron]; Abort[]
     ];
     Do[
         def = (-1)^(p+1) L[[p]] - SumOrbits[p,rpo,IncludeLast->False];
-        If[IntegerQ[def/p],
-            AppendTo[rpo, def/p]
-        ,
-            Message[PseudoAnosov::problem]; Abort[]
+        AppendTo[rpo, def/p];
+        If[!IntegerQ[def/p] || def < 0,
+            Message[PseudoAnosov::badLefschetz]; Break[]
         ]
     ,{p, 2, Length[L]}];
     rpo
 ]
 
 
-LefschetzSingularityPermutations[p_, m_, OptionsPattern[]] := Module[
-  {blen, sepp, L, P0, P, Pm, Pm0},
-  Pm = RotateLeft[Table[j, {j, m}], 1];
-  Pm0 = Pm;
-  P = RotateLeft[Table[j, {j, p/2}], 1];
-  P0 = P;
-  sepp = m Times @@ Union[Length /@ ToCycles[P]];
-  If[! OptionValue[PositivePerronRoot],
-   blen = If[OddQ[sepp], 2 sepp, sepp];
-   L = Table[0, {blen}];
-   Do[
-    Print[j, "\t", P, "\t", Pm];
-    If[Pm == Table[j2, {j2, m}],
-     If[P == Table[j2, {j2, p/2}],
-      L[[j]] = If[EvenQ[j], m (1 - p), 1],
-      L[[j]] = 1
-      ];
-     P = Permute[P, P0];
-     ,
-     L[[j]] = 0
-     ];
-    Pm = Permute[Pm, Pm0];
-    , {j, blen}]
-   ];
-  L
-  ]
-Options[LefschetzSingularity] = {PositivePerronRoot -> False};
+LefschetzNumbersSingularity[k_Integer, Pk_List, Pm_List:{1},
+                            OptionsPattern[]] := Module[
+    {period, L, m = Length[Pm], Pm1 = Pm, Pk1 = Pk,
+     (* The total period the singularities and separatrices *)
+     nm = Times @@ Union[Length /@ ToCycles[Pm]],
+     (* The period the separatrices *)
+     ns = Times @@ Union[Length /@ ToCycles[Pk]]
+    },
+    period = nm ns;
+    If[!OptionValue[PositivePerronRoot],
+        (* If the period is odd, then double it to get back to an even
+           iterate *)
+        period = If[OddQ[period], 2 period, period];
+        L = Table[0, {period}];
+        Do[
+            If[Pm1 == Table[j2, {j2, m}],
+                If[Pk1 == Table[j2, {j2, k/2+1}],
+                    L[[j]] = If[EvenQ[j], -m(k+1), m],
+                    L[[j]] = m
+                ];
+                Pk1 = Permute[Pk1,Pk];
+            ,
+                L[[j]] = 0
+            ];
+            Pm1 = Permute[Pm1,Pm];
+        , {j, period}]
+    ];
+    L
+]
+Options[LefschetzNumbersSingularity] = {PositivePerronRoot -> False};
+
+
+LefschetzCombine[Ll__List] := Module[{L = List[Ll], len},
+    len = Max @@ (Length /@ L);
+    Plus @@ (PadRight[#,len,#] & /@ L)
+]
 
 
 (*

@@ -1,0 +1,225 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[      7831,        216]
+NotebookOptionsPosition[      7075,        189]
+NotebookOutlinePosition[      7433,        205]
+CellTagsIndexPosition[      7390,        202]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.44276268918027*^9, 3.442762713975093*^9}}],
+
+Cell[BoxData[
+ RowBox[{"<<", " ", "PseudoAnosov.m"}]], "Input",
+ CellChangeTimes->{
+  3.44276975660726*^9, {3.442795192458606*^9, 3.442795195156436*^9}, {
+   3.442834863802482*^9, 3.442834864300197*^9}, {3.444932891264221*^9, 
+   3.444932903264657*^9}, {3.444963984979224*^9, 3.444963985653634*^9}, {
+   3.444964038333988*^9, 3.44496403878162*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"P1", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      SuperscriptBox["x", "3"], "-", "x", "-", "1"}], ")"}], 
+    RowBox[{"(", 
+     RowBox[{
+      SuperscriptBox["x", "3"], "+", 
+      SuperscriptBox["x", "2"], "-", "1"}], ")"}]}], "/.", 
+   RowBox[{"x", "\[Rule]", 
+    RowBox[{"-", "x"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"P2", "=", 
+  RowBox[{
+   RowBox[{
+    SuperscriptBox["x", "6"], "-", 
+    SuperscriptBox["x", "4"], "-", 
+    SuperscriptBox["x", "3"], "-", 
+    SuperscriptBox["x", "2"], "+", "1"}], "/.", 
+   RowBox[{"x", "\[Rule]", 
+    RowBox[{"-", "x"}]}]}]}]}], "Input",
+ CellChangeTimes->{{3.4450771044355993`*^9, 3.44507712304354*^9}, 
+   3.445082110269047*^9, 3.4450823130927677`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"P", "=", "P2"}], ";"}]], "Input",
+ CellChangeTimes->{{3.4450772307391253`*^9, 3.4450772729023542`*^9}, {
+  3.445078840813099*^9, 3.445078841319578*^9}, {3.4450788756381197`*^9, 
+  3.445078875876862*^9}, {3.4450851517545*^9, 3.445085173656116*^9}, {
+  3.445086580292022*^9, 3.445086580482131*^9}, {3.4451118449566402`*^9, 
+  3.44511184514554*^9}, {3.445111936985634*^9, 3.445111937087386*^9}, {
+  3.445112077395795*^9, 3.445112093048998*^9}, {3.445112849234799*^9, 
+  3.4451128494770823`*^9}, {3.445113068788528*^9, 3.4451130688320513`*^9}, {
+  3.4451131968393*^9, 3.445113214898733*^9}, {3.445114433019154*^9, 
+  3.445114441117477*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Lmax", "=", "40"}], ";"}]], "Input",
+ CellChangeTimes->{{3.445096971009833*^9, 3.445096976811664*^9}, {
+  3.445097009436874*^9, 3.445097014298607*^9}, {3.445098805533661*^9, 
+  3.445098808252107*^9}, {3.445113188022419*^9, 3.445113188060295*^9}}],
+
+Cell[BoxData[
+ RowBox[{"L", "=", 
+  RowBox[{"LefschetzNumbers", "[", 
+   RowBox[{"P", ",", "x", ",", 
+    RowBox[{"{", "Lmax", "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.445077037140609*^9, 3.44507704643116*^9}, 
+   3.445077131768519*^9, {3.445077161832221*^9, 3.445077235962675*^9}, {
+   3.445077519546238*^9, 3.4450775200297823`*^9}, 3.445096992187507*^9, {
+   3.445098813150831*^9, 3.445098813421686*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "LefschetzCombine"}]], "Input",
+ CellChangeTimes->{3.445114472741229*^9}],
+
+Cell[BoxData[
+ RowBox[{"?", "LefschetzNumbersSingularity"}]], "Input",
+ CellChangeTimes->{3.4451145340141993`*^9}],
+
+Cell["\<\
+There are two possibilities with distinct Lefschetz numbers for the stratum \
+with a single degree 8 singularity :\
+\>", "Text",
+ CellChangeTimes->{{3.445113118488566*^9, 3.445113134172031*^9}, 
+   3.445113769032686*^9}],
+
+Cell[BoxData[
+ RowBox[{"s8", "=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"LefschetzNumbersSingularity", "[", 
+     RowBox[{"8", ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "2", ",", "3", ",", "4", ",", "5"}], "}"}]}], "]"}], 
+    ",", 
+    RowBox[{"LefschetzNumbersSingularity", "[", 
+     RowBox[{"8", ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "3", ",", "4", ",", "5", ",", "1"}], "}"}]}], 
+     "]"}]}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.445112974241661*^9, 3.445113043653385*^9}, {
+  3.445113454837762*^9, 3.4451134550249987`*^9}, {3.4451143566404963`*^9, 
+  3.4451143799499903`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LefschetzRegularOrbits", "[", 
+    RowBox[{"LefschetzCombine", "[", 
+     RowBox[{"L", ",", 
+      RowBox[{"-", "#"}]}], "]"}], "]"}], "&"}], "/@", "s8"}]], "Input",
+ CellChangeTimes->{{3.4451111719223537`*^9, 3.445111179866075*^9}, 
+   3.44511177729907*^9, {3.4451118293888197`*^9, 3.4451118314561853`*^9}, {
+   3.4451120542325983`*^9, 3.445112056733639*^9}, {3.4451123970134697`*^9, 
+   3.44511240244541*^9}, {3.445112960931096*^9, 3.4451129620822153`*^9}, {
+   3.445113059343555*^9, 3.445113061027108*^9}}],
+
+Cell["\<\
+There are three possibilities with distinct Lefschetz numbers for the stratum \
+with four degree 2 singularities :\
+\>", "Text",
+ CellChangeTimes->{{3.445113118488566*^9, 3.4451131563640213`*^9}, {
+  3.445113532393447*^9, 3.44511353264669*^9}, {3.445113754072248*^9, 
+  3.445113759607006*^9}}],
+
+Cell[BoxData[
+ RowBox[{"s2222", "=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"LefschetzNumbersSingularity", "[", 
+     RowBox[{"2", ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "2"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}]}], "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"LefschetzNumbersSingularity", "[", 
+     RowBox[{"2", ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "2"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "1", ",", "2", ",", "3"}], "}"}]}], "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"LefschetzNumbersSingularity", "[", 
+     RowBox[{"2", ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "1"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "1", ",", "2", ",", "3"}], "}"}]}], "]"}]}], 
+   "}"}]}]], "Input",
+ CellChangeTimes->{{3.4451099019279222`*^9, 3.445109902766615*^9}, {
+  3.445110931981414*^9, 3.445110932242958*^9}, {3.4451109937852783`*^9, 
+  3.445110997452374*^9}, {3.445112134217683*^9, 3.4451122071618032`*^9}, {
+  3.445112323540476*^9, 3.445112344234232*^9}, {3.445112907398067*^9, 
+  3.4451129212083883`*^9}, {3.445112952991995*^9, 3.4451129541218023`*^9}, {
+  3.4451134540255013`*^9, 3.445113454619628*^9}, {3.445113702089374*^9, 
+  3.445113704451942*^9}, {3.445113743064638*^9, 3.445113743410276*^9}, {
+  3.4451143835477552`*^9, 3.445114398065179*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LefschetzRegularOrbits", "[", 
+    RowBox[{"LefschetzCombine", "[", 
+     RowBox[{"L", ",", 
+      RowBox[{"-", "#"}]}], "]"}], "]"}], "&"}], "/@", "s2222"}]], "Input",
+ CellChangeTimes->{{3.4451111719223537`*^9, 3.445111179866075*^9}, 
+   3.44511177729907*^9, {3.4451118293888197`*^9, 3.4451118314561853`*^9}, {
+   3.4451120542325983`*^9, 3.445112056733639*^9}, {3.4451123970134697`*^9, 
+   3.44511240244541*^9}, {3.445112960931096*^9, 3.4451129620822153`*^9}}]
+},
+WindowSize->{856, 750},
+WindowMargins->{{13, Automatic}, {Automatic, 25}},
+ShowSelection->True,
+FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 199, 4, 32, "Input"],
+Cell[747, 26, 348, 6, 32, "Input"],
+Cell[1098, 34, 751, 23, 55, "Input"],
+Cell[1852, 59, 671, 11, 32, "Input"],
+Cell[2526, 72, 281, 5, 32, "Input"],
+Cell[2810, 79, 415, 8, 32, "Input"],
+Cell[3228, 89, 101, 2, 32, "Input"],
+Cell[3332, 93, 114, 2, 32, "Input"],
+Cell[3449, 97, 230, 5, 31, "Text"],
+Cell[3682, 104, 612, 16, 55, "Input"],
+Cell[4297, 122, 556, 11, 32, "Input"],
+Cell[4856, 135, 303, 6, 31, "Text"],
+Cell[5162, 143, 1397, 32, 77, "Input"],
+Cell[6562, 177, 509, 10, 32, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
