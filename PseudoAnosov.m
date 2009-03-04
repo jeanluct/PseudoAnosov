@@ -50,7 +50,9 @@ SumOrbits::usage = "SumOrbits[p,l] with p an integer and l a list of nonnegative
 
 LefschetzRegularOrbits::usage = ""
 
-LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[k,Pk,Pm] returns a list of Lefschetz numbers corresponding to singularity of degree k with m-fold degeneracy.  Pk is a permutation on the separatrices of k, and Pm a permutation on the m singularities (default {1}).  Note that Pk must be a power of a cyclic permutation."
+LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[Pk,Pm] returns a list of Lefschetz numbers corresponding to singularity of degree k with m-fold degeneracy.  Pk is a permutation on the (k+2)/2 in or outgoing separatrices of the singularities, and Pm a permutation on the m singularities (default {1}).  Note that Pk must be a power of a cyclic permutation.\nLefschetzNumbersSingularity[k,m], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1)."
+
+LefschetzNumbersStratum::usage = "LefschetzNumbersStratum[S], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}})."
 
 LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz number lists.  If they are not the same length, then the blocks are repeated to the length of the longest list."
 
@@ -434,7 +436,7 @@ LefschetzSingularityPermutationsBQ[s_List,L_List] := Module[
         idx = First[idx];
         Return[SingularityToString[k[[idx]],m[[idx]]] <>
             " incompatible with " <> LefschetzToString[L[[idx]],idx] <>
-            " and " <> LCMToString[m]]
+            " and " <> LCMToString[m[[idx]]]]
     ]
 ]
 (* Private helper function for LefschetzSingularityPermutationsBQ. *)
@@ -572,9 +574,8 @@ LefschetzRegularOrbits[L_List] := Module[
 ]
 
 
-LefschetzNumbersSingularity[k_Integer, Pk_List, Pm_List:{1},
-                            OptionsPattern[]] := Module[
-    {period, L, m = Length[Pm], Pm1 = Pm, Pk1 = Pk,
+LefschetzNumbersSingularity[Pk_List, Pm_List:{1}, OptionsPattern[]] := Module[
+    {k = 2Length[Pk]-2, period, L, m = Length[Pm], Pm1 = Pm, Pk1 = Pk,
      (* The total period the singularities and separatrices *)
      nm = Times @@ Union[Length /@ ToCycles[Pm]],
      (* The period the separatrices *)
@@ -587,8 +588,8 @@ LefschetzNumbersSingularity[k_Integer, Pk_List, Pm_List:{1},
         period = If[OddQ[period], 2 period, period];
         L = Table[0, {period}];
         Do[
-            If[Pm1 == Table[j2, {j2, m}],
-                If[Pk1 == Table[j2, {j2, k/2+1}],
+            If[Pm1 == Range[m],
+                If[Pk1 == Range[k/2+1],
                     L[[j]] = If[EvenQ[j], -m(k+1), m],
                     L[[j]] = m
                 ];
@@ -602,6 +603,37 @@ LefschetzNumbersSingularity[k_Integer, Pk_List, Pm_List:{1},
     L
 ]
 Options[LefschetzNumbersSingularity] = {PositivePerronRoot -> False};
+
+
+LefschetzNumbersSingularity[k_Integer, m_Integer:1] :=
+Module[
+    {pr = k/2+1, Pk, Pm},
+    (* All possible cyclic permutations of separatrices  (Overkill!) *)
+    Pk = RotateLeft[Range[pr], #] & /@ (Range[pr] - 1);
+    (* All possible permutations of singularities (Overkill!) *)
+    Pm = Permutations[m];
+    Pk = RotateLeft[Range[pr], #] & /@ (Range[pr] - 1);
+    Union[Flatten[
+        Table[LefschetzNumbersSingularity[#,P] & /@ Pk,
+            {P,Pm}]
+        ,1]
+    ]
+]
+
+
+LefschetzNumbersStratum[s_List] := Module[
+    {t, L, f},
+    (* Accept s in either explicit or tallied form *)
+    If[ListQ[s[[1]]], t = s, t = Tally[s]];
+    (* Lists of Lefschetz numbers for each singularity type *)
+    L = (LefschetzNumbersSingularity @@ # &) /@ t;
+    (* The function f helps generate all possible combinations of strata *)
+    f[l_, a_] := Flatten[Table[
+         Append[l[[i]], a[[j]]], {i, Length[l]}, {j, Length[a]}], 1];
+    (* Use Fold to apply f to each list of Lefschetz, giving all
+       possibilities, and then combine the lists *)
+    (LefschetzCombine @@ # &) /@ Fold[f,{{}},L]
+]
 
 
 LefschetzCombine[Ll__List] := Module[{L = List[Ll], len},
