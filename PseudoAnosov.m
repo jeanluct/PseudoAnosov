@@ -54,6 +54,8 @@ LefschetzRegularOrbits::usage = ""
 
 LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[k,m], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1)."
 
+LefschetzNumbersSingularityPermutations::usage = ""
+
 LefschetzNumbersStratum::usage = "LefschetzNumbersStratum[S], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}})."
 
 LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz number.  If they are not the same length, then the blocks are repeated to the length of the longest list.\nLefschetzCombine[L1,L2,...,Lm,n] caps the total length at an integer n."
@@ -79,7 +81,7 @@ MaxLefschetz::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving
 
 IncludeLast::usage = "Option to SumOrbits: set to True to include the final iterate's contribution to the sum from (default True)."
 
-PerronRootSign::usage = "Option to LefschetzStratum, LefschetzSingularity and LefschetzRegularOrbits to specify whether the Perron root is positive or negative.  For LefschetzRegularOrbits, set to 0 to try and guess by looking at the last two Lefschetz numbers (default 0 for LefschetzRegularOrbits, -1 otherwise)."
+PerronRootSign::usage = "Option to LefschetzStratum, LefschetzSingularity and LefschetzRegularOrbits to specify whether the Perron root is positive or negative.  For LefschetzRegularOrbits, set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic for LefschetzRegularOrbits, -1 otherwise)."
 
 
 (*
@@ -101,6 +103,8 @@ PseudoAnosov::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th powe
 PseudoAnosov::notastring = "Function `1` did not return a proper string."
 
 PseudoAnosov::badLefschetz = "Bad sequence of Lefschetz numbers."
+
+PseudoAnosov::manyallowableperms = "More than one allowable permutation type on stratum `1`."
 
 
 Begin["`Private`"]
@@ -583,7 +587,7 @@ Options[SumOrbits] = {IncludeLast -> True}
 LefschetzRegularOrbits[L_List, OptionsPattern[]] := Module[
     {rpo, def, prs = OptionValue[PerronRootSign]},
     (* If the sign of the Perron root is unspecified, try and guess *)
-    If[prs == 0, prs = Sign[Times @@ Take[L,-2]]];
+    If[prs == Automatic, prs = Sign[Times @@ Take[L,-2]]];
     rpo = {-prs L[[1]]};
     If[rpo[[1]] < 0, Message[PseudoAnosov::badLefschetz]; Return[rpo]];
     If[prs < 0 && ((Times @@ Take[L,-2]) > 0),
@@ -605,36 +609,42 @@ LefschetzRegularOrbits[L_List, OptionsPattern[]] := Module[
     ,{p, 2, Length[L]}];
     rpo
 ]
-Options[LefschetzRegularOrbits] = {PerronRootSign -> 0}
+Options[LefschetzRegularOrbits] = {PerronRootSign -> Automatic}
 
 
 StratumRegularOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
     {L, Ls, ro},
     (* Use Variables to get rid of the x argument! *)
     L = LefschetzNumbers[p,First[Variables[p]],{OptionValue[MaxLefschetz]}];
+    StratumRegularOrbits[s,L,opts]
+]
+Options[StratumRegularOrbits] =
+    {MaxLefschetz -> 50, PerronRootSign -> Automatic}
+
+
+StratumRegularOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
+    {Ls, ro},
     Ls = LefschetzNumbersStratum[s,opts];
     Off[PseudoAnosov::badLefschetz];
     ro = LefschetzRegularOrbits[LefschetzCombine[L,-#,Length[L]],opts] & /@ Ls;
     On[PseudoAnosov::badLefschetz];
     (* Eliminate bad orbits: look for a negative or nonintegral last element *)
     ro = Pick[ro, Last[#] > 0 && IntegerQ[Last[#]] & /@ ro];
-    If[Length[ro] > 1, Message[PseudoAnosov::stopthepresses]];
-    If[ro == {}, Return[ro], Return[First[ro]]]
+    If[Length[ro] > 1, Message[PseudoAnosov::manyallowableperms, s]];
+    Return[ro]
 ]
-Options[StratumRegularOrbits] = {MaxLefschetz -> 50, PerronRootSign -> 0}
 
 
-LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
-    {t, opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
-    If[StratumRegularOrbits[s,p] == {}, t = "Bad", t = Allowable];
-    If[OptionValue[GiveReasonForRejection],
-        Return[{t == Allowable,t}]
+StratumRegularOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[{},
+    On[PseudoAnosov::manyallowableperms];
+    If[StratumRegularOrbits[s,L,opts] == {},
+        Return["No permutation works"]
     ,
-        Return[t == Allowable]
-    ]
+        Return[Allowable]
+    ];
+    On[PseudoAnosov::manyallowableperms];
 ]
-Options[LefschetzNumbersTestQ] =
-    {GiveReasonForRejection -> False, MaxIterate -> 5, MaxLefschetz -> 100}
+Options[StratumRegularOrbitsTestQ] = {PerronRootSign -> Automatic}
 
 
 LefschetzNumbersSingularity[k_Integer, m_Integer:1, opts:OptionsPattern[]] :=
@@ -687,7 +697,7 @@ Module[
     If[prs < 0,
         (* If the period is odd, then double it to get back to an even
            iterate *)
-        period = If[OddQ[period], 2period, period];
+        period = If[OddQ[m], 2period, period];
     ];
     L = {};
     Do[
@@ -701,7 +711,7 @@ Module[
             ,
                 AppendTo[L,m]
             ];
-            Pk1 = Permute[Pk1,Pk];
+            If[EvenQ[i], Pk1 = Permute[Pk1,Pk]];
         ,
             AppendTo[L,0]
         ];
@@ -735,7 +745,7 @@ LefschetzCombine[Ll__List, n_Integer:0] := Module[{L = List[Ll], len},
    Test for everything together
 *)
 
-LefschetzNumbersTestQ2[s_List,p_,x_, opts:OptionsPattern[]] := Module[
+LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
     {t, opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
     If[PerronRoot[p,x] > 0,
         L = LefschetzNumbers[p,x,{OptionValue[MaxLefschetz]}];
@@ -745,6 +755,12 @@ LefschetzNumbersTestQ2[s_List,p_,x_, opts:OptionsPattern[]] := Module[
            apply the even tests to half the list *)
         L = LefschetzNumbers[p,x,{2 OptionValue[MaxLefschetz]}];
         t = LefschetzNumbersTestNegativeQ[s,L,opts2]
+    ];
+    (* If all the tests have failed so far, try the ultimate one, but
+       only as a last resort! *)
+    If[t == Allowable,
+        tests = {StratumRegularOrbitsTestQ};
+        t = LefschetzNumbersTestListQ[s,L,tests,opts2,MaxIterate -> 1];
     ];
     If[OptionValue[GiveReasonForRejection],
         Return[{t == Allowable,t}]
