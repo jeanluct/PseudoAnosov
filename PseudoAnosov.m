@@ -11,31 +11,29 @@ Needs["Combinatorica`"]
 
 PseudoAnosov::usage = "Functions for manipulating characteristic polynomials of pseudo-Anosov maps."
 
-PolynomialDegree::usage = "PolynomialDegree[p,x] returns the degree of the polynomial p(x)."
+PolynomialDegree::usage = "PolynomialDegree[P] returns the degree of the polynomial P(x)."
 
-TracesPower::usage = "TracesPower[p,x,m], where p(x) is the characteristic polynomial of a matrix M, lists the traces Tr[M^k] for 1 <= k <= m."
+TracesPower::usage = "TracesPower[P,m], where P is the characteristic polynomial of a matrix M, lists the traces Tr[M^k] for 1 <= k <= m."
 
-LefschetzNumbers::usage = "LefschetzNumbers[p,x,k], where p(x) is the characteristic polynomial of some matrix M, returns the Lefschetz number 2-Tr[M^k].  LefschetzNumbers[p,x,{k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for 1 <= k <= k2.  LefschetzNumbers[p,x,{k1,k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for k1 <= k <= k2."
+LefschetzNumbers::usage = "LefschetzNumbers[P,k], where P is the characteristic polynomial of some matrix M, returns the Lefschetz number 2-Tr[M^k].  LefschetzNumbers[P,{k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for 1 <= k <= k2.  LefschetzNumbers[P,{k1,k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for k1 <= k <= k2."
 
 ReciprocalPolynomial::usage = "ReciprocalPolynomial[x,n] returns a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1.  ReciprocalPolynomial[x,n,c] uses c as the base name for coefficients.  ReciprocalPolynomial[x,n,{a_1,...,a_(n/2)}] uses a list for the coefficient, where (n/2) denotes Floor[n/2].";
 
 ReciprocalPolynomialFromTraces::usage = "ReciprocalPolynomialFromTraces[x,n,T] creates a reciprocal polynomial of degree n from a list of traces of powers of its associated matrix.  ReciprocalPolynomialFromTraces[x,T] creates a polynomial of degree 2 Length[T]."
 
-ReciprocalPolynomialQ::usage = "ReciprocalPolynomialQ[p,x] returns true if p(x) is a reciprocal polynomial, i.e. of the form a[0] x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + a[0].";
+ReciprocalPolynomialQ::usage = "ReciprocalPolynomialQ[P] returns true if P is a reciprocal polynomial, i.e. of the form a[0] x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + a[0].";
 
 ReciprocalPolynomialCoefficientBounds::usage = "ReciprocalPolynomialCoefficientBounds[n,t] lists the bound on the magnitude of the coefficients {a[1],...,a[Floor[n/2]]} of a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1, given that its largest eigenvalue is h with t = h + 1/h.";
 
 ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,amax] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with coefficients bounded by |a[k]| <= amax[k].  For n even, only one of each polynomials pair P(-x)=P(x) is listed.";
 
-PolynomialRoots::usage = "PolynomialRoots[p,x] returns the roots of the polynomial p(x), sorted in decreasing order of magnitude.";
+PolynomialRoots::usage = "PolynomialRoots[P] returns the roots of the polynomial P, sorted in decreasing order of magnitude.";
 
-PerronRoot::usage = "PerronRoot[p,x] returns the largest root (in magnitute) of the polynomial p(x).";
+PerronRoot::usage = "PerronRoot[P] returns the largest root (in magnitute) of the polynomial P.";
 
-pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[p,x] returns True if the largest root of the polynomial p(x) is nondegenerate (in magnitute) and real.  pseudoAnosovPerronRootQ[p,x,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
+pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[P] returns True if the largest root of the polynomial P is nondegenerate (in magnitute) and real.  pseudoAnosovPerronRootQ[P,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
 
-MahlerMeasure::usage = "MahlerMeasure[p,x] returns the Mahler measure of the polynomial p(x), which is the absolute value of the product of roots outside the unit circle.";
-
-MinimalPolynomialQ::usage = "MinimalPolynomialQ[p] returns true if the polynomial p cannot be factored.";
+MahlerMeasure::usage = "MahlerMeasure[P] returns the Mahler measure of the polynomial P, which is the absolute value of the product of roots outside the unit circle.";
 
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
@@ -110,12 +108,15 @@ PseudoAnosov::manyallowableperms = "More than one allowable permutation type on 
 Begin["`Private`"]
 
 
-PolynomialDegree[p_,x_] := Length[CoefficientList[Collect[p,x],x]]-1
+PolynomialDegree[p_] := Module[{x = First[Variables[p]]},
+    Length[CoefficientList[Collect[p,x],x]]-1
+]
 
 
-TracesPower[p_,x_,mm_List:{10}] := Module[
+TracesPower[p_,mm_List:{10}] := Module[
+    {x = First[Variables[p]], n, T, ml},
     (* Polynomial is x^n + c[1]x^(n-1) + ... + c[n-1]x + c[n] *)
-    {c = Reverse[CoefficientList[Collect[p,x],x]], n, T, ml},
+    c = Reverse[CoefficientList[Collect[p,x],x]];
     (* Make sure leading coefficient is 1, then drop it. *)
     c = Drop[c/c[[1]],1];
     n = Length[c]; (* Degree of polynomial *)
@@ -133,13 +134,13 @@ TracesPower[p_,x_,mm_List:{10}] := Module[
 ]
 
 
-TracesPower[p_,x_,m_Integer:1] := First[TracesPower[p,x,{m,m}]]
+TracesPower[p_,m_Integer:1] := First[TracesPower[p,{m,m}]]
 
 
-LefschetzNumbers[p_,x_,mm_List] := (2 - #) & /@ TracesPower[p,x,mm]
+LefschetzNumbers[p_,mm_List] := (2 - #) & /@ TracesPower[p,mm]
 
 
-LefschetzNumbers[p_,x_,m_Integer:1] := 2 - TracesPower[p,x,m]
+LefschetzNumbers[p_,m_Integer:1] := 2 - TracesPower[p,m]
 
 
 ReciprocalPolynomial[x_,n_,a_List] := Module[{aal},
@@ -169,8 +170,9 @@ ReciprocalPolynomialFromTraces[x_,n_Integer,T_List] := Module[
 ]
 
 
-ReciprocalPolynomialQ[p_,x_] := Module[
-    {c = CoefficientList[Collect[p,x],x], n},
+ReciprocalPolynomialQ[p_] := Module[
+    {x = First[Variables[p]], c, n},
+    c = CoefficientList[Collect[p,x],x];
     n = Length[c]-1;
     Return[Simplify[p - x^n (p/.x->1/x)] === 0]
 ]
@@ -235,12 +237,12 @@ ReciprocalPolynomialBoundedList[x_,6,h_Real] := Module[
     p = ReciprocalPolynomial[x,n,c];
     keep[hh_] := ((hmin < hh[[1]] < h) && Abs[hh[[1]]-hh[[2]]] > degen);
     Do[
-        hh = Abs/@Take[PolynomialRoots[p,x],2];
+        hh = Abs/@Take[PolynomialRoots[p],2];
         If[keep[hh], pl=Append[pl,p]; Print[p]]
     ,{c[1],-a[[1]],-1},{c[2],-a[[2]],a[[2]]},{c[3],-a[[3]],a[[3]]}];
     p = p/.{c[1]->0};
     Do[
-        hh = Abs/@Take[PolynomialRoots[p,x],2];
+        hh = Abs/@Take[PolynomialRoots[p],2];
         If[keep[hh], pl=Append[pl,p]; Print[p]]
     ,{c[2],-a[[2]],a[[2]]},{c[3],-a[[3]],0}];
     pl
@@ -252,40 +254,40 @@ ReciprocalPolynomialBoundedList[x_,8,h_Real] := Module[
     keep[hh_] := ((hmin < hh[[1]] < h) && Abs[hh[[1]]-hh[[2]]] > degen);
     Do[
         If[Mod[++cases,10000] == 0, Print[cases]];
-        hh = Abs/@Take[PolynomialRoots[p,x],2];
+        hh = Abs/@Take[PolynomialRoots[p],2];
         If[keep[hh], pl=Append[pl,p]; Print[p]]
     ,{c[1],-a[[1]],-1},{c[2],-a[[2]],a[[2]]}
     ,{c[3],-a[[3]],a[[3]]},{c[4],-a[[4]],a[[4]]}];
     p = p/.{c[1]->0};
     Do[
         If[Mod[++cases,10000] == 0, Print[cases]];
-        hh = Abs/@Take[PolynomialRoots[p,x],2];
+        hh = Abs/@Take[PolynomialRoots[p],2];
         If[keep[hh], pl=Append[pl,p]; Print[p]]
     ,{c[2],-a[[2]],a[[2]]},{c[3],-a[[3]],0},{c[4],-a[[4]],a[[4]]}];
     pl
 ]
 
 
-PolynomialRoots[p_,x_,opts:OptionsPattern[]] :=
+PolynomialRoots[p_,opts:OptionsPattern[]] := Module[
+    {x = First[Variables[p]]},
     Sort[x/.NSolve[p == 0, x, opts], Abs[#2] < Abs[#1] &]
+]
 (* PolynomialRoots inherits the options for NSolve *)
 Options[PolynomialRoots] = Options[NSolve]
 
 
-PerronRoot[p_,x_,opts:OptionsPattern[]] := First[PolynomialRoots[p,x,opts]]
+PerronRoot[p_,opts:OptionsPattern[]] := First[PolynomialRoots[p,opts]]
 (* PerronRoot inherits the options for NSolve *)
 Options[PerronRoot] = Options[NSolve]
 
 
-MahlerMeasure[p_,x_,opts:OptionsPattern[]] := Module[{},
-    If[!MinimalPolynomialQ[p],Message[PseudoAnosov::notminimal]];
-    Times @@ Select[Abs/@PolynomialRoots[p,x,opts],#>1&]
+MahlerMeasure[p_,opts:OptionsPattern[]] := Module[
+    {x = First[Variables[p]]},
+    If[!IrreduciblePolynomialQ[p],Message[PseudoAnosov::notminimal]];
+    Times @@ Select[Abs/@PolynomialRoots[p,opts],#>1&]
 ]
 (* MahlerMeasure inherits the options for NSolve *)
 Options[MahlerMeasure] = Options[NSolve]
-
-
-MinimalPolynomialQ[p_] := Factor[p] === Expand[p]
 
 
 IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
@@ -343,10 +345,10 @@ StratumToGenus[s_List] := (Plus @@ s + 4)/4
 
 
 (* Test for the Perron root *)
-pseudoAnosovPerronRootQ[p_,x_,lmax_:0,opts:OptionsPattern[]] := Module[
-    {prl, pr, degen, testdegen},
-    If[!ReciprocalPolynomialQ[p,x], Return[False]];
-    If[PolynomialDegree[p,x] < 2, Return[False]];
+pseudoAnosovPerronRootQ[p_,lmax_:0,opts:OptionsPattern[]] := Module[
+    {x = First[Variables[p]], prl, pr, degen, testdegen},
+    If[!ReciprocalPolynomialQ[p], Return[False]];
+    If[PolynomialDegree[p] < 2, Return[False]];
     degen = OptionValue[EqualityTolerance];
     testdegen[diff_] := Module[{},
         If[diff < degen, Return[False]];
@@ -354,7 +356,7 @@ pseudoAnosovPerronRootQ[p_,x_,lmax_:0,opts:OptionsPattern[]] := Module[
         Return[True]
     ];
     (* Take the first two roots (presorted by magnitude) *)
-    prl = Take[PolynomialRoots[p,x,opts], 2];
+    prl = Take[PolynomialRoots[p,opts], 2];
     pr = Abs[prl[[1]]];
     (* First criterion: largest eigenvalue is greater than 1 *)
     If[!testdegen[Abs[pr-1]], Return[False]];
@@ -613,16 +615,15 @@ Options[LefschetzRegularOrbits] = {PerronRootSign -> Automatic}
 
 
 StratumRegularOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
-    {L, Ls, ro},
-    (* Use Variables to get rid of the x argument! *)
-    L = LefschetzNumbers[p,First[Variables[p]],{OptionValue[MaxLefschetz]}];
-    StratumRegularOrbits[s,L,opts]
+    {L},
+    L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
+    LefschetzStratumRegularOrbits[s,L,opts]
 ]
 Options[StratumRegularOrbits] =
     {MaxLefschetz -> 50, PerronRootSign -> Automatic}
 
 
-StratumRegularOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
+LefschetzStratumRegularOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     {Ls, ro},
     Ls = LefschetzNumbersStratum[s,opts];
     Off[PseudoAnosov::badLefschetz];
@@ -633,6 +634,7 @@ StratumRegularOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     If[Length[ro] > 1, Message[PseudoAnosov::manyallowableperms, s]];
     Return[ro]
 ]
+Options[LefschetzStratumRegularOrbits] = Options[StratumRegularOrbits]
 
 
 StratumRegularOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[{},
@@ -745,15 +747,16 @@ LefschetzCombine[Ll__List, n_Integer:0] := Module[{L = List[Ll], len},
    Test for everything together
 *)
 
-LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
-    {t, opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
-    If[PerronRoot[p,x] > 0,
-        L = LefschetzNumbers[p,x,{OptionValue[MaxLefschetz]}];
+LefschetzNumbersTestQ[s_List,p_, opts:OptionsPattern[]] := Module[
+    {x = First[Variables[p]], t,
+     opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
+    If[PerronRoot[p] > 0,
+        L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
         t = LefschetzNumbersTestPositiveQ[s,L,opts2]
     ,
         (* Generate twice as many Lefschetz numbers, since we need to
            apply the even tests to half the list *)
-        L = LefschetzNumbers[p,x,{2 OptionValue[MaxLefschetz]}];
+        L = LefschetzNumbers[p,{2 OptionValue[MaxLefschetz]}];
         t = LefschetzNumbersTestNegativeQ[s,L,opts2]
     ];
     (* If all the tests have failed so far, try the ultimate one, but
