@@ -48,13 +48,15 @@ StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface contai
 
 SumOrbits::usage = "SumOrbits[p,l] with p an integer and l a list of nonnegative integers, returns the sum of (k l[[k]]), where k is a divisor of p."
 
+AllPossibilities::usage = "AllPossibilities[L1,L2,...] generates all possible ordered combinations of elements of the given lists with repetition."
+
 LefschetzRegularOrbits::usage = ""
 
-LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[Pk,Pm] returns a list of Lefschetz numbers corresponding to singularity of degree k with m-fold degeneracy.  Pk is a permutation on the (k+2)/2 in or outgoing separatrices of the singularities, and Pm a permutation on the m singularities (default {1}).  Note that Pk must be a power of a cyclic permutation.\nLefschetzNumbersSingularity[k,m], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1)."
+LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[k,m], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1)."
 
 LefschetzNumbersStratum::usage = "LefschetzNumbersStratum[S], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}})."
 
-LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz number lists.  If they are not the same length, then the blocks are repeated to the length of the longest list."
+LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz number.  If they are not the same length, then the blocks are repeated to the length of the longest list.\nLefschetzCombine[L1,L2,...,Lm,n] caps the total length at an integer n."
 
 LefschetzNumbersTestQ::usage = ""
 
@@ -74,6 +76,8 @@ MaxIterate::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving t
 MaxLefschetz::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving how many of Lefschetz numbers to compute for the test."
 
 IncludeLast::usage = "Option to SumOrbits: set to True to include the final iterate's contribution to the sum from (default True)."
+
+PerronRootSign::usage = "Option to LefschetzStratum, LefschetzSingularity and LefschetzRegularOrbits to specify whether the Perron root is positive or negative.  For LefschetzRegularOrbits, set to 0 to try and guess by looking at the last two Lefschetz numbers (default 0 for LefschetzRegularOrbits, -1 otherwise)."
 
 
 (*
@@ -365,13 +369,26 @@ Options[pseudoAnosovPerronRootQ] =
 SingularityToString[k_Integer, m_Integer] :=
     ToString[k] <> "^" <> ToString[m]
 
+
 LefschetzToString[L_Integer, n_Integer] :=
     "L[" <> ToString[n] <> "]=" <> ToString[L]
+
 
 LCMToString[k_Integer] := "LCM(partitions of " <> ToString[k] <> ")"
 
 
+AllPossibilities[L__List] := Module[{f},
+    (* The function f helps generate all possible combinations of
+       elements of given lists *)
+    f[l_, a_] := Flatten[Table[
+         Append[l[[i]], a[[j]]], {i, Length[l]}, {j, Length[a]}], 1];
+    (* Use Fold to apply f to each list, giving all possibilities *)
+    Fold[f,{{}},List[L]]
+]
+
+
 Allowable = "Allowable"
+
 
 (*
    Lefschetz tests for positive Perron root
@@ -549,6 +566,10 @@ LefschetzSingularityPermutationsNegativeQ[s_List,L_List] :=
     LefschetzSingularityPermutationsAQ[s,L, IterateTest->EvenQ]
 
 
+(*
+   Construct regular orbits from Lefschetz numbers
+*)
+
 SumOrbits[p_Integer, rpo_List, OptionsPattern[]] := Module[
     {dl = Divisors[p]},
     If[!OptionValue[IncludeLast], dl = Most[dl]];
@@ -557,14 +578,24 @@ SumOrbits[p_Integer, rpo_List, OptionsPattern[]] := Module[
 Options[SumOrbits] = {IncludeLast -> True}
 
 
-LefschetzRegularOrbits[L_List] := Module[
-    {rpo = {L[[1]]}, def},
-    If[L[[1]] < 0, Message[PseudoAnosov::badLefschetz]; Return[rpo]];
-    If[Times @@ Take[L,-2] > 0,
+LefschetzRegularOrbits[L_List, OptionsPattern[]] := Module[
+    {rpo, def, prs = OptionValue[PerronRootSign]},
+    (* If the sign of the Perron root is unspecified, try and guess *)
+    If[prs == 0, prs = Sign[Times @@ Take[L,-2]]];
+    rpo = {-prs L[[1]]};
+    If[rpo[[1]] < 0, Message[PseudoAnosov::badLefschetz]; Return[rpo]];
+    If[prs < 0 && ((Times @@ Take[L,-2]) > 0),
         Message[PseudoAnosov::neednegativePerron]; Abort[]
     ];
+    If[prs > 0 && ((Times @@ Take[L,-2] < 0) || Last[L] > 0),
+        Message[PseudoAnosov::needpositivePerron]; Abort[]
+    ];
     Do[
-        def = (-1)^(p+1) L[[p]] - SumOrbits[p,rpo,IncludeLast->False];
+        If[prs < 0,
+            def = (-1)^(p+1) L[[p]] - SumOrbits[p,rpo,IncludeLast->False]
+        ,
+            def = -L[[p]] - SumOrbits[p,rpo,IncludeLast->False]
+        ];
         AppendTo[rpo, def/p];
         If[!IntegerQ[def/p] || def < 0,
             Message[PseudoAnosov::badLefschetz]; Break[]
@@ -572,72 +603,99 @@ LefschetzRegularOrbits[L_List] := Module[
     ,{p, 2, Length[L]}];
     rpo
 ]
+Options[LefschetzRegularOrbits] = {PerronRootSign -> 0}
 
 
-LefschetzNumbersSingularity[Pk_List, Pm_List:{1}, OptionsPattern[]] := Module[
-    {k = 2Length[Pk]-2, period, L, m = Length[Pm], Pm1 = Pm, Pk1 = Pk,
-     (* The total period the singularities and separatrices *)
-     nm = Times @@ Union[Length /@ ToCycles[Pm]],
-     (* The period the separatrices *)
-     ns = Times @@ Union[Length /@ ToCycles[Pk]]
-    },
-    period = nm ns;
-    If[!OptionValue[PositivePerronRoot],
-        (* If the period is odd, then double it to get back to an even
-           iterate *)
-        period = If[OddQ[period], 2 period, period];
-        L = Table[0, {period}];
-        Do[
-            If[Pm1 == Range[m],
-                If[Pk1 == Range[k/2+1],
-                    L[[j]] = If[EvenQ[j], -m(k+1), m],
-                    L[[j]] = m
-                ];
-                Pk1 = Permute[Pk1,Pk];
-            ,
-                L[[j]] = 0
-            ];
-            Pm1 = Permute[Pm1,Pm];
-        , {j, period}]
-    ];
-    L
-]
-Options[LefschetzNumbersSingularity] = {PositivePerronRoot -> False};
-
-
-LefschetzNumbersSingularity[k_Integer, m_Integer:1] :=
+LefschetzNumbersSingularity[k_Integer, m_Integer:1, opts:OptionsPattern[]] :=
 Module[
-    {pr = k/2+1, Pk, Pm},
+    {pr = k/2+1, Pk, Pm, all},
     (* All possible cyclic permutations of separatrices  (Overkill!) *)
     Pk = RotateLeft[Range[pr], #] & /@ (Range[pr] - 1);
     (* All possible permutations of singularities (Overkill!) *)
-    Pm = Permutations[m];
-    Pk = RotateLeft[Range[pr], #] & /@ (Range[pr] - 1);
-    Union[Flatten[
-        Table[LefschetzNumbersSingularity[#,P] & /@ Pk,
-            {P,Pm}]
-        ,1]
-    ]
+    Pm = ToCycles /@ Permutations[m];
+    all = Flatten[
+        AllPossibilities[AllPossibilities @@ Table[Pk,{Length[#]}],{#}] & /@ Pm
+    ,1];
+    Union[(LefschetzNumbersSingularityPermutations[##,opts]&) @@ # & /@ all]
 ]
+Options[LefschetzNumbersSingularity] = {PerronRootSign -> -1}
 
 
-LefschetzNumbersStratum[s_List] := Module[
+(* Private helper function for LefschetzNumbersSingularity *)
+LefschetzNumbersSingularityPermutations[Pk_List, Pm_List:{{1}},
+                                        opts:OptionsPattern[]] :=
+Module[
+    {k = 2Length[Pk]-2, m = Length[Flatten[Pm]], Pmc,
+     prs = OptionValue[PerronRootSign]
+    },
+    Pmc = Length /@ Pm;
+    If[Length[Pk] != Length[Pmc], Message[PseudoAnosov::bad]];
+    (* Apply SingularityCyclic to each subcycle, with Pk specifying a
+       permutation on the separatrices for each subcycle *)
+    LefschetzCombine @@
+        ((LefschetzNumbersSingularityCyclic[##,opts]&) @@ # & /@
+            Transpose[{Pk,Pmc}])
+]
+Options[LefschetzNumbersSingularityPermutations] =
+    Options[LefschetzNumbersSingularity]
+(* LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[Pk,Pm] returns a list of Lefschetz numbers corresponding to singularity of degree k with m-fold degeneracy.  Pk is a list of permutations on the (k+2)/2 in or outgoing separatrices of the singularities, and Pm a permutation on the m singularities.  Pm must be in cycles form.  Note that Pk must be a power of a cyclic permutation." *)
+
+
+(* Private helper function for LefschetzNumbersSingularity *)
+(* Special case of LefschetzNumbersSingularity for the m singularities
+   being permuted cyclically *)
+LefschetzNumbersSingularityCyclic[Pk_List, m_Integer:1, OptionsPattern[]] :=
+Module[
+    {k = 2Length[Pk]-2, period, L, Pm, Pm1, Pk1 = Pk,
+     prs = OptionValue[PerronRootSign]
+    },
+    (* Generate a cyclic permutation for the singularities *)
+    Pm = RotateLeft[Range[m]]; Pm1 = Pm;
+    (* The total period for the separatrices *)
+    period = m Times @@ Union[Length /@ ToCycles[Pk]];
+    If[prs < 0,
+        (* If the period is odd, then double it to get back to an even
+           iterate *)
+        period = If[OddQ[period], 2period, period];
+    ];
+    L = {};
+    Do[
+        If[Pm1 == Range[m],
+            If[Pk1 == Range[k/2+1],
+	        If[prs < 0,
+                    AppendTo[L,If[EvenQ[i], -m(k+1), m]]
+		,
+                    AppendTo[L,-m(k+1)]
+		]
+            ,
+                AppendTo[L,m]
+            ];
+            Pk1 = Permute[Pk1,Pk];
+        ,
+            AppendTo[L,0]
+        ];
+        Pm1 = Permute[Pm1,Pm];
+    , {i, period}];
+    Return[L]
+]
+Options[LefschetzNumbersSingularityCyclic] =
+    Options[LefschetzNumbersSingularity]
+
+
+LefschetzNumbersStratum[s_List, opts:OptionsPattern[]] := Module[
     {t, L, f},
     (* Accept s in either explicit or tallied form *)
     If[ListQ[s[[1]]], t = s, t = Tally[s]];
     (* Lists of Lefschetz numbers for each singularity type *)
-    L = (LefschetzNumbersSingularity @@ # &) /@ t;
-    (* The function f helps generate all possible combinations of strata *)
-    f[l_, a_] := Flatten[Table[
-         Append[l[[i]], a[[j]]], {i, Length[l]}, {j, Length[a]}], 1];
-    (* Use Fold to apply f to each list of Lefschetz, giving all
-       possibilities, and then combine the lists *)
-    (LefschetzCombine @@ # &) /@ Fold[f,{{}},L]
+    L = ((LefschetzNumbersSingularity[##,opts]&) @@ # &) /@ t;
+    (* Take all possibilities, and then combine the lists *)
+    (LefschetzCombine @@ # &) /@ (AllPossibilities @@ L)
 ]
+Options[LefschetzNumbersStratum] = Options[LefschetzNumbersSingularity];
 
 
-LefschetzCombine[Ll__List] := Module[{L = List[Ll], len},
-    len = Max @@ (Length /@ L);
+LefschetzCombine[Ll__List, n_Integer:0] := Module[{L = List[Ll], len},
+    If[n == 0, len = LCM @@ (Length /@ L), len = n];
     Plus @@ (PadRight[#,len,#] & /@ L)
 ]
 
