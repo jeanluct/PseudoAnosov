@@ -60,6 +60,8 @@ LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz n
 
 LefschetzNumbersTestQ::usage = ""
 
+StratumRegularOrbits::usage = "StratumRegularOrbits[S,P] returns a list of regular periodic orbits for the polynomial P on stratum S; the list is empty if this proves impossible."
+
 (* Test for everything: first call pseudoAnosovPerronRootQ, then
 LefschetzNumbersTestQ by strata (for even power). *)
 (* pseudoAnosovPolynomialQ::usage = "" *)
@@ -606,6 +608,35 @@ LefschetzRegularOrbits[L_List, OptionsPattern[]] := Module[
 Options[LefschetzRegularOrbits] = {PerronRootSign -> 0}
 
 
+StratumRegularOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
+    {L, Ls, ro},
+    (* Use Variables to get rid of the x argument! *)
+    L = LefschetzNumbers[p,First[Variables[p]],{OptionValue[MaxLefschetz]}];
+    Ls = LefschetzNumbersStratum[s,opts];
+    Off[PseudoAnosov::badLefschetz];
+    ro = LefschetzRegularOrbits[LefschetzCombine[L,-#,Length[L]],opts] & /@ Ls;
+    On[PseudoAnosov::badLefschetz];
+    (* Eliminate bad orbits: look for a negative or nonintegral last element *)
+    ro = Pick[ro, Last[#] > 0 && IntegerQ[Last[#]] & /@ ro];
+    If[Length[ro] > 1, Message[PseudoAnosov::stopthepresses]];
+    If[ro == {}, Return[ro], Return[First[ro]]]
+]
+Options[StratumRegularOrbits] = {MaxLefschetz -> 50, PerronRootSign -> 0}
+
+
+LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
+    {t, opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
+    If[StratumRegularOrbits[s,p] == {}, t = "Bad", t = Allowable];
+    If[OptionValue[GiveReasonForRejection],
+        Return[{t == Allowable,t}]
+    ,
+        Return[t == Allowable]
+    ]
+]
+Options[LefschetzNumbersTestQ] =
+    {GiveReasonForRejection -> False, MaxIterate -> 5, MaxLefschetz -> 100}
+
+
 LefschetzNumbersSingularity[k_Integer, m_Integer:1, opts:OptionsPattern[]] :=
 Module[
     {pr = k/2+1, Pk, Pm, all},
@@ -704,7 +735,7 @@ LefschetzCombine[Ll__List, n_Integer:0] := Module[{L = List[Ll], len},
    Test for everything together
 *)
 
-LefschetzNumbersTestQ[s_List,p_,x_, opts:OptionsPattern[]] := Module[
+LefschetzNumbersTestQ2[s_List,p_,x_, opts:OptionsPattern[]] := Module[
     {t, opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
     If[PerronRoot[p,x] > 0,
         L = LefschetzNumbers[p,x,{OptionValue[MaxLefschetz]}];
