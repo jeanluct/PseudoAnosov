@@ -394,14 +394,17 @@ LefschetzToString[L_Integer, n_Integer] :=
 LCMToString[k_Integer] := "LCM(partitions of " <> ToString[k] <> ")"
 
 
-AllPossibilities[L__List] := Module[{f},
+AllPossibilities[L__List, OptionsPattern[]] := Module[{f, pos},
     (* The function f helps generate all possible combinations of
        elements of given lists *)
     f[l_, a_] := Flatten[Table[
          Append[l[[i]], a[[j]]], {i, Length[l]}, {j, Length[a]}], 1];
     (* Use Fold to apply f to each list, giving all possibilities *)
-    Fold[f,{{}},List[L]]
+    pos = Fold[f,{{}},List[L]];
+    (* If Ordered is False, order doesn't matter *)
+    If[OptionValue[Ordered], pos, Union[Sort/@pos]]
 ]
+Options[AllPossibilities] = {Ordered -> True}
 
 
 Allowable = "Allowable"
@@ -658,16 +661,41 @@ StratumRegularOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[{},
 Options[StratumRegularOrbitsTestQ] = {PerronRootSign -> Automatic}
 
 
+(* Groups the list l according to an integer partition of Length[l].
+   Example: GroupByPartition[{1,2,3,4},{1,3}] = {{1},{2,3,4}} *)
+GroupByPartition[l_, part_] := Module[{g = {}},
+    Fold[(AppendTo[g, Take[#1, #2]]; Drop[#1, #2]) &, l, part];
+    Return[g]
+]
+
+
 LefschetzNumbersSingularity[k_Integer, m_Integer:1, opts:OptionsPattern[]] :=
 Module[
-    {pr = k/2+1, Pk, Pm, all},
-    (* All possible cyclic permutations of separatrices  (Overkill!) *)
+    {pr = k/2+1, Pk, Pm, clen, blk, alpo, all},
+    (* All possible cyclic permutations of separatrices *)
     Pk = RotateLeft[Range[pr], #] & /@ (Range[pr] - 1);
-    (* All possible permutations of singularities (Overkill!) *)
-    Pm = ToCycles /@ Permutations[m];
-    all = Flatten[
-        AllPossibilities[AllPossibilities @@ Table[Pk,{Length[#]}],{#}] & /@ Pm
-    ,1];
+    (* Keep only the ones that have different cycle lengths *)
+    clen[perm_] := Sort[Length/@ToCycles[perm]];
+    Pk = Union[Pk, SameTest -> (clen[#1] == clen[#2] &)];
+    (* Possible permutations of singularities *)
+    Pm = GroupByPartition[Range[m],#] & /@ IntegerPartitions[m];
+    blk = Tally /@ ((Length/@#)&/@Pm);
+    all = {};
+    (* Loop over each possible Pm *)
+    Do[
+        alpo = {};
+        (* Loop over each cyclic block length of Pm
+             blk[[i,j,1]] gives the block length
+             blk[[i,j,2]] gives the multiplicity (# of blocks of that length)
+           Generate a list of combinations of permutations,
+             allowing for symmetry do to multiplicity *)
+        alpo = ((AllPossibilities[##,Ordered->False]&) @@
+                    Table[Pk,{#[[2]]}]& ) /@ blk[[i]];
+        (* Now combine the multiplicities together *)
+        alpo = AllPossibilities[##]& @@ alpo;
+        alpo = {#,Pm[[i]]}& /@ (Flatten[#,1]& /@ alpo);
+        all = Join[all,alpo];
+    ,{i,Length[Pm]}];
     Union[(LefschetzNumbersSingularityPermutations[##,opts]&) @@ # & /@ all]
 ]
 Options[LefschetzNumbersSingularity] = {PerronRootSign -> -1}
