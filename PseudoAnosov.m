@@ -104,17 +104,28 @@ PseudoAnosov::badLefschetz = "Bad sequence of Lefschetz numbers."
 
 PseudoAnosov::manyallowableperms = "More than one allowable permutation type on stratum `1`."
 
+PseudoAnosov::notapolynomial = "Input argument `1` is not a polynomial in `2`."
+
 
 Begin["`Private`"]
 
 
-PolynomialDegree[p_] := Module[{x = First[Variables[p]]},
+(* Helper function to get a polynomial's independent variable, with
+   some checks *)
+PolynomialVariable[p_] := Module[{x = Variables[p]},
+    If[x == {} || Length[x] > 1,
+        Message[PseudoAnosov::notapolynomial,p,x]; Abort[]];
+    Return[First[x]]
+]
+
+
+PolynomialDegree[p_] := Module[{x = PolynomialVariable[p]},
     Length[CoefficientList[Collect[p,x],x]]-1
 ]
 
 
 TracesPower[p_,mm_List:{10}] := Module[
-    {x = First[Variables[p]], n, T, ml},
+    {x = PolynomialVariable[p], n, T, ml},
     (* Polynomial is x^n + c[1]x^(n-1) + ... + c[n-1]x + c[n] *)
     c = Reverse[CoefficientList[Collect[p,x],x]];
     (* Make sure leading coefficient is 1, then drop it. *)
@@ -171,7 +182,7 @@ ReciprocalPolynomialFromTraces[x_,n_Integer,T_List] := Module[
 
 
 ReciprocalPolynomialQ[p_] := Module[
-    {x = First[Variables[p]], c, n},
+    {x = PolynomialVariable[p], c, n},
     c = CoefficientList[Collect[p,x],x];
     n = Length[c]-1;
     Return[Simplify[p - x^n (p/.x->1/x)] === 0]
@@ -269,7 +280,7 @@ ReciprocalPolynomialBoundedList[x_,8,h_Real] := Module[
 
 
 PolynomialRoots[p_,opts:OptionsPattern[]] := Module[
-    {x = First[Variables[p]]},
+    {x = PolynomialVariable[p]},
     Sort[x/.NSolve[p == 0, x, opts], Abs[#2] < Abs[#1] &]
 ]
 (* PolynomialRoots inherits the options for NSolve *)
@@ -282,8 +293,7 @@ Options[PerronRoot] = Options[NSolve]
 
 
 MahlerMeasure[p_,opts:OptionsPattern[]] := Module[
-    {x = First[Variables[p]]},
-    If[!IrreduciblePolynomialQ[p],Message[PseudoAnosov::notminimal]];
+    {x = PolynomialVariable[p]},
     Times @@ Select[Abs/@PolynomialRoots[p,opts],#>1&]
 ]
 (* MahlerMeasure inherits the options for NSolve *)
@@ -346,8 +356,7 @@ StratumToGenus[s_List] := (Plus @@ s + 4)/4
 
 (* Test for the Perron root *)
 pseudoAnosovPerronRootQ[p_,lmax_:0,opts:OptionsPattern[]] := Module[
-    {x = First[Variables[p]], prl, pr, degen, testdegen},
-    If[!ReciprocalPolynomialQ[p], Return[False]];
+    {prl, pr, degen, testdegen},
     If[PolynomialDegree[p] < 2, Return[False]];
     degen = OptionValue[EqualityTolerance];
     testdegen[diff_] := Module[{},
@@ -615,7 +624,7 @@ Options[LefschetzRegularOrbits] = {PerronRootSign -> Automatic}
 
 
 StratumRegularOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
-    {L},
+    {L, x = PolynomialVariable[p]},
     L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
     LefschetzStratumRegularOrbits[s,L,opts]
 ]
@@ -638,8 +647,8 @@ Options[LefschetzStratumRegularOrbits] = Options[StratumRegularOrbits]
 
 
 StratumRegularOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[{},
-    On[PseudoAnosov::manyallowableperms];
-    If[StratumRegularOrbits[s,L,opts] == {},
+    Off[PseudoAnosov::manyallowableperms];
+    If[LefschetzStratumRegularOrbits[s,L,opts] == {},
         Return["No permutation works"]
     ,
         Return[Allowable]
@@ -748,8 +757,7 @@ LefschetzCombine[Ll__List, n_Integer:0] := Module[{L = List[Ll], len},
 *)
 
 LefschetzNumbersTestQ[s_List,p_, opts:OptionsPattern[]] := Module[
-    {x = First[Variables[p]], t,
-     opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
+    {t, opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
     If[PerronRoot[p] > 0,
         L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
         t = LefschetzNumbersTestPositiveQ[s,L,opts2]
