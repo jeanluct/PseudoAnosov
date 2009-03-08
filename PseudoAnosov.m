@@ -50,17 +50,13 @@ AllPossibilities::usage = "AllPossibilities[L1,L2,...] generates all possible or
 
 LefschetzRegularOrbits::usage = ""
 
-LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[k,m], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1)."
-
-LefschetzNumbersSingularityPermutations::usage = ""
-
 LefschetzNumbersStratum::usage = "LefschetzNumbersStratum[S], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}})."
 
 LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz number.  If they are not the same length, then the blocks are repeated to the length of the longest list.\nLefschetzCombine[L1,L2,...,Lm,n] caps the total length at an integer n."
 
 LefschetzNumbersTestQ::usage = ""
 
-StratumRegularOrbits::usage = "StratumRegularOrbits[S,P] returns a list of regular periodic orbits for the polynomial P on stratum S; the list is empty if this proves impossible."
+StratumOrbits::usage = "StratumOrbits[S,P] returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial P on stratum S.  Returns an empty list if this proves impossible."
 
 (* Test for everything: first call pseudoAnosovPerronRootQ, then
 LefschetzNumbersTestQ by strata (for even power). *)
@@ -80,6 +76,16 @@ MaxLefschetz::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving
 IncludeLast::usage = "Option to SumOrbits: set to True to include the final iterate's contribution to the sum from (default True)."
 
 PerronRootSign::usage = "Option to LefschetzStratum, LefschetzSingularity and LefschetzRegularOrbits to specify whether the Perron root is positive or negative.  For LefschetzRegularOrbits, set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic for LefschetzRegularOrbits, -1 otherwise)."
+
+(* Labels for orbit structure of a stratum *)
+Polynomial::usage = ""
+Stratum::usage = ""
+SingularitiesPermutation::usage = ""
+SeparatricesPermutation::usage = ""
+SingularitiesLefschetzBlock::usage = ""
+RegularOrbits::usage = ""
+
+Protect[Polynomial,Stratum,SingularitiesPermutation,SeparatricesPermutation,SingularitiesLefschetzBlock,RegularOrbits]
 
 
 (*
@@ -345,11 +351,6 @@ StratumToGenus[s_List] := (Plus @@ s + 4)/4
   
   These are based on the Lefschetz numbers calculated from the
   polynomial.
-  
-  ToDo:
-
-   - Give more detailed reason, customized for each test.
-   - Find more harmonious names: StratumTest?  PolynomialStratumQ?  pAStratumQ?
 
  *)
 
@@ -626,39 +627,42 @@ LefschetzRegularOrbits[L_List, OptionsPattern[]] := Module[
 Options[LefschetzRegularOrbits] = {PerronRootSign -> Automatic}
 
 
-StratumRegularOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
+StratumOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
     {L, x = PolynomialVariable[p]},
     L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
-    LefschetzStratumRegularOrbits[s,L,opts]
+    Prepend[#,Polynomial -> p]& /@ LefschetzStratumOrbits[s,L,opts]
 ]
-Options[StratumRegularOrbits] =
+Options[StratumOrbits] =
     {MaxLefschetz -> 50, PerronRootSign -> Automatic}
 
 
-LefschetzStratumRegularOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
+LefschetzStratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     {Ls, ro},
     Ls = LefschetzNumbersStratum[s,opts];
     Off[PseudoAnosov::badLefschetz];
-    ro = LefschetzRegularOrbits[LefschetzCombine[L,-#,Length[L]],opts] & /@ Ls;
+    ro = LefschetzRegularOrbits[
+        LefschetzCombine[L,-SingularitiesLefschetzBlock/.#,Length[L]],opts] &
+            /@ Ls;
     On[PseudoAnosov::badLefschetz];
     (* Eliminate bad orbits: look for a negative or nonintegral last element *)
-    ro = Pick[ro, Last[#] > 0 && IntegerQ[Last[#]] & /@ ro];
+    ro = Transpose[{Ls,ro}];
+    ro = Pick[ro, Last[#[[2]]] > 0 && IntegerQ[Last[#[[2]]]] & /@ ro];
     If[Length[ro] > 1, Message[PseudoAnosov::manyallowableperms, s]];
-    Return[ro]
+    Join[#[[1]],{RegularOrbits -> #[[2]]}] & /@ ro
 ]
-Options[LefschetzStratumRegularOrbits] = Options[StratumRegularOrbits]
+Options[LefschetzStratumOrbits] = Options[StratumOrbits]
 
 
-StratumRegularOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[{},
+StratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[{},
     Off[PseudoAnosov::manyallowableperms];
-    If[LefschetzStratumRegularOrbits[s,L,opts] == {},
+    If[LefschetzStratumOrbits[s,L,opts] == {},
         Return["No permutation works"]
     ,
         Return[Allowable]
     ];
     On[PseudoAnosov::manyallowableperms];
 ]
-Options[StratumRegularOrbitsTestQ] = {PerronRootSign -> Automatic}
+Options[StratumOrbitsTestQ] = {PerronRootSign -> Automatic}
 
 
 (* Groups the list l according to an integer partition of Length[l].
@@ -668,6 +672,8 @@ GroupByPartition[l_, part_] := Module[{g = {}},
     Return[g]
 ]
 
+
+LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[k,m], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1)."
 
 LefschetzNumbersSingularity[k_Integer, m_Integer:1, opts:OptionsPattern[]] :=
 Module[
@@ -683,7 +689,6 @@ Module[
     all = {};
     (* Loop over each possible Pm *)
     Do[
-        alpo = {};
         (* Loop over each cyclic block length of Pm
              blk[[i,j,1]] gives the block length
              blk[[i,j,2]] gives the multiplicity (# of blocks of that length)
@@ -696,7 +701,9 @@ Module[
         alpo = {#,Pm[[i]]}& /@ (Flatten[#,1]& /@ alpo);
         all = Join[all,alpo];
     ,{i,Length[Pm]}];
-    Union[(LefschetzNumbersSingularityPermutations[##,opts]&) @@ # & /@ all]
+    (* Return a list of entries of the form
+       {permutations,Lefschetznumbers} *)
+    ({{##},LefschetzNumbersSingularityPermutations[##,opts]}&) @@ # & /@ all
 ]
 Options[LefschetzNumbersSingularity] = {PerronRootSign -> -1}
 
@@ -768,8 +775,16 @@ LefschetzNumbersStratum[s_List, opts:OptionsPattern[]] := Module[
     If[ListQ[s[[1]]], t = s, t = Tally[s]];
     (* Lists of Lefschetz numbers for each singularity type *)
     L = ((LefschetzNumbersSingularity[##,opts]&) @@ # &) /@ t;
-    (* Take all possibilities, and then combine the lists *)
-    (LefschetzCombine @@ # &) /@ (AllPossibilities @@ L)
+    (* Take all possibilities *)
+    L = AllPossibilities @@ L;
+    L = Transpose /@ L;
+    (* Combine the lists of Lefschetz, repeating blocks as needed *)
+    L = {Reverse[Transpose[#[[1]]]],LefschetzCombine @@ #[[2]]} & /@ L;
+    (* Add some keywords *)
+    {Stratum -> t,
+     SingularitiesPermutation -> #[[1,1]],
+     SeparatricesPermutation -> #[[1,2]],
+     SingularitiesLefschetzBlock -> #[[2]]} & /@ L
 ]
 Options[LefschetzNumbersStratum] = Options[LefschetzNumbersSingularity];
 
@@ -798,7 +813,7 @@ LefschetzNumbersTestQ[s_List,p_, opts:OptionsPattern[]] := Module[
     (* If all the tests have failed so far, try the ultimate one, but
        only as a last resort! *)
     If[t == Allowable,
-        tests = {StratumRegularOrbitsTestQ};
+        tests = {StratumOrbitsTestQ};
         t = LefschetzNumbersTestListQ[s,L,tests,opts2,MaxIterate -> 1];
     ];
     If[OptionValue[GiveReasonForRejection],
