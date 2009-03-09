@@ -58,6 +58,8 @@ LefschetzNumbersTestQ::usage = ""
 
 StratumOrbits::usage = "StratumOrbits[S,P] returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial P on stratum S.  Returns an empty list if this proves impossible."
 
+StratumOrbitsTable::usage = ""
+
 (* Test for everything: first call pseudoAnosovPerronRootQ, then
 LefschetzNumbersTestQ by strata (for even power). *)
 (* pseudoAnosovPolynomialQ::usage = "" *)
@@ -907,6 +909,52 @@ LefschetzNumbersTestNegativeQ[s_List,L_, opts:OptionsPattern[]] := Module[
 ]
 Options[LefschetzNumbersTestNegativeQ] = Options[LefschetzNumbersTestListQ]
 
+
+StratumOrbitsTable[so_, itmax_: 20] := Module[
+    {itmx = Min[itmax, Length[RegularOrbits /. so]],
+     ps, s, it, ro, Lro, top, mid, bot, sip, lsip, sep, m},
+    ps[str_] := Style[str,Italic,18];
+    s = Stratum/.so;
+    it = Range[itmx];
+    ro = Take[RegularOrbits /. so, itmx];
+    Lro = SumOrbits[#,ro, IncludeLast->True] & /@ it;
+    If[PerronRoot[Polynomial/.so] < 0,
+        Lro = MapAt[-#&, Lro, {#}&/@Range[2,itmx,2]]
+    ,
+        Lro = - Lro;
+    ];
+    top = {
+        Framed[Polynomial /. so, Background -> White, FrameStyle -> None],
+        "    ",
+        Framed[Row[(Superscript @@ #) & /@ s],
+             Background -> White, FrameStyle -> None]
+        };
+    top = Row[top];
+
+    sip = Flatten[SingularitiesPermutation/.so,1];
+    lsip = Length /@ (SingularitiesPermutation/.so);
+    sep = Flatten[SeparatricesPermutation/.so,1];
+    m = Flatten[Table[Table[(First /@ s)[[k]],{lsip[[k]]}],
+        {k,Length[SingularitiesPermutation/.so]}]];
+    mid = Framed[
+        Grid[Join[{ps/@{"k",Subscript["P","sing"],Subscript["P","sep"]}},
+            Transpose[{m,sip,sep}]]], Background -> White, FrameStyle -> None];
+
+    bot =
+        Grid[{
+            Join[{ps["n"]}, it],
+            Join[{ps["L"]},
+                LefschetzNumbers[Polynomial /. so, {itmx}]],
+            Join[{ps[Subscript["L","so"]]},
+                PadRight[SingularitiesLefschetzBlock /. so, itmx,
+                    SingularitiesLefschetzBlock /. so]],
+            Join[{ps[Subscript["L","ro"]]}, Lro],
+            Join[{"#ro"}, ro]
+        }, Dividers -> {{2 -> True}, {2 -> True, 3 -> True, -2 -> True}}];
+
+    Print[Framed[Column[{top,mid,bot}, Left, 1],
+        Background -> Lighter[LightGray, .6], FrameStyle -> None]];
+]
 
 End[(* "`Private`" *)]
 
