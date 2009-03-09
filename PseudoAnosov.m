@@ -631,13 +631,13 @@ Options[LefschetzRegularOrbits] =
 
 
 StratumOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
-    {L, x = PolynomialVariable[p]},
+    {L, x = PolynomialVariable[p], opts2},
+    opts2 = Sequence @@ Join[opts,{PerronRootSign -> Sign[PerronRoot[p]]}];
     L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
-    Prepend[#,Polynomial -> p]& /@ LefschetzStratumOrbits[s,L,opts]
+    Prepend[#,Polynomial -> p]& /@ LefschetzStratumOrbits[s,L,opts2]
 ]
 Options[StratumOrbits] =
-    {MaxLefschetz -> 50, PerronRootSign -> Automatic,
-     AllowRegularFixedPoints -> True}
+    {MaxLefschetz -> 50, AllowRegularFixedPoints -> True}
 
 
 LefschetzStratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
@@ -657,12 +657,20 @@ LefschetzStratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     If[Length[ro] > 1, Message[PseudoAnosov::manyallowableperms, s]];
     Join[#[[1]],{RegularOrbits -> #[[2]]}] & /@ ro
 ]
-Options[LefschetzStratumOrbits] = Options[StratumOrbits]
+Options[LefschetzStratumOrbits] =
+    Join[{PerronRootSign -> Automatic},Options[StratumOrbits]]
 
 
-StratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[{},
+StratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[
+    {prs = OptionValue[PerronRootSign], opts2 = opts},
+    (* If the sign of the Perron root is unspecified, try and guess *)
+    If[prs == Automatic,
+        prs = Sign[Times @@ Take[L,-2]];
+        opts2 = FilterRules[{opts},Except[PerronRootSign]];
+        opts2 = Sequence @@ Join[opts2,{PerronRootSign -> prs}];
+    ];
     Off[PseudoAnosov::manyallowableperms];
-    If[LefschetzStratumOrbits[s,L,opts] == {},
+    If[LefschetzStratumOrbits[s,L,opts2] == {},
         Return["No permutation works"]
     ,
         Return[Allowable]
@@ -766,7 +774,8 @@ Module[
             ,
                 AppendTo[L,m]
             ];
-            If[EvenQ[i], Pk1 = Permute[Pk1,Pk]];
+            (* Permute the separatrices (only on even iterates if prs < 0) *)
+            If[(prs < 0 && EvenQ[i]) || prs > 0, Pk1 = Permute[Pk1,Pk]];
         ,
             AppendTo[L,0]
         ];
