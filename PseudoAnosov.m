@@ -77,8 +77,6 @@ IncludeLast::usage = "Option to SumOrbits: set to True to include the final iter
 
 PerronRootSign::usage = "Option to LefschetzStratum, LefschetzSingularity and LefschetzRegularOrbits to specify whether the Perron root is positive or negative.  For LefschetzRegularOrbits, set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic for LefschetzRegularOrbits, -1 otherwise)."
 
-AllowRegularFixedPoints::usage = ""
-
 (* Labels for orbit structure of a stratum *)
 Polynomial::usage = ""
 Stratum::usage = ""
@@ -626,8 +624,7 @@ LefschetzRegularOrbits[L_List, OptionsPattern[]] := Module[
     ,{p, 2, Length[L]}];
     rpo
 ]
-Options[LefschetzRegularOrbits] =
-    {PerronRootSign -> Automatic, AllowRegularFixedPoints -> True}
+Options[LefschetzRegularOrbits] = {PerronRootSign -> Automatic}
 
 
 StratumOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
@@ -636,8 +633,7 @@ StratumOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
     L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
     Prepend[#,Polynomial -> p]& /@ LefschetzStratumOrbits[s,L,opts2]
 ]
-Options[StratumOrbits] =
-    {MaxLefschetz -> 50, AllowRegularFixedPoints -> True}
+Options[StratumOrbits] = {MaxLefschetz -> 50}
 
 
 LefschetzStratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
@@ -651,9 +647,6 @@ LefschetzStratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     (* Eliminate bad orbits: look for a negative or nonintegral last element *)
     ro = Transpose[{Ls,ro}];
     ro = Pick[ro, Last[#[[2]]] > 0 && IntegerQ[Last[#[[2]]]] & /@ ro];
-    If[!OptionValue[AllowRegularFixedPoints],
-        ro = Pick[ro, First[#[[2]]] == 0 & /@ ro]
-    ];
     If[Length[ro] > 1, Message[PseudoAnosov::manyallowableperms, s]];
     Join[#[[1]],{RegularOrbits -> #[[2]]}] & /@ ro
 ]
@@ -677,8 +670,7 @@ StratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[
     ];
     On[PseudoAnosov::manyallowableperms];
 ]
-Options[StratumOrbitsTestQ] =
-    {PerronRootSign -> Automatic, AllowRegularFixedPoints -> True}
+Options[StratumOrbitsTestQ] = {PerronRootSign -> Automatic}
 
 
 (* Groups the list l according to an integer partition of Length[l].
@@ -721,8 +713,7 @@ Module[
        {permutations,Lefschetznumbers} *)
     ({{##},LefschetzNumbersSingularityPermutations[##,opts]}&) @@ # & /@ all
 ]
-Options[LefschetzNumbersSingularity] =
-    {PerronRootSign -> -1, AllowRegularFixedPoints -> True}
+Options[LefschetzNumbersSingularity] = {PerronRootSign -> -1}
 
 
 (* Private helper function for LefschetzNumbersSingularity *)
