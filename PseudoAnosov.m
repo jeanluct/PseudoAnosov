@@ -905,8 +905,10 @@ Options[LefschetzNumbersTestPositiveQ] = Options[LefschetzNumbersTestListQ]
 LefschetzNumbersTestNegativeQ[s_List,L_, opts:OptionsPattern[]] := Module[
     {L2, t,
     tests = {LefschetzSingularityPermutationsNegativeQ}},
+(*
     t = LefschetzNumbersTestListQ[s,L,tests,opts,OnlyOddIterates->True];
     If[t != Allowable, Return[t]];
+*)
     (* List of Lefschetz numbers of phi^2 *)
     L2 = L[[#]] & /@ Range[2,Length[L],2];
     (* Do the test with p2, which has positive Perron root. *)
