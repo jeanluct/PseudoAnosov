@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[     19734,        542]
-NotebookOptionsPosition[     17485,        473]
-NotebookOutlinePosition[     17841,        489]
-CellTagsIndexPosition[     17798,        486]
+NotebookDataLength[     17260,        465]
+NotebookOptionsPosition[     15097,        398]
+NotebookOutlinePosition[     15454,        414]
+CellTagsIndexPosition[     15411,        411]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -27,6 +27,15 @@ Cell[BoxData[
    3.445187238437856*^9}, {3.445187997363876*^9, 3.445187997810068*^9}}],
 
 Cell[BoxData[
+ RowBox[{"Names", "[", "\"\<PseudoAnosov`*\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.445684437294353*^9, 3.445684465609416*^9}, {
+  3.445684670481341*^9, 3.445684727750553*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "%", "]"}]], "Input",
+ CellChangeTimes->{{3.445684744590438*^9, 3.445684746509261*^9}}],
+
+Cell[BoxData[
  RowBox[{
   RowBox[{"Lmax", "=", "40"}], ";"}]], "Input",
  CellChangeTimes->{{3.445096971009833*^9, 3.445096976811664*^9}, {
@@ -36,16 +45,29 @@ Cell[BoxData[
   3.445188116079084*^9}}],
 
 Cell[BoxData[
+ RowBox[{"?", "StratumOrbits"}]], "Input",
+ CellChangeTimes->{3.445268782852496*^9, 3.445529020885277*^9}],
+
+Cell[BoxData[
  RowBox[{"?", "LefschetzCombine"}]], "Input",
  CellChangeTimes->{3.445114472741229*^9}],
 
-Cell[BoxData[
- RowBox[{"?", "LefschetzNumbersStratum"}]], "Input",
- CellChangeTimes->{{3.445167874231023*^9, 3.445167879277165*^9}}],
+Cell["\<\
+The \"expert\" functions are not imported into the Global context, and must  \
+be scoped explicitly:\
+\>", "Text",
+ CellChangeTimes->{{3.445699052083143*^9, 3.4456990740795717`*^9}, {
+  3.445699253760557*^9, 3.445699261939457*^9}}],
 
 Cell[BoxData[
- RowBox[{"?", "StratumOrbits"}]], "Input",
- CellChangeTimes->{3.445268782852496*^9, 3.445529020885277*^9}],
+ RowBox[{"?", "PseudoAnosov`Lefschetz`Orbits`SingularStratum"}]], "Input",
+ CellChangeTimes->{{3.445167874231023*^9, 3.445167879277165*^9}, {
+  3.445693359154546*^9, 3.445693399296465*^9}, {3.445698226422151*^9, 
+  3.4456982354257803`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "PseudoAnosov`Lefschetz`Orbits`Regular"}]], "Input",
+ CellChangeTimes->{3.445699026871324*^9}],
 
 Cell[BoxData[
  RowBox[{"P", "=", 
@@ -74,19 +96,24 @@ There are two possibilities with distinct Lefschetz numbers for the stratum \
 with a single degree 8 singularity :\
 \>", "Text",
  CellChangeTimes->{{3.445113118488566*^9, 3.445113134172031*^9}, 
-   3.445113769032686*^9}],
+   3.445113769032686*^9, {3.445699385417727*^9, 3.4456993861005707`*^9}}],
 
 Cell[BoxData[
  RowBox[{"Ls8", "=", 
-  RowBox[{"LefschetzNumbersStratum", "[", 
+  RowBox[{"PseudoAnosov`Lefschetz`Orbits`SingularStratum", "[", 
    RowBox[{"{", "8", "}"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.445167019962783*^9, 3.445167028087212*^9}, {
-  3.445530198138095*^9, 3.445530203275811*^9}}],
+   3.445530198138095*^9, 3.445530203275811*^9}, 3.445698834169118*^9, {
+   3.445698926543291*^9, 3.445698945281642*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "Ls8", "]"}]], "Input",
+ CellChangeTimes->{{3.445698998954645*^9, 3.445699000611972*^9}}],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{
-   RowBox[{"LefschetzRegularOrbits", "[", 
+   RowBox[{"PseudoAnosov`Lefschetz`Orbits`Regular", "[", 
     RowBox[{"LefschetzCombine", "[", 
      RowBox[{"L", ",", 
       RowBox[{
@@ -100,25 +127,27 @@ Cell[BoxData[
    3.445113059343555*^9, 3.445113061027108*^9}, 3.445163893042965*^9, {
    3.445210642231166*^9, 3.445210647087792*^9}, {3.445529812802593*^9, 
    3.4455298413194647`*^9}, {3.4455299126924973`*^9, 3.445529915381309*^9}, {
-   3.445530210358127*^9, 3.445530225141077*^9}}],
+   3.445530210358127*^9, 3.445530225141077*^9}, {3.445698843700989*^9, 
+   3.445698909326202*^9}}],
 
 Cell["\<\
-There are nineteen possibilities with distinct Lefschetz numbers for the \
+There are twenty possibilities with distinct Lefschetz numbers for the \
 stratum with four degree 2 singularities :\
 \>", "Text",
  CellChangeTimes->{{3.445113118488566*^9, 3.4451131563640213`*^9}, {
   3.445113532393447*^9, 3.44511353264669*^9}, {3.445113754072248*^9, 
   3.445113759607006*^9}, {3.4451670925069304`*^9, 3.445167093031109*^9}, {
   3.445210674100709*^9, 3.445210674392857*^9}, {3.445456832041335*^9, 
-  3.445456833079013*^9}}],
+  3.445456833079013*^9}, {3.44569899061838*^9, 3.44569899133427*^9}}],
 
 Cell[BoxData[
  RowBox[{"Ls2222", "=", 
-  RowBox[{"LefschetzNumbersStratum", "[", 
+  RowBox[{"PseudoAnosov`Lefschetz`Orbits`SingularStratum", "[", 
    RowBox[{"{", 
     RowBox[{"2", ",", "2", ",", "2", ",", "2"}], "}"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.445167076514306*^9, 3.445167109111227*^9}, {
-  3.445210721234355*^9, 3.445210722464394*^9}}],
+  3.445210721234355*^9, 3.445210722464394*^9}, {3.445698865345152*^9, 
+  3.445698869088441*^9}, {3.445698974573413*^9, 3.445698977587483*^9}}],
 
 Cell[BoxData[
  RowBox[{"Length", "[", "Ls2222", "]"}]], "Input",
@@ -127,7 +156,7 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{
   RowBox[{
-   RowBox[{"LefschetzRegularOrbits", "[", 
+   RowBox[{"PseudoAnosov`Lefschetz`Orbits`Regular", "[", 
     RowBox[{"LefschetzCombine", "[", 
      RowBox[{"L", ",", 
       RowBox[{
@@ -139,41 +168,38 @@ Cell[BoxData[
    3.4451120542325983`*^9, 3.445112056733639*^9}, {3.4451123970134697`*^9, 
    3.44511240244541*^9}, {3.445112960931096*^9, 3.4451129620822153`*^9}, 
    3.445163899588644*^9, {3.445210693712455*^9, 3.445210695640087*^9}, {
-   3.445529965996674*^9, 3.44552996770107*^9}}],
+   3.445529965996674*^9, 3.44552996770107*^9}, 3.445699014365795*^9}],
 
 Cell["\<\
 A more complicated test : the minimizing polynomial for genus 3 could in \
 principle also live on (4,2,2) with a negative Perron root.  Is this really \
 possible?  Let's find out!\
 \>", "Text",
- CellChangeTimes->{{3.44516320332894*^9, 3.445163249796061*^9}}],
+ CellChangeTimes->{{3.44516320332894*^9, 3.445163249796061*^9}, {
+  3.445699396065069*^9, 3.445699396664909*^9}}],
 
 Cell[BoxData[{
- FrameBox[
-  RowBox[{"P", "=", 
-   RowBox[{
-    RowBox[{"(", 
-     RowBox[{
-      RowBox[{"-", "1"}], "-", "x", "-", 
-      SuperscriptBox["x", "3"]}], ")"}], " ", 
-    RowBox[{"(", 
-     RowBox[{
-      RowBox[{"-", "1"}], "-", 
-      SuperscriptBox["x", "2"], "-", 
-      SuperscriptBox["x", "3"]}], ")"}]}]}],
-  Background->GrayLevel[1],
-  FrameStyle->None,
-  StripOnInput->False], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "-", "x", "-", 
+     SuperscriptBox["x", "3"]}], ")"}], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "-", 
+     SuperscriptBox["x", "2"], "-", 
+     SuperscriptBox["x", "3"]}], ")"}]}]}], "\[IndentingNewLine]", 
  RowBox[{"L", "=", 
   RowBox[{"LefschetzNumbers", "[", 
    RowBox[{"P", ",", 
     RowBox[{"{", "Lmax", "}"}]}], "]"}]}]}], "Input",
  CellChangeTimes->{{3.445163607474118*^9, 3.445163618785153*^9}, {
-  3.445270337436841*^9, 3.445270337612686*^9}}],
+   3.445270337436841*^9, 3.445270337612686*^9}, 3.445699404237599*^9}],
 
 Cell[BoxData[
  RowBox[{"Ls422", "=", 
-  RowBox[{"LefschetzNumbersStratum", "[", 
+  RowBox[{"PseudoAnosov`Lefschetz`Orbits`SingularStratum", "[", 
    RowBox[{"{", 
     RowBox[{"4", ",", "2", ",", "2"}], "}"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.445163262736403*^9, 3.445163273704485*^9}, {
@@ -181,18 +207,18 @@ Cell[BoxData[
    3.445163508886838*^9}, {3.445163550194088*^9, 3.44516356381563*^9}, 
    3.4451638442851763`*^9, {3.445164140162992*^9, 3.445164140318623*^9}, {
    3.4451671261467113`*^9, 3.445167130182095*^9}, {3.44521076425021*^9, 
-   3.445210775926799*^9}}],
+   3.445210775926799*^9}, 3.445699292418888*^9}],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{
-   RowBox[{"LefschetzRegularOrbits", "[", 
+   RowBox[{"PseudoAnosov`Lefschetz`Orbits`Regular", "[", 
     RowBox[{"LefschetzCombine", "[", 
      RowBox[{"L", ",", 
       RowBox[{
        RowBox[{"-", "SingularitiesLefschetzBlock"}], "/.", "#"}], ",", 
       RowBox[{"Length", "[", "L", "]"}]}], "]"}], "]"}], "&"}], "/@", 
-  RowBox[{"LefschetzNumbersStratum", "[", 
+  RowBox[{"PseudoAnosov`Lefschetz`Orbits`SingularStratum", "[", 
    RowBox[{"{", 
     RowBox[{"4", ",", "2", ",", "2"}], "}"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.445163640971836*^9, 3.445163641976819*^9}, {
@@ -200,7 +226,7 @@ Cell[BoxData[
    3.445163854772801*^9}, {3.445167576868862*^9, 3.4451675853844137`*^9}, {
    3.445170535359579*^9, 3.445170575150674*^9}, 3.445170735972846*^9, {
    3.445210793569532*^9, 3.445210795861964*^9}, {3.445529988115756*^9, 
-   3.445529989315275*^9}}],
+   3.445529989315275*^9}, 3.445699294526627*^9, 3.4456993402364197`*^9}],
 
 Cell["So it seems to work on (4,2,2)!", "Text",
  CellChangeTimes->{{3.4451641829424257`*^9, 3.445164194201044*^9}, {
@@ -211,7 +237,7 @@ Let' s show that Lehmer' s polynomial works on (16) and (4, 4, 4, 4) :\
 \>", "Text",
  CellChangeTimes->{{3.4455299959524097`*^9, 3.445529998770974*^9}}],
 
-Cell[BoxData[{
+Cell[BoxData[
  RowBox[{"P", "=", 
   RowBox[{
    RowBox[{
@@ -223,67 +249,16 @@ Cell[BoxData[{
     SuperscriptBox["x", "4"], "-", 
     SuperscriptBox["x", "3"], "+", "x", "+", "1"}], "/.", 
    RowBox[{"x", "\[Rule]", 
-    RowBox[{"-", "x"}]}]}]}], "\[IndentingNewLine]", 
- RowBox[{"L", "=", 
-  RowBox[{"LefschetzNumbers", "[", 
-   RowBox[{"P", ",", 
-    RowBox[{"{", "Lmax", "}"}]}], "]"}]}]}], "Input",
+    RowBox[{"-", "x"}]}]}]}]], "Input",
  CellChangeTimes->{{3.445164949921672*^9, 3.44516499014464*^9}, {
-  3.445270344075981*^9, 3.445270344267642*^9}}],
+  3.445270344075981*^9, 3.445270344267642*^9}, {3.445699494441472*^9, 
+  3.445699494721122*^9}}],
 
 Cell[BoxData[
- RowBox[{"Ls16", "=", 
-  RowBox[{"LefschetzNumbersStratum", "[", 
-   RowBox[{"{", "16", "}"}], "]"}]}]], "Input",
- CellChangeTimes->{{3.4451669244050922`*^9, 3.445166933994165*^9}, {
-  3.44516728583335*^9, 3.445167287182577*^9}, {3.445210817687642*^9, 
-  3.4452108257071743`*^9}}],
-
-Cell[BoxData[
- RowBox[{
+ RowBox[{"StratumOrbits", "[", 
   RowBox[{
-   RowBox[{"LefschetzRegularOrbits", "[", 
-    RowBox[{"LefschetzCombine", "[", 
-     RowBox[{"L", ",", 
-      RowBox[{
-       RowBox[{"-", "SingularitiesLefschetzBlock"}], "/.", "#"}], ",", 
-      RowBox[{"Length", "[", "L", "]"}]}], "]"}], "]"}], "&"}], "/@", 
-  "Ls16"}]], "Input",
- CellChangeTimes->{{3.4451650873470297`*^9, 3.4451651055102663`*^9}, {
-  3.445165667245059*^9, 3.44516566788034*^9}, {3.445200774071509*^9, 
-  3.445200776613855*^9}, {3.445200935267383*^9, 3.445200939537646*^9}, {
-  3.445201232795902*^9, 3.445201236809492*^9}, {3.44553001728544*^9, 
-  3.445530018429432*^9}}],
-
-Cell["\<\
-When there is only one type of singularity, the ouput of \
-LefschetzNumbersSingularity[k, m] and LefschetzNumbersStratum[{{k, m}}] is \
-the same :\
-\>", "Text",
- CellChangeTimes->{{3.445170769304718*^9, 3.4451708062464933`*^9}, {
-  3.445170884065235*^9, 3.445170909008519*^9}}],
-
-Cell[BoxData[
- RowBox[{"Ls4444", "=", 
-  RowBox[{"LefschetzNumbersStratum", "[", 
-   RowBox[{"{", 
-    RowBox[{"4", ",", "4", ",", "4", ",", "4"}], "}"}], "]"}]}]], "Input",
- CellChangeTimes->{{3.4451703511217203`*^9, 3.445170374358514*^9}, {
-  3.44521085826128*^9, 3.4452108704959383`*^9}}],
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{
-   RowBox[{"LefschetzRegularOrbits", "[", 
-    RowBox[{"LefschetzCombine", "[", 
-     RowBox[{"L", ",", 
-      RowBox[{
-       RowBox[{"-", "SingularitiesLefschetzBlock"}], "/.", "#"}], ",", 
-      RowBox[{"Length", "[", "L", "]"}]}], "]"}], "]"}], "&"}], "/@", 
-  "Ls4444"}]], "Input",
- CellChangeTimes->{{3.445165453419346*^9, 3.445165454551057*^9}, {
-  3.445201254090558*^9, 3.445201259160626*^9}, {3.445530024878517*^9, 
-  3.44553002643987*^9}}],
+   RowBox[{"{", "16", "}"}], ",", "P"}], "]"}]], "Input",
+ CellChangeTimes->{{3.445699476784638*^9, 3.4456994854300823`*^9}}],
 
 Cell[BoxData[
  RowBox[{"LefschetzNumbersTestQ", "[", 
@@ -339,50 +314,18 @@ Cell[BoxData[
  CellChangeTimes->{{3.445177979718646*^9, 3.445178012054102*^9}}],
 
 Cell[BoxData[
- RowBox[{"L", "=", 
-  RowBox[{"LefschetzNumbers", "[", 
-   RowBox[{"P", ",", 
-    RowBox[{"{", "Lmax", "}"}]}], "]"}]}]], "Input",
- CellChangeTimes->{{3.445178013533922*^9, 3.445178022435863*^9}, {
-  3.445180200910893*^9, 3.445180201197587*^9}, {3.445270362410006*^9, 
-  3.445270362569881*^9}}],
-
-Cell[BoxData[
- RowBox[{"LefschetzNumbersStratum", "[", 
-  RowBox[{
-   RowBox[{"{", 
-    RowBox[{"4", ",", "2", ",", "2"}], "}"}], ",", 
-   RowBox[{"PerronRootSign", "\[Rule]", 
-    RowBox[{"-", "1"}]}]}], "]"}]], "Input",
- CellChangeTimes->{3.445178919054194*^9}],
-
-Cell[BoxData[
- RowBox[{"LefschetzNumbersStratum", "[", 
-  RowBox[{
-   RowBox[{"{", 
-    RowBox[{"4", ",", "2", ",", "2"}], "}"}], ",", 
-   RowBox[{"PerronRootSign", "\[Rule]", 
-    RowBox[{"-", "1"}]}]}], "]"}]], "Input",
- CellChangeTimes->{{3.445178289357143*^9, 3.445178303484984*^9}, {
-   3.445178434155862*^9, 3.445178481689093*^9}, {3.445178907488898*^9, 
-   3.445178911693923*^9}, 3.44552614462929*^9, {3.445526269258259*^9, 
-   3.445526269565076*^9}, {3.445527633921177*^9, 3.4455276390099297`*^9}, {
-   3.445527914300161*^9, 3.445527914461587*^9}}],
-
-Cell[BoxData[
  RowBox[{"StratumOrbits", "[", 
   RowBox[{
    RowBox[{"{", 
     RowBox[{"4", ",", "2", ",", "2"}], "}"}], ",", "P"}], "]"}]], "Input",
- CellChangeTimes->{{3.4455274409934673`*^9, 3.4455274702022877`*^9}, {
-   3.4455277687343616`*^9, 3.445527769966703*^9}, 3.4455278203417387`*^9, {
-   3.445528060696052*^9, 3.445528060943544*^9}, 3.4455289979165783`*^9, {
-   3.4455291502470303`*^9, 3.4455291504114447`*^9}, {3.4455300589168777`*^9, 
-   3.44553005972418*^9}}],
+ CellChangeTimes->{{3.445699538316905*^9, 3.445699545752672*^9}}],
 
 Cell[BoxData[
  RowBox[{"Scan", "[", 
   RowBox[{"StratumOrbitsTable", ",", "%"}], "]"}]], "Input"],
+
+Cell["Also works with negative Perron root :", "Text",
+ CellChangeTimes->{{3.445699567098681*^9, 3.4456995752924833`*^9}}],
 
 Cell[BoxData[
  RowBox[{"StratumOrbits", "[", 
@@ -396,29 +339,11 @@ Cell[BoxData[
    3.4455277687343616`*^9, 3.445527769966703*^9}, 3.4455278203417387`*^9, {
    3.445528060696052*^9, 3.445528060943544*^9}, 3.4455289979165783`*^9, {
    3.4455291502470303`*^9, 3.4455291504114447`*^9}, {3.4455300589168777`*^9, 
-   3.445530073993566*^9}}],
+   3.44553005972418*^9}, {3.445699559364259*^9, 3.44569956049481*^9}}],
 
 Cell[BoxData[
  RowBox[{"Scan", "[", 
   RowBox[{"StratumOrbitsTable", ",", "%"}], "]"}]], "Input"],
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{
-   RowBox[{"LefschetzRegularOrbits", "[", 
-    RowBox[{"LefschetzCombine", "[", 
-     RowBox[{"L", ",", 
-      RowBox[{
-       RowBox[{"-", "SingularitiesLefschetzBlock"}], "/.", "#"}], ",", 
-      RowBox[{"Length", "[", "L", "]"}]}], "]"}], "]"}], "&"}], "/@", 
-  RowBox[{"LefschetzNumbersStratum", "[", 
-   RowBox[{
-    RowBox[{"{", 
-     RowBox[{"4", ",", "2", ",", "2"}], "}"}], ",", 
-    RowBox[{"PerronRootSign", "\[Rule]", "1"}]}], "]"}]}]], "Input",
- CellChangeTimes->{{3.445180212671689*^9, 3.445180225102421*^9}, 
-   3.445180288559966*^9, {3.445211057448792*^9, 3.445211059548489*^9}, 
-   3.445212299217771*^9, {3.44552919858186*^9, 3.445529210898048*^9}}],
 
 Cell["Tests for strata with \"degenerate\" regular orbits :", "Text",
  CellChangeTimes->{{3.445268633503543*^9, 3.445268646712534*^9}}],
@@ -472,9 +397,9 @@ Cell[BoxData[
    3.445529438061593*^9}]
 },
 WindowSize->{892, 868},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowMargins->{{0, Automatic}, {Automatic, 25}},
 ShowSelection->True,
-FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -488,55 +413,53 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[400, 13, 199, 4, 31, "Input"],
-Cell[602, 19, 444, 7, 31, "Input"],
-Cell[1049, 28, 379, 7, 31, "Input"],
-Cell[1431, 37, 101, 2, 31, "Input"],
-Cell[1535, 41, 132, 2, 31, "Input"],
-Cell[1670, 45, 120, 2, 31, "Input"],
-Cell[1793, 49, 369, 9, 35, "Input"],
-Cell[2165, 60, 455, 9, 31, "Input"],
-Cell[2623, 71, 230, 5, 30, "Text"],
-Cell[2856, 78, 240, 5, 31, "Input"],
-Cell[3099, 85, 884, 17, 52, "Input"],
-Cell[3986, 104, 452, 8, 30, "Text"],
-Cell[4441, 114, 288, 6, 31, "Input"],
-Cell[4732, 122, 132, 2, 31, "Input"],
-Cell[4867, 126, 736, 15, 52, "Input"],
-Cell[5606, 143, 268, 5, 49, "Text"],
-Cell[5877, 150, 669, 21, 71, "Input"],
-Cell[6549, 173, 548, 10, 31, "Input"],
-Cell[7100, 185, 812, 17, 52, "Input"],
-Cell[7915, 204, 162, 2, 30, "Text"],
-Cell[8080, 208, 162, 3, 30, "Text"],
-Cell[8245, 213, 661, 18, 57, "Input"],
-Cell[8909, 233, 294, 6, 31, "Input"],
-Cell[9206, 241, 629, 14, 52, "Input"],
-Cell[9838, 257, 287, 6, 49, "Text"],
-Cell[10128, 265, 291, 6, 31, "Input"],
-Cell[10422, 273, 484, 12, 52, "Input"],
-Cell[10909, 287, 571, 11, 31, "Input"],
-Cell[11483, 300, 251, 7, 31, "Input"],
-Cell[11737, 309, 162, 3, 31, "Input"],
-Cell[11902, 314, 158, 2, 30, "Text"],
-Cell[12063, 318, 130, 1, 30, "Text"],
-Cell[12196, 321, 159, 3, 30, "Text"],
-Cell[12358, 326, 379, 12, 39, "Input"],
-Cell[12740, 340, 308, 7, 31, "Input"],
-Cell[13051, 349, 263, 7, 31, "Input"],
-Cell[13317, 358, 556, 11, 31, "Input"],
-Cell[13876, 371, 473, 9, 31, "Input"],
-Cell[14352, 382, 97, 2, 31, "Input"],
-Cell[14452, 386, 551, 12, 31, "Input"],
-Cell[15006, 400, 97, 2, 31, "Input"],
-Cell[15106, 404, 701, 16, 52, "Input"],
-Cell[15810, 422, 135, 1, 30, "Text"],
-Cell[15948, 425, 387, 10, 35, "Input"],
-Cell[16338, 437, 374, 10, 31, "Input"],
-Cell[16715, 449, 164, 3, 31, "Input"],
-Cell[16882, 454, 186, 4, 31, "Input"],
-Cell[17071, 460, 198, 4, 31, "Input"],
-Cell[17272, 466, 209, 5, 31, "Input"]
+Cell[400, 13, 199, 4, 32, "Input"],
+Cell[602, 19, 444, 7, 32, "Input"],
+Cell[1049, 28, 194, 3, 32, "Input"],
+Cell[1246, 33, 125, 2, 32, "Input"],
+Cell[1374, 37, 379, 7, 32, "Input"],
+Cell[1756, 46, 120, 2, 32, "Input"],
+Cell[1879, 50, 101, 2, 32, "Input"],
+Cell[1983, 54, 241, 5, 31, "Text"],
+Cell[2227, 61, 254, 4, 32, "Input"],
+Cell[2484, 67, 122, 2, 32, "Input"],
+Cell[2609, 71, 369, 9, 32, "Input"],
+Cell[2981, 82, 455, 9, 32, "Input"],
+Cell[3439, 93, 278, 5, 31, "Text"],
+Cell[3720, 100, 335, 6, 32, "Input"],
+Cell[4058, 108, 127, 2, 32, "Input"],
+Cell[4188, 112, 949, 18, 55, "Input"],
+Cell[5140, 132, 494, 8, 31, "Text"],
+Cell[5637, 142, 405, 7, 32, "Input"],
+Cell[6045, 151, 132, 2, 32, "Input"],
+Cell[6180, 155, 773, 15, 55, "Input"],
+Cell[6956, 172, 317, 6, 51, "Text"],
+Cell[7276, 180, 598, 17, 55, "Input"],
+Cell[7877, 199, 592, 10, 32, "Input"],
+Cell[8472, 211, 895, 17, 77, "Input"],
+Cell[9370, 230, 162, 2, 31, "Text"],
+Cell[9535, 234, 162, 3, 31, "Text"],
+Cell[9700, 239, 563, 15, 32, "Input"],
+Cell[10266, 256, 182, 4, 32, "Input"],
+Cell[10451, 262, 571, 11, 32, "Input"],
+Cell[11025, 275, 251, 7, 32, "Input"],
+Cell[11279, 284, 162, 3, 32, "Input"],
+Cell[11444, 289, 158, 2, 31, "Text"],
+Cell[11605, 293, 130, 1, 31, "Text"],
+Cell[11738, 296, 159, 3, 31, "Text"],
+Cell[11900, 301, 379, 12, 32, "Input"],
+Cell[12282, 315, 214, 5, 32, "Input"],
+Cell[12499, 322, 97, 2, 32, "Input"],
+Cell[12599, 326, 122, 1, 31, "Text"],
+Cell[12724, 329, 595, 12, 32, "Input"],
+Cell[13322, 343, 97, 2, 32, "Input"],
+Cell[13422, 347, 135, 1, 31, "Text"],
+Cell[13560, 350, 387, 10, 32, "Input"],
+Cell[13950, 362, 374, 10, 32, "Input"],
+Cell[14327, 374, 164, 3, 32, "Input"],
+Cell[14494, 379, 186, 4, 32, "Input"],
+Cell[14683, 385, 198, 4, 32, "Input"],
+Cell[14884, 391, 209, 5, 32, "Input"]
 }
 ]
 *)

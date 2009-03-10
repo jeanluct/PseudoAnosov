@@ -14,9 +14,15 @@ PseudoAnosov::usage = "Functions for manipulating characteristic polynomials of 
 
 PolynomialDegree::usage = "PolynomialDegree[P] returns the degree of the polynomial P(x)."
 
-TracesPower::usage = "TracesPower[P,m], where P is the characteristic polynomial of a matrix M, lists the traces Tr[M^k] for 1 <= k <= m."
+PolynomialRoots::usage = "PolynomialRoots[P] returns the roots of the polynomial P, sorted in decreasing order of magnitude.";
 
-LefschetzNumbers::usage = "LefschetzNumbers[P,k], where P is the characteristic polynomial of some matrix M, returns the Lefschetz number 2-Tr[M^k].  LefschetzNumbers[P,{k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for 1 <= k <= k2.  LefschetzNumbers[P,{k1,k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for k1 <= k <= k2."
+PerronRoot::usage = "PerronRoot[P] returns the largest root (in magnitute) of the polynomial P.";
+
+pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[P] returns True if the largest root of the polynomial P is nondegenerate (in magnitute) and real.  pseudoAnosovPerronRootQ[P,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
+
+MahlerMeasure::usage = "MahlerMeasure[P] returns the Mahler measure of the polynomial P, which is the absolute value of the product of roots outside the unit circle.";
+
+TracesPower::usage = "TracesPower[P,m], where P is the characteristic polynomial of a matrix M, lists the traces Tr[M^k] for 1 <= k <= m."
 
 ReciprocalPolynomial::usage = "ReciprocalPolynomial[x,n] returns a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1.  ReciprocalPolynomial[x,n,c] uses c as the base name for coefficients.  ReciprocalPolynomial[x,n,{a_1,...,a_(n/2)}] uses a list for the coefficient, where (n/2) denotes Floor[n/2].";
 
@@ -26,29 +32,19 @@ ReciprocalPolynomialCoefficientBounds::usage = "ReciprocalPolynomialCoefficientB
 
 ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,amax] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with coefficients bounded by |a[k]| <= amax[k].  For n even, only one of each polynomials pair P(-x)=P(x) is listed.";
 
-PolynomialRoots::usage = "PolynomialRoots[P] returns the roots of the polynomial P, sorted in decreasing order of magnitude.";
-
-PerronRoot::usage = "PerronRoot[P] returns the largest root (in magnitute) of the polynomial P.";
-
-pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[P] returns True if the largest root of the polynomial P is nondegenerate (in magnitute) and real.  pseudoAnosovPerronRootQ[P,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
-
-MahlerMeasure::usage = "MahlerMeasure[P] returns the Mahler measure of the polynomial P, which is the absolute value of the product of roots outside the unit circle.";
-
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
 OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the (even) degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.  Use Tally/@OrientableStrataList[g] to group by multiplicities.";
 
 StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k_1,...,k_m}."
 
-LefschetzRegularOrbits::usage = ""
-
-LefschetzNumbersStratum::usage = "LefschetzNumbersStratum[S], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}})."
+LefschetzNumbers::usage = "LefschetzNumbers[P,k], where P is the characteristic polynomial of some matrix M, returns the Lefschetz number 2-Tr[M^k].  LefschetzNumbers[P,{k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for 1 <= k <= k2.  LefschetzNumbers[P,{k1,k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for k1 <= k <= k2."
 
 LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz number.  If they are not the same length, then the blocks are repeated to the length of the longest list.\nLefschetzCombine[L1,L2,...,Lm,n] caps the total length at an integer n."
 
 LefschetzNumbersTestQ::usage = ""
 
-StratumOrbits::usage = "StratumOrbits[S,P] returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial P on stratum S.  Returns an empty list if this proves impossible."
+StratumOrbits::usage = "StratumOrbits[S,P] returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial P on stratum S.  Returns an empty list if this proves impossible.\nStratumOrbits[S,L] does the same for a list of Lefschetz numbers L."
 
 StratumOrbitsTable::usage = ""
 
@@ -67,7 +63,7 @@ MaxIterate::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving t
 
 MaxLefschetz::usage = "Option to LefschetzNumbersTestQ: Set to an integer giving how many of Lefschetz numbers to compute for the test."
 
-PerronRootSign::usage = "Option to LefschetzStratum, LefschetzSingularity and LefschetzRegularOrbits to specify whether the Perron root is positive or negative.  For LefschetzRegularOrbits, set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic for LefschetzRegularOrbits, -1 otherwise)."
+PerronRootSign::usage = "Option to LefschetzStratum, LefschetzSingularity and Regular to specify whether the Perron root is positive or negative.  For Regular, set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic for Regular, -1 otherwise)."
 
 (* Labels for orbit structure of a stratum *)
 Polynomial::usage = ""
@@ -80,50 +76,74 @@ RegularOrbits::usage = ""
 Protect[Polynomial,Stratum,SingularitiesPermutation,SeparatricesPermutation,SingularitiesLefschetzBlock,RegularOrbits]
 
 
-(*
-   Error messages and warnings
-*)
-
-PseudoAnosov::toofewtraces = "Error: list of traces should ne at least n/2, where n is the degree of the polynomial."
-
-PseudoAnosov::notminimal = "Warning: Not a minimal polynomial."
-
-PseudoAnosov::nottested = "Warning: This function is not well tested."
-
-PseudoAnosov::needpositivePerron = "Error: This function only applies to positive Perron root."
-
-PseudoAnosov::neednegativePerron = "Error: This function only applies to negative Perron root."
-
-PseudoAnosov::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th power."
-
-PseudoAnosov::notastring = "Function `1` did not return a proper string."
-
-PseudoAnosov::badLefschetz = "Bad sequence of Lefschetz numbers."
-
-PseudoAnosov::manyallowableperms = "More than one allowable permutation type on stratum `1`."
-
-PseudoAnosov::notapolynomial = "Input argument `1` is not a polynomial in `2`."
-
-
 Begin["`Private`"]
 
 
 (* Helper function to get a polynomial's independent variable, with
    some checks *)
-PolynomialVariable[p_] := Module[{x = Variables[p]},
+polynomialvariable[p_] := Module[{x = Variables[p]},
     If[x == {} || Length[x] > 1,
         Message[PseudoAnosov::notapolynomial,p,x]; Abort[]];
     Return[First[x]]
 ]
+polynomialvariable::notapolynomial = "Input argument `1` is not a polynomial in `2`."
 
 
-PolynomialDegree[p_] := Module[{x = PolynomialVariable[p]},
+PolynomialDegree[p_] := Module[{x = polynomialvariable[p]},
     Length[CoefficientList[Collect[p,x],x]]-1
 ]
 
 
+PolynomialRoots[p_,opts:OptionsPattern[]] := Module[
+    {x = polynomialvariable[p]},
+    Sort[x/.NSolve[p == 0, x, opts], Abs[#2] < Abs[#1] &]
+]
+(* PolynomialRoots inherits the options for NSolve *)
+Options[PolynomialRoots] = Options[NSolve]
+
+
+PerronRoot[p_,opts:OptionsPattern[]] := First[PolynomialRoots[p,opts]]
+(* PerronRoot inherits the options for NSolve *)
+Options[PerronRoot] = Options[NSolve]
+
+
+(* Test for the Perron root *)
+pseudoAnosovPerronRootQ[p_,lmax_:0,opts:OptionsPattern[]] := Module[
+    {prl, pr, degen, testdegen},
+    If[PolynomialDegree[p] < 2, Return[False]];
+    degen = OptionValue[EqualityTolerance];
+    testdegen[diff_] := Module[{},
+        If[diff < degen, Return[False]];
+        If[degen/2 < diff < degen, Message[PseudoAnosov::tooclose]];
+        Return[True]
+    ];
+    (* Take the first two roots (presorted by magnitude) *)
+    prl = Take[PolynomialRoots[p,opts], 2];
+    pr = Abs[prl[[1]]];
+    (* First criterion: largest eigenvalue is greater than 1 *)
+    If[!testdegen[Abs[pr-1]], Return[False]];
+    (* Second criterion: largest eigenvalue is separated from the second *)
+    If[!testdegen[pr - Abs[prl[[2]]]], Return[False]];
+    If[lmax != 0,
+        (* Third criterion: largest eigenvalue is less than lmax *)
+        If[!testdegen[Abs[lmax] - pr], Return[False]];
+    ];
+    Return[True];
+]
+Options[pseudoAnosovPerronRootQ] =
+    {WorkingPrecision -> $MachinePrecision, EqualityTolerance -> 10^-8}
+
+
+MahlerMeasure[p_,opts:OptionsPattern[]] := Module[
+    {x = polynomialvariable[p]},
+    Times @@ Select[Abs/@PolynomialRoots[p,opts],#>1&]
+]
+(* MahlerMeasure inherits the options for NSolve *)
+Options[MahlerMeasure] = Options[PolynomialRoots]
+
+
 TracesPower[p_,mm_List:{10}] := Module[
-    {x = PolynomialVariable[p], n, T, ml},
+    {x = polynomialvariable[p], n, T, ml},
     (* Polynomial is x^n + c[1]x^(n-1) + ... + c[n-1]x + c[n] *)
     c = Reverse[CoefficientList[Collect[p,x],x]];
     (* Make sure leading coefficient is 1, then drop it. *)
@@ -146,12 +166,6 @@ TracesPower[p_,mm_List:{10}] := Module[
 TracesPower[p_,m_Integer:1] := First[TracesPower[p,{m,m}]]
 
 
-LefschetzNumbers[p_,mm_List] := (2 - #) & /@ TracesPower[p,mm]
-
-
-LefschetzNumbers[p_,m_Integer:1] := 2 - TracesPower[p,m]
-
-
 ReciprocalPolynomial[x_,n_,a_List] := Module[{aal},
     aal = Table[a[[m]], {m,n/2}];
     aal = If[OddQ[n], Join[aal,Reverse[aal]], Join[aal,Drop[Reverse[aal],1]]];
@@ -165,7 +179,7 @@ ReciprocalPolynomial[x_,n_,c_:Global`a] :=
 
 
 ReciprocalPolynomialQ[p_] := Module[
-    {x = PolynomialVariable[p], c, n},
+    {x = polynomialvariable[p], c, n},
     c = CoefficientList[Collect[p,x],x];
     n = Length[c]-1;
     Return[Simplify[p - x^n (p/.x->1/x)] === 0]
@@ -222,27 +236,6 @@ ReciprocalPolynomialBoundedList[x_,n_,a_List] := Module[
 ]
 
 
-PolynomialRoots[p_,opts:OptionsPattern[]] := Module[
-    {x = PolynomialVariable[p]},
-    Sort[x/.NSolve[p == 0, x, opts], Abs[#2] < Abs[#1] &]
-]
-(* PolynomialRoots inherits the options for NSolve *)
-Options[PolynomialRoots] = Options[NSolve]
-
-
-PerronRoot[p_,opts:OptionsPattern[]] := First[PolynomialRoots[p,opts]]
-(* PerronRoot inherits the options for NSolve *)
-Options[PerronRoot] = Options[NSolve]
-
-
-MahlerMeasure[p_,opts:OptionsPattern[]] := Module[
-    {x = PolynomialVariable[p]},
-    Times @@ Select[Abs/@PolynomialRoots[p,opts],#>1&]
-]
-(* MahlerMeasure inherits the options for NSolve *)
-Options[MahlerMeasure] = Options[NSolve]
-
-
 IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
     (* See Ham and Song paper (2007), p. 172; Seneta 73. Theorem 2.8 *)
     powmax = n^2 - 2n + 2;
@@ -258,46 +251,32 @@ OrientableStrataList[g_Integer] := 2 IntegerPartitions[2g-2]
 StratumToGenus[s_List] := (Plus @@ s + 4)/4
 
 
-(*
-
-  The pseudo-Anosov polynomial tests
-  
-  These are based on the Lefschetz numbers calculated from the
-  polynomial.
-
- *)
+End[(* "`Private`" *)]
 
 
-(* Test for the Perron root *)
-pseudoAnosovPerronRootQ[p_,lmax_:0,opts:OptionsPattern[]] := Module[
-    {prl, pr, degen, testdegen},
-    If[PolynomialDegree[p] < 2, Return[False]];
-    degen = OptionValue[EqualityTolerance];
-    testdegen[diff_] := Module[{},
-        If[diff < degen, Return[False]];
-        If[degen/2 < diff < degen, Message[PseudoAnosov::tooclose]];
-        Return[True]
-    ];
-    (* Take the first two roots (presorted by magnitude) *)
-    prl = Take[PolynomialRoots[p,opts], 2];
-    pr = Abs[prl[[1]]];
-    (* First criterion: largest eigenvalue is greater than 1 *)
-    If[!testdegen[Abs[pr-1]], Return[False]];
-    (* Second criterion: largest eigenvalue is separated from the second *)
-    If[!testdegen[pr - Abs[prl[[2]]]], Return[False]];
-    If[lmax != 0,
-        (* Third criterion: largest eigenvalue is less than lmax *)
-        If[!testdegen[Abs[lmax] - pr], Return[False]];
-    ];
-    Return[True];
-]
-Options[pseudoAnosovPerronRootQ] =
-    {WorkingPrecision -> $MachinePrecision, EqualityTolerance -> 10^-8}
-
+Begin["`Lefschetz`"]
 
 (*
-   General helper functions and definitions for the tests
+   General helper functions and definitions
 *)
+
+LefschetzNumbers[p_,mm_List] := (2 - #) & /@ TracesPower[p,mm]
+
+
+LefschetzNumbers[p_,m_Integer:1] := 2 - TracesPower[p,m]
+
+
+LefschetzCombine[Ll__List, n_Integer:0] := Module[{L = List[Ll], len},
+    If[n == 0, len = LCM @@ (Length /@ L), len = n];
+    Plus @@ (PadRight[#,len,#] & /@ L)
+]
+
+
+Begin["`Tests`"]
+
+
+Allowable = "Allowable"
+
 
 singularitytostring[k_Integer, m_Integer] :=
     ToString[k] <> "^" <> ToString[m]
@@ -308,6 +287,299 @@ lefschetztostring[L_Integer, n_Integer] :=
 
 
 lcmtostring[k_Integer] := "LCM(partitions of " <> ToString[k] <> ")"
+
+
+(*
+   Lefschetz tests for positive Perron root
+*)
+
+(* Test whether there are enough singularities on a stratum to support
+   this pseudo-Anosov (when Perron root is positive). *)
+MinimumSingularitiesQ[s_List,L_List] := Module[{idx},
+    idx = Flatten[Position[# >= 0 & /@ (Length[s] - L), False]];
+    If[idx == {},
+        Return[Allowable]
+    ,
+        idx = First[idx];
+        Return["Not enough singularities for " <>
+               lefschetztostring[L[[idx]],idx]]
+    ]
+]
+
+
+SingularityPermutationsAQ[s_List,L_List, OptionsPattern[]] := Module[
+    {d, m, Nn = Length[s], pow, idx},
+    (* Group singularities by multiplicity *)
+    d = #[[1]]/2& /@ Tally[s];
+    m = #[[2]]& /@ Tally[s];
+    (* Check if the formula is satisfied for each singularity type,
+       logical-And the results. *)
+    pow = (#[[2]])! (#[[1]]/2+1) & /@ Tally[s];
+    (* Don't go past the end of L for this test (no complaints --
+       factorial is just too big).  Also check for the optional
+       IterateTest criterion (used to select even iterates, say). *)
+    idx = Pick[Range[Length[d]],
+        (# <= Length[L] && OptionValue[IterateTest][#]) & /@ pow];
+    If[idx != {},
+        idx = Pick[idx, Not/@(L[[pow[[#]]]] <= Nn-2m[[#]](d[[#]]+1) & /@ idx)];
+        If[idx == {},
+            Return[Allowable]
+        ,
+            idx = First[idx];
+            Return[singularitytostring[2d[[idx]],m[[idx]]] <>
+                " incompatible with " <>
+                lefschetztostring[L[[pow[[idx]]]],pow[[idx]]]]
+        ]
+    ];
+    Return[Allowable]
+]
+Options[SingularityPermutationsAQ] = {IterateTest -> (True &)}
+
+
+SingularityPermutationsBQ[s_List,L_List] := Module[
+    {k, m, Nn = Length[s], idx},
+    (* Group singularities by multiplicity *)
+    k = #[[1]]& /@ Tally[s];
+    m = #[[2]]& /@ Tally[s];
+    (* Check if the formula is satisfied for each singularity type,
+       logical-And the results. *)
+    idx = Flatten[Position[Table[
+            SingularityPermutationsBQ1[k[[j]]/2,m[[j]],Nn,L]
+        ,{j,Length[k]}], False]];
+    If[idx == {},
+        Return[Allowable]
+    ,
+        idx = First[idx];
+        Return[singularitytostring[k[[idx]],m[[idx]]] <>
+            " incompatible with " <> lefschetztostring[L[[idx]],idx] <>
+            " and " <> lcmtostring[m[[idx]]]]
+    ]
+]
+(* Private helper function for SingularityPermutationsBQ. *)
+SingularityPermutationsBQ1[d_Integer,m_Integer,Nn_,L_] := Module[
+    (* Compute the (unique) LCMs of integer partitions of m *)
+    {lcm = Union[LCM @@ # & /@ IntegerPartitions[m]]},
+    (* Test for each LCM in the list and Or the result, since at least
+       one of them has to be true. *)
+    If[Max[lcm](d+1) > Length[L], Throw[Max[lcm](d+1), oor]];
+    Or @@ (L[[#(d+1)]] <= Nn - 2m(d+1) & /@ lcm)
+]
+
+
+PureStratumAQ[s_List,L_List] := Module[
+    {d, m, t = Tally[s]},
+    (* If there is more than one singularity type, return Allowable. *)
+    If[Length[t] > 1, Return[Allowable]];
+    (* Need positive Lefschetz number L[[1]] *)
+    If[L[[1]] <= 0, Return[Allowable]];
+    d = t[[1,1]]/2;
+    m = t[[1,2]];
+    If[(d+1) > Length[L], Throw[d+1, oor]];
+    If[L[[d+1]] <= m - 2 (d+1) L[[1]],
+        Return[Allowable]
+    ,
+        Return[singularitytostring[2d,m] <>
+            " incompatible with " <> lefschetztostring[L[[1]],1] <> " and " <>
+            lefschetztostring[L[[d+1]],d+1]]
+    ]
+]
+
+
+PureStratumBQ[s_List,L_List] := Module[
+    {d, m, t = Tally[s], k},
+    (* If there is more than one singularity type, return Allowable. *)
+    If[Length[t] > 1, Return[Allowable]];
+    d = t[[1,1]]/2;
+    m = t[[1,2]];
+    (* Need positive Lefschetz number L[[1]] and enough singularities *)
+    If[m-L[[1]] < 1 || L[[1]] <= 0, Return[Allowable]];
+    k = Union[LCM @@ # & /@ IntegerPartitions[m-L[[1]]]];
+    If[Max[k](d+1) > Length[L], Throw[Max[k](d+1), oor]];
+    If[Or @@ (L[[#(d+1)]] <= m - 2m(d+1) & /@ k),
+        Return[Allowable]
+    ,
+        Return[singularitytostring[2d,m] <>
+            " incompatible with " <> lefschetztostring[L[[1]],1] <>
+            " and " <> lcmtostring[m-L[[1]]]]
+    ]
+]
+
+
+AlmostPureStratumAQ[s_List,L_List] := Module[
+    {d2, m2, f, Nn = Length[s],
+     (* Group and sort strata by increasing multiplicity *)
+     t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
+    (* If there aren't exactly two singularity types, return Allowable. *)
+    If[Length[t] != 2, Return[Allowable]];
+    (* If the first singularity type doesn't have multiplicity 1,
+       return Allowable. *)
+    If[t[[1,2]] > 1, Return[Allowable]];
+    f = L[[1]]-1;
+    If[f <= 0, Return[Allowable]];
+    (* The repeated singularity is in the second slot, since we sorted. *)
+    d2 = t[[2,1]]/2;
+    m2 = t[[2,2]];
+    If[(d2+1) > Length[L], Throw[d2+1, oor]];
+    If[L[[d2+1]] <= Nn - 2f (d2+1),
+        Return[Allowable]
+    ,
+        Return[singularitytostring[2d2,m2] <>
+            " incompatible with " <> lefschetztostring[L[[1]],1] <> " and " <>
+            lefschetztostring[L[[d2+1]],d2+1]]
+    ]
+]
+
+
+AlmostPureStratumBQ[s_List,L_List] := Module[
+    {d2, m2, f, Nn = Length[s], k,
+     (* Group and sort strata by increasing multiplicity *)
+     t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
+    (* If there aren't exactly two singularity types, return Allowable. *)
+    If[Length[t] != 2, Return[Allowable]];
+    (* If the first singularity type doesn't have multiplicity 1,
+       return Allowable. *)
+    If[t[[1,2]] > 1, Return[Allowable]];
+    (* The repeated singularity is in the second slot, since we sorted. *)
+    d2 = t[[2,1]]/2;
+    m2 = t[[2,2]];
+    f = L[[1]]-1;
+    If[f <= 0 || m2-f < 1, Return[Allowable]];
+    k = Union[LCM @@ # & /@ IntegerPartitions[m2-f]];
+    If[Max[k](d2+1) > Length[L], Throw[Max[k](d2+1), oor]];
+    If[Or @@ (L[[#(d2+1)]] <= Nn - 2m2 (d2+1) & /@ k),
+        Return[Allowable]
+    ,
+        Return[singularitytostring[2d2,m] <>
+            " incompatible with " <> lefschetztostring[L[[1]],1] <>
+            " and " <> lcmtostring[m2-L[[1]]+1]]
+    ]
+]
+
+
+StratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[
+    {prs = OptionValue[PerronRootSign], opts2 = opts},
+    (* If the sign of the Perron root is unspecified, try and guess *)
+    If[prs == Automatic,
+        prs = Sign[Times @@ Take[L,-2]];
+        opts2 = FilterRules[{opts},Except[PerronRootSign]];
+        opts2 = Sequence @@ Join[opts2,{PerronRootSign -> prs}];
+    ];
+    Off[StratumOrbits::manyallowableperms];
+    If[StratumOrbits[s,L,opts2] == {},
+        Return["No permutation works"]
+    ,
+        Return[Allowable]
+    ];
+    On[StratumOrbits::manyallowableperms];
+]
+Options[StratumOrbitsTestQ] = {PerronRootSign -> Automatic}
+
+
+(*
+   Test for everything together
+*)
+
+LefschetzNumbersTestQ[s_List,p_, opts:OptionsPattern[]] := Module[
+    {t, opts2 = FilterRules[{opts},TestListQ]},
+    If[PerronRoot[p] > 0,
+        L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
+        t = TestPositiveQ[s,L,opts2]
+    ,
+        (* Generate twice as many Lefschetz numbers, since we need to
+           apply the even tests to half the list *)
+        L = LefschetzNumbers[p,{2 OptionValue[MaxLefschetz]}];
+        t = TestNegativeQ[s,L,opts2]
+    ];
+    (* If all the tests have failed so far, try the ultimate one, but
+       only as a last resort! *)
+    If[t == Allowable,
+        tests = {StratumOrbitsTestQ};
+        t = TestListQ[s,L,tests,opts2,MaxIterate -> 1];
+    ];
+    If[OptionValue[GiveReasonForRejection],
+        Return[{t == Allowable,t}]
+    ,
+        Return[t == Allowable]
+    ]
+]
+Options[LefschetzNumbersTestQ] =
+    {GiveReasonForRejection -> False, MaxIterate -> 5, MaxLefschetz -> 100}
+
+
+(* Private helper function for LefschetzNumbersTestQ *)
+TestListQ[s_List,L_List,tests_List, OptionsPattern[]] :=
+Module[
+    {Lm, reason = Allowable, dm = 1},
+    If[OptionValue[OnlyOddIterates], dm = 2];
+    Catch[
+        Do[
+            Do[
+                (* The testing functions throw an exception if there
+                   are not enough Lefschetz numbers *)
+                Catch[
+                    (* Make a list of Lefschetz numbers fpr phi^m *)
+                    Lm = L[[#]]& /@ Range[m,Length[L],m];
+                    (* If fails once, exit loops to avoid the other tests *)
+                    reason = tests[[k]][s,Lm];
+                    If[!StringQ[reason], Message[TestListQ::notastring,
+                        SymbolName[tests[[k]]]]; Abort[]];
+                    If[reason != Allowable,
+                        (* For the reason string, append the reason
+                           returned by the test to the test's function
+                           name. *)
+                        reason = StringReplace[SymbolName[tests[[k]]],
+                            {RegularExpression["Q$"] -> "",
+                             RegularExpression["AQ$"] -> "(a)",
+                             RegularExpression["BQ$"] -> "(b)"}]
+                             <> ": " <> reason;
+                        (* Throw exception to escape both loops *)
+                        Throw[k, testfailed];
+                    ];
+                , oor, Message[TestListQ::moreLefschetz,#1,m] &]
+            , {m, 1, OptionValue[MaxIterate], dm}]
+        , {k,Length[tests]}];
+    , testfailed];
+    Return[reason]
+]
+Options[TestListQ] =
+    Append[FilterRules[Options[LefschetzNumbersTestQ], MaxIterate],
+           OnlyOddIterates -> False]
+TestListQ::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th power."
+TestListQ::notastring = "Function `1` did not return a proper string."
+
+
+(* Private helper function for LefschetzNumbersTestQ *)
+TestPositiveQ[s_List,L_, opts:OptionsPattern[]] := Module[
+    {tests =
+        {MinimumSingularitiesQ,
+         SingularityPermutationsAQ,
+         SingularityPermutationsBQ,
+         PureStratumAQ,
+         PureStratumBQ,
+         AlmostPureStratumAQ,
+         AlmostPureStratumBQ}},
+    TestListQ[s,L,tests,
+        FilterRules[{opts},Options[TestListQ]]]
+]
+Options[TestPositiveQ] = Options[TestListQ]
+
+
+(* Private helper function for LefschetzNumbersTestQ *)
+TestNegativeQ[s_List,L_, opts:OptionsPattern[]] := Module[
+    {L2},
+    (* There are no separate tests for negative Perron root *)
+    (* List of Lefschetz numbers of phi^2 *)
+    L2 = L[[#]] & /@ Range[2,Length[L],2];
+    (* Do the test with p2, which has positive Perron root *)
+    TestPositiveQ[s,L2,opts]
+]
+Options[TestNegativeQ] = Options[TestListQ]
+
+
+End[(* "`Tests`" *)]
+
+
+Begin["`Orbits`"]
 
 
 allpossibilities::usage = "allpossibilities[L1,L2,...] generates all possible ordered combinations of elements of the given lists with repetition."
@@ -345,191 +617,73 @@ groupbypartition[l_, part_] := Module[{g = {}},
 ]
 
 
-Allowable = "Allowable"
-
-
-(*
-   Lefschetz tests for positive Perron root
-*)
-
-(* Test whether there are enough singularities on a stratum to support
-   this pseudo-Anosov (when Perron root is positive). *)
-LefschetzMinimumSingularitiesQ[s_List,L_List] := Module[{idx},
-    idx = Flatten[Position[# >= 0 & /@ (Length[s] - L), False]];
-    If[idx == {},
-        Return[Allowable]
-    ,
-        idx = First[idx];
-        Return["Not enough singularities for " <>
-               lefschetztostring[L[[idx]],idx]]
-    ]
-]
-
-
-LefschetzSingularityPermutationsAQ[s_List,L_List, OptionsPattern[]] := Module[
-    {d, m, Nn = Length[s], pow, idx},
-    (* Group singularities by multiplicity *)
-    d = #[[1]]/2& /@ Tally[s];
-    m = #[[2]]& /@ Tally[s];
-    (* Check if the formula is satisfied for each singularity type,
-       logical-And the results. *)
-    pow = (#[[2]])! (#[[1]]/2+1) & /@ Tally[s];
-    (* Don't go past the end of L for this test (no complaints --
-       factorial is just too big).  Also check for the optional
-       IterateTest criterion (used to select even iterates, say). *)
-    idx = Pick[Range[Length[d]],
-        (# <= Length[L] && OptionValue[IterateTest][#]) & /@ pow];
-    If[idx != {},
-        idx = Pick[idx, Not/@(L[[pow[[#]]]] <= Nn-2m[[#]](d[[#]]+1) & /@ idx)];
-        If[idx == {},
-            Return[Allowable]
-        ,
-            idx = First[idx];
-            Return[singularitytostring[2d[[idx]],m[[idx]]] <>
-                " incompatible with " <>
-                lefschetztostring[L[[pow[[idx]]]],pow[[idx]]]]
-        ]
-    ];
-    Return[Allowable]
-]
-Options[LefschetzSingularityPermutationsAQ] = {IterateTest -> (True &)}
-
-
-LefschetzSingularityPermutationsBQ[s_List,L_List] := Module[
-    {k, m, Nn = Length[s], idx},
-    (* Group singularities by multiplicity *)
-    k = #[[1]]& /@ Tally[s];
-    m = #[[2]]& /@ Tally[s];
-    (* Check if the formula is satisfied for each singularity type,
-       logical-And the results. *)
-    idx = Flatten[Position[Table[
-            LefschetzSingularityPermutationsBQ1[k[[j]]/2,m[[j]],Nn,L]
-        ,{j,Length[k]}], False]];
-    If[idx == {},
-        Return[Allowable]
-    ,
-        idx = First[idx];
-        Return[singularitytostring[k[[idx]],m[[idx]]] <>
-            " incompatible with " <> lefschetztostring[L[[idx]],idx] <>
-            " and " <> lcmtostring[m[[idx]]]]
-    ]
-]
-(* Private helper function for LefschetzSingularityPermutationsBQ. *)
-LefschetzSingularityPermutationsBQ1[d_Integer,m_Integer,Nn_,L_] := Module[
-    (* Compute the (unique) LCMs of integer partitions of m *)
-    {lcm = Union[LCM @@ # & /@ IntegerPartitions[m]]},
-    (* Test for each LCM in the list and Or the result, since at least
-       one of them has to be true. *)
-    If[Max[lcm](d+1) > Length[L], Throw[Max[lcm](d+1), oor]];
-    Or @@ (L[[#(d+1)]] <= Nn - 2m(d+1) & /@ lcm)
-]
-
-
-LefschetzPureStratumAQ[s_List,L_List] := Module[
-    {d, m, t = Tally[s]},
-    (* If there is more than one singularity type, return Allowable. *)
-    If[Length[t] > 1, Return[Allowable]];
-    (* Need positive Lefschetz number L[[1]] *)
-    If[L[[1]] <= 0, Return[Allowable]];
-    d = t[[1,1]]/2;
-    m = t[[1,2]];
-    If[(d+1) > Length[L], Throw[d+1, oor]];
-    If[L[[d+1]] <= m - 2 (d+1) L[[1]],
-        Return[Allowable]
-    ,
-        Return[singularitytostring[2d,m] <>
-            " incompatible with " <> lefschetztostring[L[[1]],1] <> " and " <>
-            lefschetztostring[L[[d+1]],d+1]]
-    ]
-]
-
-
-LefschetzPureStratumBQ[s_List,L_List] := Module[
-    {d, m, t = Tally[s], k},
-    (* If there is more than one singularity type, return Allowable. *)
-    If[Length[t] > 1, Return[Allowable]];
-    d = t[[1,1]]/2;
-    m = t[[1,2]];
-    (* Need positive Lefschetz number L[[1]] and enough singularities *)
-    If[m-L[[1]] < 1 || L[[1]] <= 0, Return[Allowable]];
-    k = Union[LCM @@ # & /@ IntegerPartitions[m-L[[1]]]];
-    If[Max[k](d+1) > Length[L], Throw[Max[k](d+1), oor]];
-    If[Or @@ (L[[#(d+1)]] <= m - 2m(d+1) & /@ k),
-        Return[Allowable]
-    ,
-        Return[singularitytostring[2d,m] <>
-            " incompatible with " <> lefschetztostring[L[[1]],1] <>
-            " and " <> lcmtostring[m-L[[1]]]]
-    ]
-]
-
-
-LefschetzAlmostPureStratumAQ[s_List,L_List] := Module[
-    {d2, m2, f, Nn = Length[s],
-     (* Group and sort strata by increasing multiplicity *)
-     t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
-    (* If there aren't exactly two singularity types, return Allowable. *)
-    If[Length[t] != 2, Return[Allowable]];
-    (* If the first singularity type doesn't have multiplicity 1,
-       return Allowable. *)
-    If[t[[1,2]] > 1, Return[Allowable]];
-    f = L[[1]]-1;
-    If[f <= 0, Return[Allowable]];
-    (* The repeated singularity is in the second slot, since we sorted. *)
-    d2 = t[[2,1]]/2;
-    m2 = t[[2,2]];
-    If[(d2+1) > Length[L], Throw[d2+1, oor]];
-    If[L[[d2+1]] <= Nn - 2f (d2+1),
-        Return[Allowable]
-    ,
-        Return[singularitytostring[2d2,m2] <>
-            " incompatible with " <> lefschetztostring[L[[1]],1] <> " and " <>
-            lefschetztostring[L[[d2+1]],d2+1]]
-    ]
-]
-
-
-LefschetzAlmostPureStratumBQ[s_List,L_List] := Module[
-    {d2, m2, f, Nn = Length[s], k,
-     (* Group and sort strata by increasing multiplicity *)
-     t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
-    (* If there aren't exactly two singularity types, return Allowable. *)
-    If[Length[t] != 2, Return[Allowable]];
-    (* If the first singularity type doesn't have multiplicity 1,
-       return Allowable. *)
-    If[t[[1,2]] > 1, Return[Allowable]];
-    (* The repeated singularity is in the second slot, since we sorted. *)
-    d2 = t[[2,1]]/2;
-    m2 = t[[2,2]];
-    f = L[[1]]-1;
-    If[f <= 0 || m2-f < 1, Return[Allowable]];
-    k = Union[LCM @@ # & /@ IntegerPartitions[m2-f]];
-    If[Max[k](d2+1) > Length[L], Throw[Max[k](d2+1), oor]];
-    If[Or @@ (L[[#(d2+1)]] <= Nn - 2m2 (d2+1) & /@ k),
-        Return[Allowable]
-    ,
-        Return[singularitytostring[2d2,m] <>
-            " incompatible with " <> lefschetztostring[L[[1]],1] <>
-            " and " <> lcmtostring[m2-L[[1]]+1]]
-    ]
-]
-
-
 (*
    Construct regular orbits from Lefschetz numbers
 *)
 
-LefschetzRegularOrbits[L_List, OptionsPattern[]] := Module[
+(* Must list this function before the next one to ensure that the more
+   "specific" version is matched first *)
+StratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
+    {Ls, ro},
+    Ls = SingularStratum[s,opts];
+    Off[Regular::badLefschetz];
+    ro = Regular[
+        LefschetzCombine[L,-SingularitiesLefschetzBlock/.#,Length[L]],opts] &
+            /@ Ls;
+    On[Regular::badLefschetz];
+    (* Eliminate bad orbits: look for a negative or nonintegral last element *)
+    ro = Transpose[{Ls,ro}];
+    ro = Pick[ro, Last[#[[2]]] > 0 && IntegerQ[Last[#[[2]]]] & /@ ro];
+    If[Length[ro] > 1, Message[StratumOrbits::manyallowableperms, s]];
+    Join[#[[1]],{RegularOrbits -> #[[2]]}] & /@ ro
+]
+Options[StratumOrbits] = {PerronRootSign -> Automatic, MaxLefschetz -> 50}
+StratumOrbits::manyallowableperms = "More than one allowable permutation type on stratum `1`."
+
+
+StratumOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
+    {L, x = polynomialvariable[p], opts2},
+    opts2 = Sequence @@ Join[opts,{PerronRootSign -> Sign[PerronRoot[p]]}];
+    L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
+    Prepend[#,Polynomial -> p]& /@ StratumOrbits[s,L,opts2]
+] /; ReciprocalPolynomialQ[p]
+
+
+SingularStratum::usage = "PseudoAnosov`Lefschetz`Orbits`SingularStratum[S], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}})."
+
+SingularStratum[s_List, opts:OptionsPattern[]] := Module[
+    {t, L, f},
+    (* Accept s in either explicit or tallied form *)
+    If[ListQ[s[[1]]], t = s, t = Tally[s]];
+    (* Lists of Lefschetz numbers for each singularity type *)
+    L = ((Singular[##,opts]&) @@ # &) /@ t;
+    (* Take all possibilities *)
+    L = allpossibilities @@ L;
+    L = Transpose /@ L;
+    (* Combine the lists of Lefschetz, repeating blocks as needed *)
+    L = {Reverse[Transpose[#[[1]]]],LefschetzCombine @@ #[[2]]} & /@ L;
+    (* Add some keywords *)
+    {Stratum -> t,
+     SingularitiesPermutation -> #[[1,1]],
+     SeparatricesPermutation -> #[[1,2]],
+     SingularitiesLefschetzBlock -> #[[2]]} & /@ L
+]
+Options[SingularStratum] = Options[Singular];
+
+
+Regular::usage = "PseudoAnosov`Lefschetz`Orbits`Regular[L], where L is a list of Lefschetz numbers, returns the list of regular periodic orbits compatible with L, unless an incompatible orbit is detected, in which cases the function stops and returns what it's found."
+
+Regular[L_List, OptionsPattern[]] := Module[
     {rpo, def, prs = OptionValue[PerronRootSign]},
     (* If the sign of the Perron root is unspecified, try and guess *)
     If[prs == Automatic, prs = Sign[Times @@ Take[L,-2]]];
     rpo = {-prs L[[1]]};
-    If[rpo[[1]] < 0, Message[PseudoAnosov::badLefschetz]; Return[rpo]];
+    If[rpo[[1]] < 0, Message[Regular::badLefschetz]; Return[rpo]];
     If[prs < 0 && ((Times @@ Take[L,-2]) > 0),
-        Message[PseudoAnosov::neednegativePerron]; Abort[]
+        Message[Regular::neednegativePerron]; Abort[]
     ];
     If[prs > 0 && ((Times @@ Take[L,-2] < 0) || Last[L] > 0),
-        Message[PseudoAnosov::needpositivePerron]; Abort[]
+        Message[Regular::needpositivePerron]; Abort[]
     ];
     Do[
         If[prs < 0,
@@ -539,63 +693,20 @@ LefschetzRegularOrbits[L_List, OptionsPattern[]] := Module[
         ];
         AppendTo[rpo, def/p];
         If[!IntegerQ[def/p] || def < 0,
-            Message[PseudoAnosov::badLefschetz]; Break[]
+            Message[Regular::badLefschetz]; Break[]
         ]
     ,{p, 2, Length[L]}];
     rpo
 ]
-Options[LefschetzRegularOrbits] = {PerronRootSign -> Automatic}
+Options[Regular] = {PerronRootSign -> Automatic}
+Regular::needpositivePerron = "Error: This function only applies to positive Perron root."
+Regular::neednegativePerron = "Error: This function only applies to negative Perron root."
+Regular::badLefschetz = "Bad sequence of Lefschetz numbers."
 
 
-StratumOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
-    {L, x = PolynomialVariable[p], opts2},
-    opts2 = Sequence @@ Join[opts,{PerronRootSign -> Sign[PerronRoot[p]]}];
-    L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
-    Prepend[#,Polynomial -> p]& /@ LefschetzStratumOrbits[s,L,opts2]
-]
-Options[StratumOrbits] = {MaxLefschetz -> 50}
+Singular::usage = "PseudoAnosov`Lefschetz`Orbits`Singular[k,m], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1)."
 
-
-LefschetzStratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
-    {Ls, ro},
-    Ls = LefschetzNumbersStratum[s,opts];
-    Off[PseudoAnosov::badLefschetz];
-    ro = LefschetzRegularOrbits[
-        LefschetzCombine[L,-SingularitiesLefschetzBlock/.#,Length[L]],opts] &
-            /@ Ls;
-    On[PseudoAnosov::badLefschetz];
-    (* Eliminate bad orbits: look for a negative or nonintegral last element *)
-    ro = Transpose[{Ls,ro}];
-    ro = Pick[ro, Last[#[[2]]] > 0 && IntegerQ[Last[#[[2]]]] & /@ ro];
-    If[Length[ro] > 1, Message[PseudoAnosov::manyallowableperms, s]];
-    Join[#[[1]],{RegularOrbits -> #[[2]]}] & /@ ro
-]
-Options[LefschetzStratumOrbits] =
-    Join[{PerronRootSign -> Automatic},Options[StratumOrbits]]
-
-
-StratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[
-    {prs = OptionValue[PerronRootSign], opts2 = opts},
-    (* If the sign of the Perron root is unspecified, try and guess *)
-    If[prs == Automatic,
-        prs = Sign[Times @@ Take[L,-2]];
-        opts2 = FilterRules[{opts},Except[PerronRootSign]];
-        opts2 = Sequence @@ Join[opts2,{PerronRootSign -> prs}];
-    ];
-    Off[PseudoAnosov::manyallowableperms];
-    If[LefschetzStratumOrbits[s,L,opts2] == {},
-        Return["No permutation works"]
-    ,
-        Return[Allowable]
-    ];
-    On[PseudoAnosov::manyallowableperms];
-]
-Options[StratumOrbitsTestQ] = {PerronRootSign -> Automatic}
-
-
-LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[k,m], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1)."
-
-LefschetzNumbersSingularity[k_Integer, m_Integer:1, opts:OptionsPattern[]] :=
+Singular[k_Integer, m_Integer:1, opts:OptionsPattern[]] :=
 Module[
     {pr = k/2+1, Pk, Pm, clen, blk, alpo, all},
     (* All possible cyclic permutations of separatrices *)
@@ -623,13 +734,14 @@ Module[
     ,{i,Length[Pm]}];
     (* Return a list of entries of the form
        {permutations,Lefschetznumbers} *)
-    ({{##},LefschetzNumbersSingularityPermutations[##,opts]}&) @@ # & /@ all
+    ({{##},SingularPermutations[##,opts]}&) @@ # & /@ all
 ]
-Options[LefschetzNumbersSingularity] = {PerronRootSign -> -1}
+Options[Singular] = {PerronRootSign -> -1}
 
 
-(* Private helper function for LefschetzNumbersSingularity *)
-LefschetzNumbersSingularityPermutations[Pk_List, Pm_List:{{1}},
+SingularPermutations::usage = "PseudoAnosov`Lefschetz`Orbits`SingularPermutations[Pk,Pm] returns a list of Lefschetz numbers corresponding to singularity of degree k with m-fold degeneracy.  Pk is a list of permutations on the (k+2)/2 in or outgoing separatrices of the singularities, and Pm a permutation on the m singularities.  Pm must be in cycles form.  Note that Pk must be a power of a cyclic permutation."
+
+SingularPermutations[Pk_List, Pm_List:{{1}},
                                         opts:OptionsPattern[]] :=
 Module[
     {k = 2Length[Pk]-2, m = Length[Flatten[Pm]], Pmc,
@@ -640,18 +752,17 @@ Module[
     (* Apply SingularityCyclic to each subcycle, with Pk specifying a
        permutation on the separatrices for each subcycle *)
     LefschetzCombine @@
-        ((LefschetzNumbersSingularityCyclic[##,opts]&) @@ # & /@
+        ((SingularCyclic[##,opts]&) @@ # & /@
             Transpose[{Pk,Pmc}])
 ]
-Options[LefschetzNumbersSingularityPermutations] =
-    Options[LefschetzNumbersSingularity]
-(* LefschetzNumbersSingularity::usage = "LefschetzNumbersSingularity[Pk,Pm] returns a list of Lefschetz numbers corresponding to singularity of degree k with m-fold degeneracy.  Pk is a list of permutations on the (k+2)/2 in or outgoing separatrices of the singularities, and Pm a permutation on the m singularities.  Pm must be in cycles form.  Note that Pk must be a power of a cyclic permutation." *)
+Options[SingularPermutations] =
+    Options[Singular]
 
 
-(* Private helper function for LefschetzNumbersSingularity *)
-(* Special case of LefschetzNumbersSingularity for the m singularities
+(* Private helper function for Singular *)
+(* Special case of Singular for the m singularities
    being permuted cyclically *)
-LefschetzNumbersSingularityCyclic[Pk_List, m_Integer:1, OptionsPattern[]] :=
+SingularCyclic[Pk_List, m_Integer:1, OptionsPattern[]] :=
 Module[
     {k = 2Length[Pk]-2, period, L, Pm, Pm1, Pk1 = Pk,
      prs = OptionValue[PerronRootSign]
@@ -686,134 +797,8 @@ Module[
     , {i, period}];
     Return[L]
 ]
-Options[LefschetzNumbersSingularityCyclic] =
-    Options[LefschetzNumbersSingularity]
-
-
-LefschetzNumbersStratum[s_List, opts:OptionsPattern[]] := Module[
-    {t, L, f},
-    (* Accept s in either explicit or tallied form *)
-    If[ListQ[s[[1]]], t = s, t = Tally[s]];
-    (* Lists of Lefschetz numbers for each singularity type *)
-    L = ((LefschetzNumbersSingularity[##,opts]&) @@ # &) /@ t;
-    (* Take all possibilities *)
-    L = allpossibilities @@ L;
-    L = Transpose /@ L;
-    (* Combine the lists of Lefschetz, repeating blocks as needed *)
-    L = {Reverse[Transpose[#[[1]]]],LefschetzCombine @@ #[[2]]} & /@ L;
-    (* Add some keywords *)
-    {Stratum -> t,
-     SingularitiesPermutation -> #[[1,1]],
-     SeparatricesPermutation -> #[[1,2]],
-     SingularitiesLefschetzBlock -> #[[2]]} & /@ L
-]
-Options[LefschetzNumbersStratum] = Options[LefschetzNumbersSingularity];
-
-
-LefschetzCombine[Ll__List, n_Integer:0] := Module[{L = List[Ll], len},
-    If[n == 0, len = LCM @@ (Length /@ L), len = n];
-    Plus @@ (PadRight[#,len,#] & /@ L)
-]
-
-
-(*
-   Test for everything together
-*)
-
-LefschetzNumbersTestQ[s_List,p_, opts:OptionsPattern[]] := Module[
-    {t, opts2 = FilterRules[{opts},LefschetzNumbersTestListQ]},
-    If[PerronRoot[p] > 0,
-        L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
-        t = LefschetzNumbersTestPositiveQ[s,L,opts2]
-    ,
-        (* Generate twice as many Lefschetz numbers, since we need to
-           apply the even tests to half the list *)
-        L = LefschetzNumbers[p,{2 OptionValue[MaxLefschetz]}];
-        t = LefschetzNumbersTestNegativeQ[s,L,opts2]
-    ];
-    (* If all the tests have failed so far, try the ultimate one, but
-       only as a last resort! *)
-    If[t == Allowable,
-        tests = {StratumOrbitsTestQ};
-        t = LefschetzNumbersTestListQ[s,L,tests,opts2,MaxIterate -> 1];
-    ];
-    If[OptionValue[GiveReasonForRejection],
-        Return[{t == Allowable,t}]
-    ,
-        Return[t == Allowable]
-    ]
-]
-Options[LefschetzNumbersTestQ] =
-    {GiveReasonForRejection -> False, MaxIterate -> 5, MaxLefschetz -> 100}
-
-
-(* Private helper function for LefschetzNumbersTestQ *)
-LefschetzNumbersTestListQ[s_List,L_List,tests_List, OptionsPattern[]] :=
-Module[
-    {Lm, reason = Allowable, dm = 1},
-    If[OptionValue[OnlyOddIterates], dm = 2];
-    Catch[
-        Do[
-            Do[
-                (* The testing functions throw an exception if there
-                   are not enough Lefschetz numbers *)
-                Catch[
-                    (* Make a list of Lefschetz numbers fpr phi^m *)
-                    Lm = L[[#]]& /@ Range[m,Length[L],m];
-                    (* If fails once, exit loops to avoid the other tests *)
-                    reason = tests[[k]][s,Lm];
-                    If[!StringQ[reason], Message[PseudoAnosov::notastring,
-                        SymbolName[tests[[k]]]]; Abort[]];
-                    If[reason != Allowable,
-                        (* For the reason string, append the reason
-                           returned by the test to the test's function
-                           name. *)
-                        reason = StringReplace[SymbolName[tests[[k]]],
-                            {"Lefschetz" -> "",
-                             RegularExpression["Q$"] -> "",
-                             RegularExpression["AQ$"] -> "(a)",
-                             RegularExpression["BQ$"] -> "(b)"}]
-                             <> ": " <> reason;
-                        (* Throw exception to escape both loops *)
-                        Throw[k, testfailed];
-                    ];
-                , oor, Message[PseudoAnosov::moreLefschetz,#1,m] &]
-            , {m, 1, OptionValue[MaxIterate], dm}]
-        , {k,Length[tests]}];
-    , testfailed];
-    Return[reason]
-]
-Options[LefschetzNumbersTestListQ] =
-    Append[FilterRules[Options[LefschetzNumbersTestQ], MaxIterate],
-           OnlyOddIterates -> False]
-
-
-(* Private helper function for LefschetzNumbersTestQ *)
-LefschetzNumbersTestPositiveQ[s_List,L_, opts:OptionsPattern[]] := Module[
-    {tests =
-        {LefschetzMinimumSingularitiesQ,
-         LefschetzSingularityPermutationsAQ,
-         LefschetzSingularityPermutationsBQ,
-         LefschetzPureStratumAQ,
-         LefschetzPureStratumBQ,
-         LefschetzAlmostPureStratumAQ,
-         LefschetzAlmostPureStratumBQ}},
-    LefschetzNumbersTestListQ[s,L,tests,
-        FilterRules[{opts},Options[LefschetzNumbersTestListQ]]]
-]
-Options[LefschetzNumbersTestPositiveQ] = Options[LefschetzNumbersTestListQ]
-
-
-(* Private helper function for LefschetzNumbersTestQ *)
-LefschetzNumbersTestNegativeQ[s_List,L_, opts:OptionsPattern[]] := Module[
-    {L2},
-    (* There are no separate tests for negative Perron root *)
-    (* List of Lefschetz numbers of phi^2 *)
-    L2 = L[[#]] & /@ Range[2,Length[L],2];
-    (* Do the test with p2, which has positive Perron root *)
-    LefschetzNumbersTestPositiveQ[s,L2,opts]
-]
-Options[LefschetzNumbersTestNegativeQ] = Options[LefschetzNumbersTestListQ]
+Options[SingularCyclic] =
+    Options[Singular]
 
 
 StratumOrbitsTable[so_, itmax_: 20] := Module[
@@ -862,6 +847,11 @@ StratumOrbitsTable[so_, itmax_: 20] := Module[
         Background -> Lighter[LightGray, .6], FrameStyle -> None]];
 ]
 
-End[(* "`Private`" *)]
+
+End[(* "`Orbits`" *)]
+
+
+End[(* "`Lefschetz`" *)]
+
 
 EndPackage[(* "PseudoAnosov`" *)]

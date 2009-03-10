@@ -7,12 +7,13 @@ ReciprocalPolynomialFromTraces[x_,T_List] :=
 ReciprocalPolynomialFromTraces[x_,n_Integer,T_List] := Module[
     {tl, a},
     If[n > 2 Length[T],
-        Message[PseudoAnosov::toofewtraces]; Return[]];
+        Message[ReciprocalPolynomialFromTraces::toofewtraces]; Return[]];
     tl = TracesPower[ReciprocalPolynomial[x,n,a],x,{n/2}];
     ReciprocalPolynomial[x,n,
         Table[a[k],{k,n/2}] /.
         Solve[Table[T[[k]] == tl[[k]],{k,n/2}], Table[a[k],{k,n/2}]][[1]]]
 ]
+ReciprocalPolynomialFromTraces::toofewtraces = "Error: list of traces should ne at least n/2, where n is the degree of the polynomial."
 
 
 (* These versions of the function takes a dilatation as an argument
@@ -64,7 +65,7 @@ StrataList[g_Integer,n_Integer:0] := Module[{},
        component.  Note that a p-pronged singularity on the boundary
        is really a (p-2)-prong when the boundary components are shrunk
        to punctures. *)
-    Message[PseudoAnosov::nottested];
+    Message[StrataList::nottested];
     (* Need to separate out the singularities on punctures and those
        away from them.  The ones on punctures should get a -2. To
        support a pA, 1-prongs must be on the boundary. *)
@@ -82,6 +83,7 @@ StrataList[g_Integer,n_Integer:0] := Module[{},
        "punctures" later on. *)
 ]
 (* Maybe it's better to do this from the partition function directly, by subtracting 2 afterwards. *)
+StrataList::nottested = "Warning: This function is not well tested."
 
 
 (*
@@ -92,3 +94,6 @@ StrataList[g_Integer,n_Integer:0] := Module[{},
 LefschetzSingularityPermutationsNegativeQ[s_List,L_List] :=
     (* Call the normal test but only apply to even iterates *)
     LefschetzSingularityPermutationsAQ[s,L, IterateTest->EvenQ]
+
+
+PseudoAnosov::notminimal = "Warning: Not a minimal polynomial."
