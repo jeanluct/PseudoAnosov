@@ -749,7 +749,7 @@ Module[
     },
     Pmc = Length /@ Pm;
     If[Length[Pk] != Length[Pmc], Message[PseudoAnosov::bad]];
-    (* Apply SingularityCyclic to each subcycle, with Pk specifying a
+    (* Apply SingularCyclic to each subcycle, with Pk specifying a
        permutation on the separatrices for each subcycle *)
     LefschetzCombine @@
         ((SingularCyclic[##,opts]&) @@ # & /@
@@ -802,43 +802,57 @@ Options[SingularCyclic] =
 
 
 StratumOrbitsTable[so_, itmax_: 20] := Module[
-    {itmx = Min[itmax, Length[RegularOrbits /. so]],
-     ps, s, it, ro, Lro, top, mid, bot, sip, lsip, sep, m},
-    ps[str_] := Style[str,Italic,18];
-    s = Stratum/.so;
-    it = Range[itmx];
+    {itmx = Min[itmax, Length[RegularOrbits /. so]], pr,
+     ps, ro, Lro, top, mid, bot, sip, lsip, sep, k, sp, ln},
+    ps[str_] := Style[str,Italic,12];
     ro = Take[RegularOrbits /. so, itmx];
-    Lro = sumorbits[#,ro, IncludeLast->True] & /@ it;
-    If[PerronRoot[Polynomial/.so] < 0,
+    Lro = sumorbits[#,ro, IncludeLast->True] & /@ Range[itmx];
+    pr = PerronRoot[Polynomial/.so];
+    If[pr < 0,
         Lro = MapAt[-#&, Lro, {#}&/@Range[2,itmx,2]]
     ,
-        Lro = - Lro;
+        Lro = -Lro;
     ];
     top = {
         Framed[Polynomial /. so, Background -> White, FrameStyle -> None],
-        "    ",
-        Framed[Row[(Superscript @@ #) & /@ s],
+        "  ",
+        Framed[Row[{"Perron root ",PerronRoot[Polynomial/.so]}],
              Background -> White, FrameStyle -> None]
         };
     top = Row[top];
 
-    sip = Flatten[SingularitiesPermutation/.so,1];
+    sip = FromCycles[{#}]& /@ Flatten[SingularitiesPermutation/.so,1];
     lsip = Length /@ (SingularitiesPermutation/.so);
     sep = Flatten[SeparatricesPermutation/.so,1];
-    m = Flatten[Table[Table[(First /@ s)[[k]],{lsip[[k]]}],
-        {k,Length[SingularitiesPermutation/.so]}]];
-    mid = Framed[
-        Grid[Join[{ps/@{"k",Subscript["P","sing"],Subscript["P","sep"]}},
-            Transpose[{m,sip,sep}]]], Background -> White, FrameStyle -> None];
+    k = Flatten[Table[Table[(First /@ (Stratum/.so))[[i]],{lsip[[i]]}],
+        {i,Length[SingularitiesPermutation/.so]}]];
+    sp = Superscript @@ # & /@
+        Table[{k[[i]],Length[sip[[i]]]}, {i,Length[k]}];
+    mid = Row[{
+        Framed[Row[{"stratum ",(Superscript @@ #) & /@ (Stratum/.so)}],
+             Background -> White, FrameStyle -> None],
+        "   ",
+        Framed[
+        Grid[Join[{ps/@{"sing",Subscript["P","sing"],Subscript["P","sep"]}},
+            Transpose[{sp,sip,sep}]]], Background -> White, FrameStyle -> None]
+    }];
+
+    sp = Row[{ps["L"],"(",Superscript @@ #,")"}] & /@
+        Table[{k[[i]],Length[sip[[i]]]}, {i,Length[k]}];
+    ln = Table[SingularCyclic[sep[[i]], Length[sip[[i]]],
+        PerronRootSign -> Sign[pr]], {i,Length[k]}];
+    ln = PadRight[#,itmx,#]& /@ ln;
+    ln = Flatten /@ Transpose[{sp,ln}];
 
     bot =
         Grid[{
-            Join[{ps["n"]}, it],
+            Join[{ps["n"]}, Range[itmx]],
             Join[{ps["L"]},
                 LefschetzNumbers[Polynomial /. so, {itmx}]],
-            Join[{ps[Subscript["L","so"]]},
+            (* Join[{ps[Subscript["L","so"]]},
                 PadRight[SingularitiesLefschetzBlock /. so, itmx,
-                    SingularitiesLefschetzBlock /. so]],
+                    SingularitiesLefschetzBlock /. so]], *)
+            Sequence @@ ln,
             Join[{ps[Subscript["L","ro"]]}, Lro],
             Join[{"#ro"}, ro]
         }, Dividers -> {{2 -> True}, {2 -> True, 3 -> True, -2 -> True}}];
