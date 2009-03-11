@@ -670,7 +670,7 @@ StratumOrbits::noprs = "PerronRootSign option contradicts actual Perron root of 
 
 SingularStratum::usage = "PseudoAnosov`Lefschetz`Orbits`SingularStratum[S,prs], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}}).  The sign of the Perron root is given by prs (default -1)."
 
-SingularStratum[s_List, prs_:-1] := Module[
+SingularStratum[s_List, prs_Integer:-1] := Module[
     {t, L, f},
     (* Accept s in either explicit or tallied form *)
     If[ListQ[s[[1]]], t = s, t = Tally[s]];
@@ -724,7 +724,7 @@ Regular::badLefschetz = "Bad sequence of Lefschetz numbers."
 
 Singular::usage = "PseudoAnosov`Lefschetz`Orbits`Singular[k,m,prs], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1).  The sign of the Perron root is given by prs (default -1)."
 
-Singular[k_Integer, m_Integer:1, prs_:-1] :=
+Singular[k_Integer, m_Integer:1, prs_Integer:-1] :=
 Module[
     {pr = k/2+1, Pk, Pm, clen, blk, alpo, all},
     (* All possible cyclic permutations of separatrices *)
@@ -758,7 +758,7 @@ Module[
 
 SingularPermutations::usage = "PseudoAnosov`Lefschetz`Orbits`SingularPermutations[Pk,Pm,prs] returns a list of Lefschetz numbers corresponding to singularity of degree k with m-fold degeneracy.  Pk is a list of permutations on the (k+2)/2 in or outgoing separatrices of the singularities, and Pm a permutation on the m singularities.  Pm must be in cycles form.  Note that Pk must be a power of a cyclic permutation.  The sign of the Perron root is given by prs (default -1)."
 
-SingularPermutations[Pk_List, Pm_List:{{1}}, prs_:-1] := Module[
+SingularPermutations[Pk_List, Pm_List:{{1}}, prs_Integer:-1] := Module[
     {k = 2Length[Pk]-2, m = Length[Flatten[Pm]], Pmc = Length /@ Pm},
     If[Length[Pk] != Length[Pmc], Message[PseudoAnosov::bad]];
     (* Apply SingularCyclic to each subcycle, with Pk specifying a
@@ -771,7 +771,7 @@ SingularPermutations[Pk_List, Pm_List:{{1}}, prs_:-1] := Module[
 (* Private helper function for Singular *)
 (* Special case of Singular for the m singularities
    being permuted cyclically *)
-SingularCyclic[Pk_List, m_Integer:1, prs_:-1] := Module[
+SingularCyclic[Pk_List, m_Integer:1, prs_Integer:-1] := Module[
     {k = 2Length[Pk]-2, period, L, Pm, Pm1, Pk1 = Pk},
     (* Generate a cyclic permutation for the singularities *)
     Pm = RotateLeft[Range[m]]; Pm1 = Pm;
