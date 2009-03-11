@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     35535,        991]
-NotebookOptionsPosition[     32896,        904]
-NotebookOutlinePosition[     33255,        920]
-CellTagsIndexPosition[     33212,        917]
+NotebookDataLength[     38557,       1075]
+NotebookOptionsPosition[     35568,        979]
+NotebookOutlinePosition[     35927,        995]
+CellTagsIndexPosition[     35884,        992]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -484,11 +484,26 @@ Cell[BoxData[
      SuperscriptBox["x", "6"]}]}], "}"}]}]], "Input",
  CellChangeTimes->{{3.444842744558538*^9, 3.4448427448092737`*^9}}],
 
-Cell[BoxData[{
+Cell["These all have positive Perron root :", "Text",
+ CellChangeTimes->{{3.44578115874964*^9, 3.445781164102216*^9}}],
+
+Cell[BoxData[
+ RowBox[{"PerronRoot", "/@", "P"}]], "Input",
+ CellChangeTimes->{{3.445781147783573*^9, 3.445781155462236*^9}}],
+
+Cell["For table 2, we only consider stratum (4, 4) :", "Text",
+ CellChangeTimes->{{3.445788064049085*^9, 3.445788073819984*^9}}],
+
+Cell[BoxData[
  RowBox[{"s", "=", 
-  RowBox[{"OrientableStrataList", "[", "3", "]"}]}], "\[IndentingNewLine]", 
- RowBox[{"Length", "[", "s", "]"}]}], "Input",
- CellChangeTimes->{{3.444842796798962*^9, 3.444842800364314*^9}}],
+  RowBox[{"{", 
+   RowBox[{"{", 
+    RowBox[{"4", ",", "4"}], "}"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.444842796798962*^9, 3.444842800364314*^9}, {
+  3.445788075795879*^9, 3.445788079506218*^9}}],
+
+Cell["The test for table 2 only applies to positive dilatation :", "Text",
+ CellChangeTimes->{{3.445781170366301*^9, 3.445781199765628*^9}}],
 
 Cell[BoxData[
  RowBox[{"fulltreatment", "[", 
@@ -496,14 +511,21 @@ Cell[BoxData[
  CellChangeTimes->{
   3.444842999418845*^9, {3.444845980857987*^9, 3.444845989640822*^9}}],
 
+Cell["So there is only one case left :", "Text",
+ CellChangeTimes->{{3.445788397803842*^9, 3.445788403161658*^9}}],
+
 Cell[BoxData[
- RowBox[{"fulltreatment", "[", 
-  RowBox[{
-   RowBox[{"P", "/.", 
-    RowBox[{"x", "\[Rule]", 
-     RowBox[{"-", "x"}]}]}], ",", "s"}], "]"}]], "Input",
- CellChangeTimes->{{3.4448428417107286`*^9, 3.444842842937825*^9}, 
-   3.444843009634226*^9, 3.444845993809411*^9}]
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"4", ",", "4"}], "}"}], ",", 
+    RowBox[{"P", "[", 
+     RowBox[{"[", "8", "]"}], "]"}]}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.445781359820362*^9, 3.445781377986878*^9}, {
+  3.445781560913219*^9, 3.445781633950026*^9}, {3.445781953720791*^9, 
+  3.445781967272284*^9}, {3.445782563259064*^9, 3.445782563705652*^9}, {
+  3.445782782806787*^9, 3.445782783143146*^9}}]
 }, Open  ]]
 }, Open  ]],
 
@@ -603,7 +625,60 @@ Cell[BoxData[
     RowBox[{"x", "\[Rule]", 
      RowBox[{"-", "x"}]}]}], ",", "s"}], "]"}]], "Input",
  CellChangeTimes->{{3.444842950958647*^9, 3.4448429524069147`*^9}, 
-   3.444843151522685*^9, 3.444846216618888*^9}]
+   3.444843151522685*^9, 3.444846216618888*^9}],
+
+Cell["\<\
+There are three cases that work, all for negative dilatation :\
+\>", "Text",
+ CellChangeTimes->{{3.445789244524123*^9, 3.445789259380963*^9}}],
+
+Cell[BoxData[
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"First", "[", 
+   RowBox[{"StratumOrbits", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"6", ",", "2", ",", "2", ",", "2"}], "}"}], ",", 
+     RowBox[{
+      RowBox[{"P", "[", 
+       RowBox[{"[", "4", "]"}], "]"}], "/.", 
+      RowBox[{"x", "\[Rule]", 
+       RowBox[{"-", "x"}]}]}]}], "]"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.445789451524471*^9, 3.445789455457679*^9}, {
+  3.445789596160407*^9, 3.44578960550734*^9}, {3.445790665963384*^9, 
+  3.445790668155105*^9}}],
+
+Cell[BoxData[
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"First", "[", 
+   RowBox[{"StratumOrbits", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"10", ",", "2"}], "}"}], ",", 
+     RowBox[{
+      RowBox[{"P", "[", 
+       RowBox[{"[", "6", "]"}], "]"}], "/.", 
+      RowBox[{"x", "\[Rule]", 
+       RowBox[{"-", "x"}]}]}]}], "]"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.445789133765852*^9, 3.445789148553237*^9}, {
+  3.445789190907798*^9, 3.445789214233214*^9}, {3.445790705705387*^9, 
+  3.445790708791322*^9}}],
+
+Cell[BoxData[
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"First", "[", 
+   RowBox[{"StratumOrbits", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"4", ",", "2", ",", "2", ",", "2", ",", "2"}], "}"}], ",", 
+     RowBox[{
+      RowBox[{"P", "[", 
+       RowBox[{"[", "6", "]"}], "]"}], "/.", 
+      RowBox[{"x", "\[Rule]", 
+       RowBox[{"-", "x"}]}]}]}], "]"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.445789133765852*^9, 3.445789148553237*^9}, {
+  3.445789190907798*^9, 3.445789236392695*^9}, {3.445790736328679*^9, 
+  3.445790738678741*^9}}]
 }, Open  ]]
 }, Open  ]],
 
@@ -903,9 +978,9 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{1042, 750},
-WindowMargins->{{33, Automatic}, {Automatic, 86}},
+WindowMargins->{{28, Automatic}, {Automatic, 62}},
 ShowSelection->True,
-FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
+FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -935,61 +1010,70 @@ Cell[12591, 307, 148, 2, 43, "Section"],
 Cell[CellGroupData[{
 Cell[12764, 313, 219, 3, 39, "Subsection"],
 Cell[CellGroupData[{
-Cell[13008, 320, 116, 1, 29, "Subsubsection"],
-Cell[13127, 323, 337, 6, 51, "Text"],
-Cell[13467, 331, 947, 29, 32, "Input"],
-Cell[14417, 362, 468, 8, 55, "Input"],
-Cell[14888, 372, 247, 5, 31, "Text"],
-Cell[15138, 379, 338, 6, 32, "Input"],
-Cell[15479, 387, 196, 4, 31, "Text"],
-Cell[15678, 393, 234, 6, 32, "Input"]
+Cell[13008, 320, 116, 1, 28, "Subsubsection"],
+Cell[13127, 323, 337, 6, 49, "Text"],
+Cell[13467, 331, 947, 29, 39, "Input"],
+Cell[14417, 362, 468, 8, 52, "Input"],
+Cell[14888, 372, 247, 5, 30, "Text"],
+Cell[15138, 379, 338, 6, 31, "Input"],
+Cell[15479, 387, 196, 4, 30, "Text"],
+Cell[15678, 393, 234, 6, 31, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[15949, 404, 167, 3, 29, "Subsubsection"],
-Cell[16119, 409, 128, 1, 31, "Text"],
-Cell[16250, 412, 2380, 72, 55, "Input"],
-Cell[18633, 486, 224, 4, 55, "Input"],
-Cell[18860, 492, 180, 4, 32, "Input"],
-Cell[19043, 498, 282, 7, 32, "Input"]
+Cell[15949, 404, 167, 3, 28, "Subsubsection"],
+Cell[16119, 409, 128, 1, 30, "Text"],
+Cell[16250, 412, 2380, 72, 92, "Input"],
+Cell[18633, 486, 118, 1, 30, "Text"],
+Cell[18754, 489, 125, 2, 31, "Input"],
+Cell[18882, 493, 128, 1, 30, "Text"],
+Cell[19013, 496, 236, 6, 31, "Input"],
+Cell[19252, 504, 140, 1, 30, "Text"],
+Cell[19395, 507, 180, 4, 31, "Input"],
+Cell[19578, 513, 114, 1, 30, "Text"],
+Cell[19695, 516, 501, 11, 31, "Input"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[19374, 511, 241, 3, 39, "Subsection"],
+Cell[20245, 533, 241, 3, 39, "Subsection"],
 Cell[CellGroupData[{
-Cell[19640, 518, 112, 1, 29, "Subsubsection"],
-Cell[19755, 521, 2122, 63, 55, "Input"],
-Cell[21880, 586, 224, 4, 55, "Input"],
-Cell[22107, 592, 180, 4, 32, "Input"],
-Cell[22290, 598, 282, 7, 32, "Input"]
+Cell[20511, 540, 112, 1, 28, "Subsubsection"],
+Cell[20626, 543, 2122, 63, 67, "Input"],
+Cell[22751, 608, 224, 4, 52, "Input"],
+Cell[22978, 614, 180, 4, 31, "Input"],
+Cell[23161, 620, 282, 7, 31, "Input"],
+Cell[23446, 629, 152, 3, 30, "Text"],
+Cell[23601, 634, 548, 14, 31, "Input"],
+Cell[24152, 650, 530, 14, 31, "Input"],
+Cell[24685, 666, 559, 14, 31, "Input"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[22621, 611, 169, 2, 39, "Subsection"],
+Cell[25293, 686, 169, 2, 39, "Subsection"],
 Cell[CellGroupData[{
-Cell[22815, 617, 96, 1, 29, "Subsubsection"],
-Cell[22914, 620, 176, 2, 31, "Text"],
-Cell[23093, 624, 466, 12, 32, "Input"],
-Cell[23562, 638, 275, 5, 55, "Input"],
-Cell[23840, 645, 142, 1, 31, "Text"],
-Cell[23985, 648, 215, 4, 32, "Input"],
-Cell[24203, 654, 152, 3, 31, "Text"],
-Cell[24358, 659, 289, 7, 32, "Input"]
+Cell[25487, 692, 96, 1, 28, "Subsubsection"],
+Cell[25586, 695, 176, 2, 30, "Text"],
+Cell[25765, 699, 466, 12, 39, "Input"],
+Cell[26234, 713, 275, 5, 52, "Input"],
+Cell[26512, 720, 142, 1, 30, "Text"],
+Cell[26657, 723, 215, 4, 31, "Input"],
+Cell[26875, 729, 152, 3, 30, "Text"],
+Cell[27030, 734, 289, 7, 31, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[24684, 671, 137, 1, 29, "Subsubsection"],
-Cell[24824, 674, 163, 3, 31, "Text"],
-Cell[24990, 679, 2812, 82, 77, "Input"],
-Cell[27805, 763, 431, 7, 32, "Input"],
-Cell[28239, 772, 537, 11, 32, "Input"]
+Cell[27356, 746, 137, 1, 28, "Subsubsection"],
+Cell[27496, 749, 163, 3, 30, "Text"],
+Cell[27662, 754, 2812, 82, 95, "Input"],
+Cell[30477, 838, 431, 7, 31, "Input"],
+Cell[30911, 847, 537, 11, 31, "Input"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[28825, 789, 121, 2, 39, "Subsection"],
-Cell[28949, 793, 173, 4, 31, "Text"],
-Cell[29125, 799, 2517, 71, 77, "Input"],
-Cell[31645, 872, 273, 5, 55, "Input"],
-Cell[31921, 879, 415, 7, 32, "Input"],
-Cell[32339, 888, 517, 11, 32, "Input"]
+Cell[31497, 864, 121, 2, 39, "Subsection"],
+Cell[31621, 868, 173, 4, 30, "Text"],
+Cell[31797, 874, 2517, 71, 95, "Input"],
+Cell[34317, 947, 273, 5, 52, "Input"],
+Cell[34593, 954, 415, 7, 31, "Input"],
+Cell[35011, 963, 517, 11, 31, "Input"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

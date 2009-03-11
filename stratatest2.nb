@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[     17130,        458]
-NotebookOptionsPosition[     15078,        394]
-NotebookOutlinePosition[     15435,        410]
-CellTagsIndexPosition[     15392,        407]
+NotebookDataLength[     16913,        447]
+NotebookOptionsPosition[     14934,        385]
+NotebookOutlinePosition[     15294,        401]
+CellTagsIndexPosition[     15251,        398]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -279,9 +279,9 @@ Cell[BoxData[
    3.445529026712325*^9}],
 
 Cell[BoxData[
- RowBox[{"Scan", "[", 
-  RowBox[{"StratumOrbitsTable", ",", "%"}], "]"}]], "Input",
- CellChangeTimes->{{3.44562628912439*^9, 3.445626289828452*^9}}],
+ RowBox[{"StratumOrbitsTable", "@", "%"}]], "Input",
+ CellChangeTimes->{{3.44562628912439*^9, 3.445626289828452*^9}, {
+  3.445782935938727*^9, 3.445782939952364*^9}}],
 
 Cell["So works on (4, 4, 4, 4)!", "Text",
  CellChangeTimes->{{3.445167636675413*^9, 3.445167645804492*^9}, {
@@ -317,29 +317,27 @@ Cell[BoxData[
  CellChangeTimes->{{3.445699538316905*^9, 3.445699545752672*^9}}],
 
 Cell[BoxData[
- RowBox[{"Scan", "[", 
-  RowBox[{"StratumOrbitsTable", ",", "%"}], "]"}]], "Input"],
+ RowBox[{"StratumOrbitsTable", "@", "%"}]], "Input",
+ CellChangeTimes->{{3.445782948386301*^9, 3.445782951808*^9}}],
 
 Cell["Also works with negative Perron root :", "Text",
  CellChangeTimes->{{3.445699567098681*^9, 3.4456995752924833`*^9}}],
 
 Cell[BoxData[
- RowBox[{"StratumOrbits", "[", 
-  RowBox[{
-   RowBox[{"{", 
-    RowBox[{"4", ",", "2", ",", "2"}], "}"}], ",", 
-   RowBox[{"P", "/.", 
-    RowBox[{"x", "\[Rule]", 
-     RowBox[{"-", "x"}]}]}]}], "]"}]], "Input",
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"4", ",", "2", ",", "2"}], "}"}], ",", 
+    RowBox[{"P", "/.", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"-", "x"}]}]}]}], "]"}], "]"}]], "Input",
  CellChangeTimes->{{3.4455274409934673`*^9, 3.4455274702022877`*^9}, {
    3.4455277687343616`*^9, 3.445527769966703*^9}, 3.4455278203417387`*^9, {
    3.445528060696052*^9, 3.445528060943544*^9}, 3.4455289979165783`*^9, {
    3.4455291502470303`*^9, 3.4455291504114447`*^9}, {3.4455300589168777`*^9, 
-   3.44553005972418*^9}, {3.445699559364259*^9, 3.44569956049481*^9}}],
-
-Cell[BoxData[
- RowBox[{"Scan", "[", 
-  RowBox[{"StratumOrbitsTable", ",", "%"}], "]"}]], "Input"],
+   3.44553005972418*^9}, {3.445699559364259*^9, 3.44569956049481*^9}, {
+   3.44578284283543*^9, 3.445782847395775*^9}}],
 
 Cell["Tests for strata with \"degenerate\" regular orbits :", "Text",
  CellChangeTimes->{{3.445268633503543*^9, 3.445268646712534*^9}}],
@@ -369,9 +367,9 @@ Cell[BoxData[
    3.44562639027593*^9}],
 
 Cell[BoxData[
- RowBox[{"Scan", "[", 
-  RowBox[{"StratumOrbitsTable", ",", "so"}], "]"}]], "Input",
- CellChangeTimes->{{3.445626178200443*^9, 3.445626202902162*^9}}],
+ RowBox[{"StratumOrbitsTable", "@", "so"}]], "Input",
+ CellChangeTimes->{{3.445626178200443*^9, 3.445626202902162*^9}, {
+  3.445782989713373*^9, 3.445782992910873*^9}}],
 
 Cell[BoxData[
  RowBox[{"Subtract", "@@", 
@@ -383,19 +381,12 @@ Cell[BoxData[
  RowBox[{"Subtract", "@@", 
   RowBox[{"(", 
    RowBox[{"SingularitiesLefschetzBlock", "/.", "so"}], ")"}]}]], "Input",
- CellChangeTimes->{{3.4455294939575043`*^9, 3.4455294987483*^9}}],
-
-Cell[BoxData[
- RowBox[{"LefschetzNumbers", "[", 
-  RowBox[{"P", ",", 
-   RowBox[{"{", "20", "}"}]}], "]"}]], "Input",
- CellChangeTimes->{{3.445270369898392*^9, 3.445270370154353*^9}, 
-   3.445529438061593*^9}]
+ CellChangeTimes->{{3.4455294939575043`*^9, 3.4455294987483*^9}}]
 },
 WindowSize->{892, 868},
-WindowMargins->{{0, Automatic}, {Automatic, 25}},
+WindowMargins->{{494, Automatic}, {111, Automatic}},
 ShowSelection->True,
-FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
+FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -409,50 +400,48 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[400, 13, 199, 4, 32, "Input"],
-Cell[602, 19, 444, 7, 32, "Input"],
-Cell[1049, 28, 478, 10, 32, "Input"],
-Cell[1530, 40, 241, 5, 31, "Text"],
-Cell[1774, 47, 254, 4, 32, "Input"],
-Cell[2031, 53, 122, 2, 32, "Input"],
-Cell[2156, 57, 379, 7, 32, "Input"],
-Cell[2538, 66, 369, 9, 32, "Input"],
-Cell[2910, 77, 455, 9, 32, "Input"],
-Cell[3368, 88, 278, 5, 31, "Text"],
-Cell[3649, 95, 387, 7, 32, "Input"],
-Cell[4039, 104, 127, 2, 32, "Input"],
-Cell[4169, 108, 949, 18, 55, "Input"],
-Cell[5121, 128, 494, 8, 31, "Text"],
-Cell[5618, 138, 405, 7, 32, "Input"],
-Cell[6026, 147, 132, 2, 32, "Input"],
-Cell[6161, 151, 773, 15, 55, "Input"],
-Cell[6937, 168, 317, 6, 51, "Text"],
-Cell[7257, 176, 598, 17, 55, "Input"],
-Cell[7858, 195, 592, 10, 32, "Input"],
-Cell[8453, 207, 895, 17, 77, "Input"],
-Cell[9351, 226, 162, 2, 31, "Text"],
-Cell[9516, 230, 162, 3, 31, "Text"],
-Cell[9681, 235, 563, 15, 32, "Input"],
-Cell[10247, 252, 182, 4, 32, "Input"],
-Cell[10432, 258, 571, 11, 32, "Input"],
-Cell[11006, 271, 251, 7, 32, "Input"],
-Cell[11260, 280, 162, 3, 32, "Input"],
-Cell[11425, 285, 158, 2, 31, "Text"],
-Cell[11586, 289, 130, 1, 31, "Text"],
-Cell[11719, 292, 159, 3, 31, "Text"],
-Cell[11881, 297, 379, 12, 32, "Input"],
-Cell[12263, 311, 214, 5, 32, "Input"],
-Cell[12480, 318, 97, 2, 32, "Input"],
-Cell[12580, 322, 122, 1, 31, "Text"],
-Cell[12705, 325, 595, 12, 32, "Input"],
-Cell[13303, 339, 97, 2, 32, "Input"],
-Cell[13403, 343, 135, 1, 31, "Text"],
-Cell[13541, 346, 387, 10, 32, "Input"],
-Cell[13931, 358, 374, 10, 32, "Input"],
-Cell[14308, 370, 164, 3, 32, "Input"],
-Cell[14475, 375, 186, 4, 32, "Input"],
-Cell[14664, 381, 198, 4, 32, "Input"],
-Cell[14865, 387, 209, 5, 32, "Input"]
+Cell[400, 13, 199, 4, 31, "Input"],
+Cell[602, 19, 444, 7, 31, "Input"],
+Cell[1049, 28, 478, 10, 31, "Input"],
+Cell[1530, 40, 241, 5, 30, "Text"],
+Cell[1774, 47, 254, 4, 31, "Input"],
+Cell[2031, 53, 122, 2, 31, "Input"],
+Cell[2156, 57, 379, 7, 31, "Input"],
+Cell[2538, 66, 369, 9, 35, "Input"],
+Cell[2910, 77, 455, 9, 31, "Input"],
+Cell[3368, 88, 278, 5, 30, "Text"],
+Cell[3649, 95, 387, 7, 31, "Input"],
+Cell[4039, 104, 127, 2, 31, "Input"],
+Cell[4169, 108, 949, 18, 52, "Input"],
+Cell[5121, 128, 494, 8, 30, "Text"],
+Cell[5618, 138, 405, 7, 31, "Input"],
+Cell[6026, 147, 132, 2, 31, "Input"],
+Cell[6161, 151, 773, 15, 72, "Input"],
+Cell[6937, 168, 317, 6, 49, "Text"],
+Cell[7257, 176, 598, 17, 60, "Input"],
+Cell[7858, 195, 592, 10, 31, "Input"],
+Cell[8453, 207, 895, 17, 72, "Input"],
+Cell[9351, 226, 162, 2, 30, "Text"],
+Cell[9516, 230, 162, 3, 30, "Text"],
+Cell[9681, 235, 563, 15, 35, "Input"],
+Cell[10247, 252, 182, 4, 31, "Input"],
+Cell[10432, 258, 571, 11, 31, "Input"],
+Cell[11006, 271, 251, 7, 31, "Input"],
+Cell[11260, 280, 180, 3, 31, "Input"],
+Cell[11443, 285, 158, 2, 30, "Text"],
+Cell[11604, 289, 130, 1, 30, "Text"],
+Cell[11737, 292, 159, 3, 30, "Text"],
+Cell[11899, 297, 379, 12, 39, "Input"],
+Cell[12281, 311, 214, 5, 31, "Input"],
+Cell[12498, 318, 129, 2, 31, "Input"],
+Cell[12630, 322, 122, 1, 30, "Text"],
+Cell[12755, 325, 695, 14, 31, "Input"],
+Cell[13453, 341, 135, 1, 30, "Text"],
+Cell[13591, 344, 387, 10, 35, "Input"],
+Cell[13981, 356, 374, 10, 31, "Input"],
+Cell[14358, 368, 182, 3, 31, "Input"],
+Cell[14543, 373, 186, 4, 31, "Input"],
+Cell[14732, 379, 198, 4, 31, "Input"]
 }
 ]
 *)

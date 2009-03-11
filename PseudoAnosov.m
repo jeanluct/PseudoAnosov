@@ -808,6 +808,11 @@ SingularCyclic[Pk_List, m_Integer:1, prs_Integer:-1] := Module[
 StratumOrbitsTable[so_, itmax_: 20] := Module[
     {itmx = Min[itmax, Length[RegularOrbits /. so]], pr,
      ps, ro, Lro, top, mid, bot, sip, lsip, sep, k, sp, ln},
+    (* If the input is a list of solutions rather than one solution,
+       call the function on each element *)
+    If[Count[Flatten[so],Rule[Polynomial,_]] > 1 || Length[so] == 1,
+        Return[StratumOrbitsTable[#,itmax]& /@ so]
+    ];
     (* Function to set the math text style *)
     ps[str_] := Style[str,Italic,12];
     (* Regular orbits *)
@@ -863,8 +868,8 @@ StratumOrbitsTable[so_, itmax_: 20] := Module[
             Join[{"#ro"}, ro]
         }, Dividers -> {{2 -> True}, {2 -> True, 3 -> True, -2 -> True}}];
 
-    Print[Framed[Column[{top,mid,bot}, Left, 1],
-        Background -> Lighter[LightGray, .6], FrameStyle -> None]];
+    Framed[Column[{top,mid,bot}, Left, 1],
+        Background -> Lighter[LightGray, .6], FrameStyle -> None]
 ]
 
 
