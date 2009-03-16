@@ -512,7 +512,7 @@ Options[LefschetzNumbersTestQ] =
 (* Private helper function for LefschetzNumbersTestQ *)
 TestListQ[s_List,L_List,tests_List, OptionsPattern[]] :=
 Module[
-    {Lm, reason = Allowable, dm = 1},
+    {Lm, reason = Allowable, funcname, dm = 1},
     If[OptionValue[OnlyOddIterates], dm = 2];
     Catch[
         Do[
@@ -535,7 +535,10 @@ Module[
                            with options as a pure function.  Hence,
                            use ToString, which does not remove the
                            context: we have to do it manually. *)
-                        reason = StringReplace[ToString[tests[[k]]],
+                        (* Clean up the function name *)
+                        funcname = StringCases[ToString[tests[[k]]],
+                            RegularExpression["^[A-Za-z_ 0-9()`]+(?=\[?)"]];
+                        reason = StringReplace[funcname,
                             {"PseudoAnosov`Lefschetz`Tests`" -> "",
                              RegularExpression["Q$"] -> "",
                              RegularExpression["AQ$"] -> "(a)",
