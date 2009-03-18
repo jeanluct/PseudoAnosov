@@ -52,6 +52,10 @@ StratumOrbitsTable::usage = "StratumOrbitsTable[so] presents the output of Strat
 LefschetzNumbersTestQ by strata (for even power). *)
 (* pseudoAnosovPolynomialQ::usage = "" *)
 
+DehnTwist::usage = "DehnTwist[i,{a,b}] applies the Dehn twist i to the curve with homology {a,b} on a closed surface of genus g.  Here a and b are lists of length g and represent the coefficients in the standard homology basis.  The Dehn twists are the standard \"Lickorish generators\", numbers from 1 to 3g-1, with the sign giving the direction of the twist.\nDehnTwist[{i1,i2,...},{a,b}] applies successive generators starting from the first element of the list."
+
+HomologyAction::usage = "HomologyAction[{i1,i2,...}] returns the matrix of the action on homology of a sequence of Dehn twists {i1,i2,...}.  (See DehnTwist for a description of the generators.)  HomologyAction[{i1,i2,...},g] specifies the genus g explictly, which is otherwise taken as small as possible.  The option BasisOrder can be set to \"abab\" or \"aabb\" to specify whether the standard basis for homology should be ordered by hole or by type."
+
 
 (*
    Options
@@ -64,6 +68,8 @@ MaxIterate::usage = "MaxIterate is an option to LefschetzNumbersTestQ: Set to an
 MaxLefschetz::usage = "MaxLefschetz is an option to LefschetzNumbersTestQ and StratumOrbits, specifying how many Lefschetz numbers to compute."
 
 PerronRootSign::usage = "PerronRootSign is an option to StratumOrbits (Lefschetz numbers form) to specify whether the Perron root is positive or negative.  Set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic)."
+
+BasisOrder::usage = "BasisOrder is an option to HomologyAction: set to \"abab\" or \"aabb\" to specify whether the standard basis for homology should be ordered by hole or by type."
 
 (* Rule labels for orbit structure of a stratum *)
 Polynomial::usage = "Polynomial is a rule label to specify the polynomial in the output of StratumOrbits."
@@ -880,6 +886,106 @@ End[(* "`Orbits`" *)]
 
 
 End[(* "`Lefschetz`" *)]
+
+
+Begin["`Homology`"]
+
+(*
+   Action on homology of Dehn Twists for surfaces of genus g
+*)
+
+(* There are 3g-1 Degn twists that generate the mapping class group. *)
+
+(* The direction of a positive twist is given by a curve "turning
+   right" as it approaches the Dehn-twist curve. *)
+
+
+(* Helper: Twist around "thin" vertical direction around a donut hole *)
+iDehnA[ii_Integer, {a_, b_}] := Module[{ap = a, bp = b, i = Abs[ii]},
+    ap[[i]] = a[[i]] - Sign[ii] b[[i]];
+    {ap, bp}
+]
+
+(* Helper: Twist around horizontal direction around a donut hole *)
+iDehnB[ii_Integer, {a_, b_}] := Module[{ap = a, bp = b, i = Abs[ii]},
+    bp[[i]] = b[[i]] + Sign[ii] a[[i]];
+    {ap, bp}
+]
+
+(* Helper: Twist around vertical direction between two donut holes *)
+iDehnC[ii_Integer, {a_, b_}] := Module[{ap = a, bp = b, i = Abs[ii]},
+    ap[[i]] = a[[i]] + Sign[ii] (b[[i + 1]] - b[[i]]);
+    ap[[i + 1]] = a[[i + 1]] - Sign[ii] (b[[i + 1]] - b[[i]]);
+    {ap, bp}
+]
+
+
+(* A single numbered twist: the 2g-1 generators are numbered 1,2,...,3g-1 *)
+DehnTwist[i_Integer, {a_, b_}] := Module[
+    {t = Mod[Abs[i]-1, 3]+1, g = Quotient[Abs[i]-1, 3]+1},
+    Switch[t,
+        1, iDehnA[Sign[i] g, {a, b}],
+        2, iDehnB[Sign[i] g, {a, b}],
+        3, iDehnC[Sign[i] g, {a, b}]
+    ]
+]
+
+
+(* A sequence of twists, applied left to right *)
+DehnTwist[ll_List, {a_, b_}] := Fold[DehnTwist[#2, #1] &, {a, b}, ll]
+
+
+HomologyAction[ii_List, genus_Integer:0, OptionsPattern[]] := Module[
+    {g = genus, al, bl, abl, apl, bpl, abpl, lhs, rhs, sub, rules},
+    (* Figure out the genus if it wasn't specified *)
+    If[g == 0, g = Quotient[Max[Abs[ii]],3]+1];
+
+    (* Tables of dummy coefficients to compute the linear action *)
+    al = Table[a[k], {k, g}];
+    bl = Table[b[k], {k, g}];
+    abl = Table[ab[k], {k, 2 g}];
+    apl = Table[ap[k], {k, g}];
+    bpl = Table[bp[k], {k, g}];
+    abpl = Table[abp[k], {k, 2 g}];
+    lhs = Flatten[{apl, bpl}];
+    rhs = Flatten[DehnTwist[ii, {al, bl}]];
+
+    (* The basis can be ordered in two ways *)
+    If[OptionValue[BasisOrder] == "aabb",
+        (* Order of rows/columns : aaaa bbbb *)
+        sub = Flatten[Join[
+            Table[{a[k] -> ab[k], ap[k] -> abp[k]},{k,g}],
+            Table[{b[k] -> ab[k+g], bp[k] -> abp[k+g]}, {k,g}]]]
+    ,
+        (* Order of rows/columns : ab ab ab ab *)
+        sub = Flatten @
+            Table[{a[k] -> ab[2k-1], b[k] -> ab[2k], ap[k] -> abp[2k-1], 
+                bp[k] -> abp[2k]}, {k,g}]
+    ];
+
+    (* Substitution rules, based on the choice of basis ordering *)
+    rules = Table[lhs[[k]] -> rhs[[k]], {k, Length[lhs]}] /. sub;
+
+    Table[D[abp[k] /. rules, ab[l]], {k, 2g}, {l, 2g}]
+]
+Options[HomologyAction] = {BasisOrder -> "abab"}
+
+
+(*
+HomologyAction[s_String, genus_Integer:0, opts:OptionsPattern[]] :=
+    HomologyAction[fromXtrain[],genus,opts]
+
+
+fromXtrain[s_String] := Module[{},
+]
+
+
+toXtrain[s_String] := Module[{},
+]
+*)
+
+
+End[(* "`Homology`" *)]
 
 
 EndPackage[(* "PseudoAnosov`" *)]
