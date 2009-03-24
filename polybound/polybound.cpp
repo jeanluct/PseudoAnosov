@@ -15,12 +15,12 @@
 namespace jlt {
 
 template<class S, int g, class T>
-T findroot(const reciprocal_polynomial<S,g,T>& p, const T x0, const T tol);
+T findroot(const reciprocal_polynomial<S,g>& p, const T x0, const T tol);
 
 #ifdef DOUBLECHECK_SPECTRAL_RADIUS
 // Spectral radius (magnitude of largest eigenvalue) of polynomial.
 template<class S, int g, class T>
-T spectral_radius(const reciprocal_polynomial<S,g,T>& p);
+void spectral_radius(const reciprocal_polynomial<S,g>& p, T& sr);
 #endif
 
 template<class T>
@@ -31,6 +31,10 @@ bool increment_vector(std::vector<T>& a,
 		      const std::vector<T>& amin,
 		      const std::vector<T>& amax);
 
+template<class S, int g>
+bool traces_to_reciprocal_poly(const std::vector<S>& Tr,
+			       jlt::reciprocal_polynomial<S,g>& p);
+
 template<class T>
 bool reject(const std::vector<T>& a);
 
@@ -40,16 +44,16 @@ bool reject(const std::vector<T>& a);
 int main()
 {
   using jlt::reciprocal_polynomial;
-  using jlt::Abs;
   using jlt::operator<<;
   using jlt::is_candidate;
+  using jlt::Abs;
   using std::cout;
   using std::cerr;
   using std::endl;
 
   typedef double T;
 
-  const int g = 4;
+  const int g = 5;
   long long int N = 0;
   long long int Np = 0; // Number of candidate polynomials found.
   long long int N_found_positive_root = 0;
@@ -59,113 +63,78 @@ int main()
   long long int N_discard_negative_by_spectral_radius = 0;
 #endif
   long long int N_failed_to_converge = 0;
+  long long int N_fractional_coefficients = 0;
   const T tol = 1e-4;
   T lambdamax;
   // Use bound from below as well: Penner's 2^1/(12g-12).
   const T lambdamin = jlt::Pow(2.0,1.0/(12*g-12));
 
-  std::vector<int> amin(g), amax(g), a(g);
+  std::vector<int> Trmin(g), Trmax(g), Tr(g);
 
   if (g == 2)
     {
-      // 75 cases
-      amax[0] = 4; amin[0] = 0;
-      amax[1] = 7; amin[1] = -amax[1];
       lambdamax = 1.72208380573904;
     }
   else if (g == 3)
     {
-      // 12,765 cases
-      amax[0] = 6; amin[0] = 0;
-      amax[1] = 18; amin[1] = -amax[1];
-      amax[2] = 26; amin[2] = -amax[2];
       lambdamax = 1.72208380573904;
     }
   else if (g == 4)
     {
-      // 9,889,930 cases
-      amax[0] = 8; amin[0] = 0;
-      amax[1] = 30; amin[1] = -amax[1];
-      amax[2] = 61; amin[2] = -amax[2];
-      amax[3] = 77; amin[3] = -amax[3];
       lambdamax = 1.34371999561122;
     }
   else if (g == 5)
     {
-#if 0
-      // 54,873,202,455 cases
-      amax[0] = 10; amin[0] = 0;
-      amax[1] = 46; amin[1] = -amax[1];
-      amax[2] = 123; amin[2] = -amax[2];
-      amax[3] = 217; amin[3] = -amax[3];
-      amax[4] = 261; amin[4] = -amax[4];
-      lambdamax = 1.17628081825992;
-#endif
-      // 63,523,102,800 cases
-      amax[0] = 10; amin[0] = 0;
-      amax[1] = 47; amin[1] = -amax[1];
-      amax[2] = 128; amin[2] = -amax[2];
-      amax[3] = 226; amin[3] = -amax[3];
-      amax[4] = 273; amin[4] = -amax[4];
       lambdamax = 1.27247673631011;
     }
   else if (g == 6)
     {
-      amax[0] = 10; amin[0] = 0;
-      amax[1] = 10; amin[1] = -amax[1];
-      amax[2] = 10; amin[2] = -amax[2];
-      amax[3] = 10; amin[3] = -amax[3];
-      amax[4] = 10; amin[4] = -amax[4];
-      amax[5] = 10; amin[5] = -amax[4];
       lambdamax = 1.22571747523471;
+    }
+  else if (g == 7)
+    {
+      lambdamax = 1.19266542682899;
     }
   else
     {
-      cerr << "What should the coefficients be?\n";
+      cerr << "What should the maximum root be?\n";
       exit(1);
     }
 
-  reciprocal_polynomial<int,g,T> p;
+  for (int k = 0; k < g; ++k)
+    {
+      Trmax[k] = g * (jlt::Pow(lambdamax,k+1) + 1);
+      Trmin[k] = -Trmax[k];
+    }
+  cerr << "Maximum traces:            " << Trmax << endl;
+  long int to_try = Trmax[0]+1;
+  for (int k = 1; k < g; ++k) to_try *= 2*Trmax[k]+1;
+  cerr << "Cases to try:                  " << to_try << endl;
+
+  reciprocal_polynomial<int,g> p;
 
   T x0 = 1.2*lambdamax;
 
-  // Initial value for coefficients: the odd ones begin at 0, to take
+  // Initial value for traces: the first ones begin at 0, to take
   // advantage of the sp(p(x))=sp(p(-x)) symmetry of the spectral
-  // radius.  If amin[m]<0, they eventually become negative as they
-  // increment past amax[m] and their value resets to amin[m].
-  // /* What happens if both amin and amax are negative? */
-  for (int m = 0; m < g; m += 2) a[m] = 0;
-  for (int m = 1; m < g; m += 2) a[m] = amin[m];
+  // radius.
+  Tr[0] = 0;
+  for (int m = 1; m < g; ++m) Tr[m] = Trmin[m];
 
   std::ofstream ostr("poly.m");
   ostr << "{";
 
   do
     {
-      // If the first nonzero coefficient of an odd x power is
-      // negative then we can skip this case using the
-      // sp(p(x))=sp(p(-x)) symmetry of the spectral radius.
-      if (jlt::reject(a)) continue;
       ++N;
 
-      // Print current status to stderr once in a while.
-      if (g > 3)
+      // traces-to_poly returns false if the current list of traces do
+      // not give a polynomial over Z.
+      if (!traces_to_reciprocal_poly(Tr,p))
 	{
-	  bool prnt = true;
-	  for (int i = g-3; i < g; ++i)
-	    if (a[i] != 0) { prnt = false; break; }
-	  if (prnt)
-	    {
-	      for (int i = 0; i < g-3; ++i)
-		{
-		  cerr << "a[" << i << "]=" << a[i] << "\t";
-		}
-	      cerr << "\tN=" << N << endl;
-	    }
+	  ++N_fractional_coefficients;
+	  continue;
 	}
-
-      // Copy the coefficients to the polynomial object.
-      for (int m = 0; m < g; ++m) p[m+1] = a[m];
 
       bool cand = false;
       T lambda = 0;
@@ -203,7 +172,8 @@ int main()
       // the spectral radius of the polynomial in this case.
       if (cand)
 	{
-	  T lambda_sr = jlt::spectral_radius(p);
+	  T lambda_sr;
+	  jlt::spectral_radius(p,lambda_sr);
 	  if (!is_candidate(lambda_sr,lambdamin,lambdamax))
 	    {
 	      // Looks like the spectral radius is too large after
@@ -222,11 +192,12 @@ int main()
 	  if (Np++ != 0) ostr << ",\n";
 	  ostr << p.to_polynomial() << std::flush;
 	}
-    } while (jlt::increment_vector(a,amin,amax));
+    } while (jlt::increment_vector(Tr,Trmin,Trmax));
 
   ostr << "}\n";
-  cerr << "Found " << Np << "/" << N << " candidates.\n";
-  cerr << "Found positive candidate root: ";
+  cerr << "Discarded fractional poly:     ";
+  cerr << N_fractional_coefficients;
+  cerr << "\nFound positive candidate root: ";
   cerr << N_found_positive_root;
 #ifdef DOUBLECHECK_SPECTRAL_RADIUS
   cerr << "\t(" << N_discard_positive_by_spectral_radius << " discarded)";
@@ -240,13 +211,14 @@ int main()
   cerr << endl;
   cerr << "Failed to converge:            ";
   cerr << N_failed_to_converge << endl;
+  cerr << "Found " << Np << "/" << N << " candidates.\n";
 }
 
 
 namespace jlt {
 
 template<class S, int g, class T>
-inline T findroot(const reciprocal_polynomial<S,g,T>& p,
+inline T findroot(const reciprocal_polynomial<S,g>& p,
 		  const T x0, const T tol)
 {
   T px(p(x0)), x(x0);
@@ -271,7 +243,7 @@ inline T findroot(const reciprocal_polynomial<S,g,T>& p,
 #ifdef DOUBLECHECK_SPECTRAL_RADIUS
 // Spectral radius (magnitude of largest eigenvalue) of polynomial.
 template<class S, int g, class T>
-T spectral_radius(const reciprocal_polynomial<S,g,T>& p)
+void spectral_radius(const reciprocal_polynomial<S,g>& p, T& sr)
 {
   const int n = p.degree();
   mathmatrix<T> M(n,n);
@@ -280,7 +252,7 @@ T spectral_radius(const reciprocal_polynomial<S,g,T>& p)
   // Copy the coefficients of the polynomial to the matrix.
   for (int m = 0; m < n; ++m) M(n-1,m) = -(T)p[m]/p[n];
 
-  return spectral_radius(M);
+  sr = spectral_radius(M);
 }
 #endif // DOUBLECHECK_SPECTRAL_RADIUS
 
@@ -323,6 +295,29 @@ inline bool increment_vector(std::vector<T>& a,
     }
 
   return incr;
+}
+
+
+
+template<class S, int g>
+bool traces_to_reciprocal_poly(const std::vector<S>& Tr,
+			       jlt::reciprocal_polynomial<S,g>& p)
+{
+  // See Silva, J. Math. Phys. 39, 6206 (1998), Theorem 1.
+  const int n = 2*g;
+
+  for (int k = 1; k <= g; ++k)
+    {
+      p[n-k] = -Tr[k-1];
+      for (int m = 1; m <= k-1; ++m)
+	{
+	  p[n-k] -= Tr[k-m-1]*p[m];
+	}
+      if (p[n-k] % k) return false;
+      p[n-k] /= k;
+    }
+
+  return true;
 }
 
 
