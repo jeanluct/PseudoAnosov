@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[      9878,        294]
-NotebookOptionsPosition[      8422,        246]
-NotebookOutlinePosition[      8779,        262]
-CellTagsIndexPosition[      8736,        259]
+NotebookDataLength[     12343,        366]
+NotebookOptionsPosition[     10618,        311]
+NotebookOutlinePosition[     10975,        327]
+CellTagsIndexPosition[     10932,        324]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -56,11 +56,18 @@ Cell["Genus 2 minimizer : WORKS", "Text",
 Cell[BoxData[
  RowBox[{"wd", "=", 
   RowBox[{"{", 
-   RowBox[{"1", ",", "1", ",", "1", ",", "3", ",", "2", ",", "5"}], 
+   RowBox[{"1", ",", "1", ",", "1", ",", "2", ",", "3", ",", "5"}], 
    "}"}]}]], "Input",
  CellChangeTimes->{{3.446299557662496*^9, 3.4462995803829823`*^9}, {
   3.4463006731868668`*^9, 3.446300674069429*^9}, {3.446316875319254*^9, 
-  3.446316876237916*^9}}],
+  3.446316876237916*^9}, {3.446423752281953*^9, 3.44642375392503*^9}}],
+
+Cell[BoxData[
+ RowBox[{"wd", "=", 
+  RowBox[{"{", 
+   RowBox[{"1", ",", "1", ",", "1", ",", "3", ",", "2", ",", "5"}], 
+   "}"}]}]], "Input",
+ CellChangeTimes->{{3.446423779109376*^9, 3.446423781013091*^9}}],
 
 Cell["Genus 2 false minimizers :", "Text",
  CellChangeTimes->{{3.446397226872382*^9, 3.446397234195178*^9}, {
@@ -82,6 +89,26 @@ Cell[BoxData[
     RowBox[{"-", "1"}]}], "}"}]}]], "Input",
  CellChangeTimes->{{3.446397374997733*^9, 3.4463973863087597`*^9}}],
 
+Cell["\<\
+This one is weird : XTrain says it is pA with dilatation 1.685.  But if we \
+look at its output closely, we see that the puncture has a 1-prong, so if we \
+remove the puncture it is no longer a valid pA.  On homology it acts \
+trivially.\
+\>", "Text",
+ CellChangeTimes->{{3.446400175730591*^9, 3.446400241108247*^9}, {
+  3.4464012390541477`*^9, 3.446401270233865*^9}}],
+
+Cell[BoxData[
+ RowBox[{"wd", "=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"-", "1"}], ",", 
+    RowBox[{"-", "2"}], ",", 
+    RowBox[{"-", "3"}], ",", " ", "4", ",", " ", "5"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.4463999441799088`*^9, 3.4463999528022833`*^9}, {
+  3.446400054998684*^9, 3.446400056956903*^9}, {3.446400228469819*^9, 
+  3.446400230286419*^9}}],
+
 Cell[BoxData[
  RowBox[{"wd", "=", 
   RowBox[{"{", 
@@ -91,9 +118,10 @@ Cell[BoxData[
 
 Cell["\<\
 This one looks just like a pA from the point of view of homology : what is \
-it?  It has dilatation 1.618 so can't be a pA.\
+it?  It has dilatation 1.618 so can't be a pA.  XTrain gives 2.01.\
 \>", "Text",
- CellChangeTimes->{{3.446397693194591*^9, 3.446397728602409*^9}}],
+ CellChangeTimes->{{3.446397693194591*^9, 3.446397728602409*^9}, {
+  3.44639980365985*^9, 3.44639981141998*^9}}],
 
 Cell[BoxData[
  RowBox[{"wd", "=", 
@@ -109,6 +137,11 @@ Cell[BoxData[
 Cell["Genus 3 candidate : DOESN'T WORK", "Text",
  CellChangeTimes->{{3.446300780112494*^9, 3.446300783997074*^9}, {
   3.4463010801515913`*^9, 3.44630108603664*^9}}],
+
+Cell["\<\
+There are two varieties, neither of which gives the right dilatation.\
+\>", "Text",
+ CellChangeTimes->{{3.446426934715257*^9, 3.446426949224334*^9}}],
 
 Cell[BoxData[
  RowBox[{"wd", "=", 
@@ -146,9 +179,41 @@ Cell[BoxData[
     RowBox[{"-", "8"}], ",", " ", "2"}], "}"}]}]], "Input",
  CellChangeTimes->{{3.4463016866946077`*^9, 3.446301696289109*^9}}],
 
-Cell["Genus 3 \"old\" minimizer : DOESN'T WORK?!!", "Text",
+Cell[BoxData[
+ RowBox[{"wd", "=", 
+  RowBox[{"{", 
+   RowBox[{"1", ",", 
+    RowBox[{"-", "3"}], ",", 
+    RowBox[{"-", "4"}], ",", 
+    RowBox[{"-", "4"}], ",", 
+    RowBox[{"-", "5"}], ",", 
+    RowBox[{"-", "6"}], ",", 
+    RowBox[{"-", "8"}], ",", " ", "2"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.446426321663916*^9, 3.446426329005957*^9}}],
+
+Cell[BoxData[
+ RowBox[{"wd", "=", 
+  RowBox[{"{", 
+   RowBox[{"1", ",", 
+    RowBox[{"-", "3"}], ",", 
+    RowBox[{"-", "4"}], ",", 
+    RowBox[{"-", "5"}], ",", 
+    RowBox[{"-", "6"}], ",", 
+    RowBox[{"-", "5"}], ",", 
+    RowBox[{"-", "8"}], ",", " ", "2"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.446426380844531*^9, 3.446426390277883*^9}}],
+
+Cell["Genus 3 \"old\" minimizer : DOESN'T ALWAYS WORK?!!", "Text",
  CellChangeTimes->{{3.446300815337524*^9, 3.4463008237296352`*^9}, {
-  3.4463010726868753`*^9, 3.446301077737774*^9}}],
+  3.4463010726868753`*^9, 3.446301077737774*^9}, {3.446426878296974*^9, 
+  3.446426879967045*^9}}],
+
+Cell["\<\
+There must be two different types : one that stabilizes an orientable \
+foliation, the other nonorientable, but with exactly the same dilatation.  \
+Cool!\
+\>", "Text",
+ CellChangeTimes->{{3.446426882905112*^9, 3.446426922568054*^9}}],
 
 Cell[BoxData[
  RowBox[{"wd", "=", 
@@ -167,16 +232,16 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{"wd", "=", 
   RowBox[{"{", 
-   RowBox[{"1", ",", 
+   RowBox[{"1", ",", "1", ",", "2", ",", "3", ",", 
     RowBox[{"-", "5"}], ",", 
-    RowBox[{"-", "7"}], ",", " ", "1", ",", 
-    RowBox[{"-", "8"}], ",", " ", "3", ",", 
-    RowBox[{"-", "6"}], ",", " ", "2"}], "}"}], " ", 
+    RowBox[{"-", "6"}], ",", 
+    RowBox[{"-", "7"}], ",", 
+    RowBox[{"-", "8"}]}], "}"}], " ", 
   RowBox[{"(*", " ", 
    RowBox[{"This", " ", "one", " ", 
     RowBox[{"works", "!"}]}], " ", "*)"}]}]], "Input",
- CellChangeTimes->{{3.446301491521913*^9, 3.4463015064424467`*^9}, {
-  3.4463015439322863`*^9, 3.446301549872299*^9}}],
+ CellChangeTimes->{{3.446426632830479*^9, 3.446426639318937*^9}, 
+   3.446426707674161*^9}],
 
 Cell["Genus 4 \"new\" minimizer : WORKS!", "Text",
  CellChangeTimes->{{3.4463010045724077`*^9, 3.446301007186767*^9}, {
@@ -244,10 +309,10 @@ Cell[BoxData[
  CellChangeTimes->{{3.446396472053934*^9, 3.44639647314925*^9}}]
 }, Open  ]]
 },
-WindowSize->{818, 945},
+WindowSize->{818, 689},
 WindowMargins->{{Automatic, 0}, {Automatic, 25}},
 ShowSelection->True,
-FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
+FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -271,30 +336,37 @@ Cell[1106, 40, 105, 1, 43, "Section"],
 Cell[1214, 43, 117, 2, 32, "Input"],
 Cell[1334, 47, 127, 2, 32, "Input"],
 Cell[1464, 51, 156, 2, 31, "Text"],
-Cell[1623, 55, 309, 7, 32, "Input"],
-Cell[1935, 64, 179, 2, 31, "Text"],
-Cell[2117, 68, 273, 6, 31, "Text"],
-Cell[2393, 76, 255, 6, 32, "Input"],
-Cell[2651, 84, 234, 5, 32, "Input"],
-Cell[2888, 91, 213, 4, 31, "Text"],
-Cell[3104, 97, 378, 9, 32, "Input"],
-Cell[3485, 108, 164, 2, 31, "Text"],
-Cell[3652, 112, 343, 10, 32, "Input"],
-Cell[3998, 124, 348, 10, 32, "Input"],
-Cell[4349, 136, 350, 10, 32, "Input"],
-Cell[4702, 148, 178, 2, 31, "Text"],
-Cell[4883, 152, 485, 12, 32, "Input"],
-Cell[5371, 166, 479, 12, 32, "Input"],
-Cell[5853, 180, 169, 2, 31, "Text"],
-Cell[6025, 184, 285, 6, 32, "Input"],
-Cell[6313, 192, 168, 2, 31, "Text"],
-Cell[6484, 196, 304, 7, 32, "Input"],
-Cell[6791, 205, 536, 9, 32, "Input"],
-Cell[7330, 216, 186, 3, 32, "Input"],
-Cell[7519, 221, 324, 7, 32, "Input"],
-Cell[7846, 230, 134, 2, 32, "Input"],
-Cell[7983, 234, 299, 5, 32, "Input"],
-Cell[8285, 241, 121, 2, 32, "Input"]
+Cell[1623, 55, 354, 7, 32, "Input"],
+Cell[1980, 64, 207, 5, 32, "Input"],
+Cell[2190, 71, 179, 2, 31, "Text"],
+Cell[2372, 75, 273, 6, 31, "Text"],
+Cell[2648, 83, 255, 6, 32, "Input"],
+Cell[2906, 91, 378, 7, 51, "Text"],
+Cell[3287, 100, 365, 9, 32, "Input"],
+Cell[3655, 111, 234, 5, 32, "Input"],
+Cell[3892, 118, 280, 5, 51, "Text"],
+Cell[4175, 125, 378, 9, 32, "Input"],
+Cell[4556, 136, 164, 2, 31, "Text"],
+Cell[4723, 140, 159, 3, 31, "Text"],
+Cell[4885, 145, 343, 10, 32, "Input"],
+Cell[5231, 157, 348, 10, 32, "Input"],
+Cell[5582, 169, 350, 10, 32, "Input"],
+Cell[5935, 181, 348, 10, 32, "Input"],
+Cell[6286, 193, 348, 10, 32, "Input"],
+Cell[6637, 205, 234, 3, 31, "Text"],
+Cell[6874, 210, 244, 5, 51, "Text"],
+Cell[7121, 217, 485, 12, 32, "Input"],
+Cell[7609, 231, 437, 12, 32, "Input"],
+Cell[8049, 245, 169, 2, 31, "Text"],
+Cell[8221, 249, 285, 6, 32, "Input"],
+Cell[8509, 257, 168, 2, 31, "Text"],
+Cell[8680, 261, 304, 7, 32, "Input"],
+Cell[8987, 270, 536, 9, 32, "Input"],
+Cell[9526, 281, 186, 3, 32, "Input"],
+Cell[9715, 286, 324, 7, 32, "Input"],
+Cell[10042, 295, 134, 2, 32, "Input"],
+Cell[10179, 299, 299, 5, 32, "Input"],
+Cell[10481, 306, 121, 2, 32, "Input"]
 }, Open  ]]
 }
 ]

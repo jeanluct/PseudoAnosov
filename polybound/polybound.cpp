@@ -50,7 +50,7 @@ int main()
 
   typedef double T;
 
-  const int g = 5;
+  const int g = 6;
   long long int N = 0;
   long long int Np = 0; // Number of candidate polynomials found.
   long long int N_found_positive_root = 0;
@@ -101,11 +101,11 @@ int main()
   for (int k = 0; k < g; ++k)
     {
       T pw = jlt::Pow(lambdamax,k+1);
-      Trmax[k] = g * (pw + 1/pw);
+      Trmax[k] = (int)(g * (pw + 1/pw));
       Trmin[k] = -Trmax[k];
     }
   cerr << "Maximum traces:            " << Trmax << endl;
-  long int to_try = Trmax[0]+1;
+  long long int to_try = Trmax[0]+1;
   for (int k = 1; k < g; ++k) to_try *= 2*Trmax[k]+1;
   cerr << "Cases to try:                  " << to_try << endl;
 
@@ -113,7 +113,7 @@ int main()
 
   T x0 = 1.2*lambdamax;
 
-  // Initial value for traces: the first ones begin at 0, to take
+  // Initial value for traces: the first one begins at 0, to take
   // advantage of the sp(p(x))=sp(p(-x)) symmetry of the spectral
   // radius.
   Tr[0] = 0;
@@ -300,9 +300,11 @@ template<class S, int g>
 bool traces_to_reciprocal_poly(const std::vector<S>& Tr,
 			       jlt::reciprocal_polynomial<S,g>& p)
 {
-  // See Silva, J. Math. Phys. 39, 6206 (1998), Theorem 1.
   const int n = 2*g;
+  // The degree of p is automatically n because of the template parameter g.
+  // We also have p[0]==p[n]==1 always in the reciprocal_polynomial class.
 
+  // Find coefficients: See Silva, J. Math. Phys. 39, 6206 (1998), Theorem 1.
   for (int k = 1; k <= g; ++k)
     {
       p[n-k] = -Tr[k-1];
@@ -310,7 +312,7 @@ bool traces_to_reciprocal_poly(const std::vector<S>& Tr,
 	{
 	  p[n-k] -= Tr[k-m-1]*p[m];
 	}
-      if (p[n-k] % k) return false;
+      if (p[n-k] % k) return false;  // coeffs aren't integers: bad
       p[n-k] /= k;
     }
 

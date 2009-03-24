@@ -22,7 +22,7 @@ pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[P] returns True if the
 
 MahlerMeasure::usage = "MahlerMeasure[P] returns the Mahler measure of the polynomial P, which is the absolute value of the product of roots outside the unit circle.";
 
-TracesPower::usage = "TracesPower[P,m], where P is the characteristic polynomial of a matrix M, lists the traces Tr[M^k] for 1 <= k <= m."
+TracesPower::usage = "TracesPower[P,k], where P is the characteristic polynomial of some matrix M, returns the trace Tr[M^k].  TracesPower[P,{k2}] returns a list of traces Tr[M^k] for 1 <= k <= k2.  TracesPower[P,{k1,k2}] returns a list of traces Tr[M^k] for k1 <= k <= k2."
 
 ReciprocalPolynomial::usage = "ReciprocalPolynomial[x,n] returns a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1.  ReciprocalPolynomial[x,n,c] uses c as the base name for coefficients.  ReciprocalPolynomial[x,n,{a_1,...,a_(n/2)}] uses a list for the coefficient, where (n/2) denotes Floor[n/2].";
 
@@ -31,6 +31,8 @@ ReciprocalPolynomialQ::usage = "ReciprocalPolynomialQ[P] returns true if P is a 
 ReciprocalPolynomialCoefficientBounds::usage = "ReciprocalPolynomialCoefficientBounds[n,t] lists the bound on the magnitude of the coefficients {a[1],...,a[Floor[n/2]]} of a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1, given that its largest eigenvalue is h with t = h + 1/h.";
 
 ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,amax] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with coefficients bounded by |a[k]| <= amax[k].  For n even, only one of each polynomials pair P(-x)=P(x) is listed.";
+
+ReciprocalPolynomialFromTraces::usage = "ReciprocalPolynomialFromTraces[x,n,T] creates a reciprocal polynomial of degree n from a list of traces of powers of its associated matrix.  ReciprocalPolynomialFromTraces[x,T] creates a polynomial of degree 2 Length[T]."
 
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
@@ -88,8 +90,8 @@ Begin["`Private`"]
 (* Helper function to get a polynomial's independent variable, with
    some checks *)
 polynomialvariable[p_] := Module[{x = Variables[p]},
-    If[x == {} || Length[x] > 1,
-        Message[PseudoAnosov::notapolynomial,p,x]; Abort[]];
+    If[x == {}, (* || Length[x] > 1, *)
+        Message[polynomialvariable::notapolynomial,p,x]; Abort[]];
     Return[First[x]]
 ]
 polynomialvariable::notapolynomial = "Input argument `1` is not a polynomial in `2`."
@@ -240,6 +242,22 @@ ReciprocalPolynomialBoundedList[x_,n_,a_List] := Module[
     ]
     ]
 ]
+
+
+ReciprocalPolynomialFromTraces[x_,T_List] :=
+    ReciprocalPolynomialFromTraces[x,2 Length[T],T]
+
+
+ReciprocalPolynomialFromTraces[x_,n_Integer,T_List] := Module[
+    {tl, a},
+    If[n > 2 Length[T],
+        Message[ReciprocalPolynomialFromTraces::toofewtraces]; Return[]];
+    tl = TracesPower[ReciprocalPolynomial[x,n,a],{n/2}];
+    ReciprocalPolynomial[x,n,
+        Table[a[k],{k,n/2}] /.
+        Solve[Table[T[[k]] == tl[[k]],{k,n/2}], Table[a[k],{k,n/2}]][[1]]]
+]
+ReciprocalPolynomialFromTraces::toofewtraces = "Error: list of traces should ne at least n/2, where n is the degree of the polynomial."
 
 
 IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
@@ -894,7 +912,7 @@ Begin["`Homology`"]
    Action on homology of Dehn Twists for surfaces of genus g
 *)
 
-(* There are 3g-1 Degn twists that generate the mapping class group. *)
+(* There are 3g-1 Dehn twists that generate the mapping class group. *)
 
 (* The direction of a positive twist is given by a curve "turning
    right" as it approaches the Dehn-twist curve. *)

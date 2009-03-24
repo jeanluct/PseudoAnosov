@@ -1,21 +1,3 @@
-ReciprocalPolynomialFromTraces::usage = "ReciprocalPolynomialFromTraces[x,n,T] creates a reciprocal polynomial of degree n from a list of traces of powers of its associated matrix.  ReciprocalPolynomialFromTraces[x,T] creates a polynomial of degree 2 Length[T]."
-
-ReciprocalPolynomialFromTraces[x_,T_List] :=
-    ReciprocalPolynomialFromTraces[x,2 Length[T],T]
-
-
-ReciprocalPolynomialFromTraces[x_,n_Integer,T_List] := Module[
-    {tl, a},
-    If[n > 2 Length[T],
-        Message[ReciprocalPolynomialFromTraces::toofewtraces]; Return[]];
-    tl = TracesPower[ReciprocalPolynomial[x,n,a],x,{n/2}];
-    ReciprocalPolynomial[x,n,
-        Table[a[k],{k,n/2}] /.
-        Solve[Table[T[[k]] == tl[[k]],{k,n/2}], Table[a[k],{k,n/2}]][[1]]]
-]
-ReciprocalPolynomialFromTraces::toofewtraces = "Error: list of traces should ne at least n/2, where n is the degree of the polynomial."
-
-
 (* These versions of the function takes a dilatation as an argument
    rather than a coefficient list.  They are hand-coded for specific
    n, which is ugly but this function is only needed for specific,
