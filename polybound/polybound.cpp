@@ -35,9 +35,6 @@ template<class S, int g>
 bool traces_to_reciprocal_poly(const std::vector<S>& Tr,
 			       jlt::reciprocal_polynomial<S,g>& p);
 
-template<class T>
-bool reject(const std::vector<T>& a);
-
 } // namespace jlt
 
 
@@ -103,7 +100,8 @@ int main()
 
   for (int k = 0; k < g; ++k)
     {
-      Trmax[k] = g * (jlt::Pow(lambdamax,k+1) + 1);
+      T pw = jlt::Pow(lambdamax,k+1);
+      Trmax[k] = g * (pw + 1/pw);
       Trmin[k] = -Trmax[k];
     }
   cerr << "Maximum traces:            " << Trmax << endl;
@@ -298,7 +296,6 @@ inline bool increment_vector(std::vector<T>& a,
 }
 
 
-
 template<class S, int g>
 bool traces_to_reciprocal_poly(const std::vector<S>& Tr,
 			       jlt::reciprocal_polynomial<S,g>& p)
@@ -320,21 +317,5 @@ bool traces_to_reciprocal_poly(const std::vector<S>& Tr,
   return true;
 }
 
-
-template<class T>
-inline bool reject(const std::vector<T>& a)
-{
-  // If the first nonzero coefficient of an odd x power is
-  // negative then we can skip this case using the
-  // sp(p(x))=sp(p(-x)) symmetry of the spectral radius.
-  const int n = a.size();
-  bool skip = false;
-  for (int m = 0; m < n; m += 2)
-    {
-      if (a[m] > 0) break;
-      if (a[m] < 0) { skip = true; break; }
-    }
-  return skip;
-}
 
 } // namespace jlt
