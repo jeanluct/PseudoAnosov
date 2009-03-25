@@ -14,13 +14,13 @@
 
 namespace jlt {
 
-template<class S, int g, class T>
-T findroot(const reciprocal_polynomial<S,g>& p, const T x0, const T tol);
+template<class S, class T>
+T findroot(const reciprocal_polynomial<S>& p, const T x0, const T tol);
 
 #ifdef DOUBLECHECK_SPECTRAL_RADIUS
 // Spectral radius (magnitude of largest eigenvalue) of polynomial.
-template<class S, int g, class T>
-void spectral_radius(const reciprocal_polynomial<S,g>& p, T& sr);
+template<class S, class T>
+void spectral_radius(const reciprocal_polynomial<S>& p, T& sr);
 #endif
 
 template<class T>
@@ -31,9 +31,9 @@ bool increment_vector(std::vector<T>& a,
 		      const std::vector<T>& amin,
 		      const std::vector<T>& amax);
 
-template<class S, int g>
+template<class S>
 bool traces_to_reciprocal_poly(const std::vector<S>& Tr,
-			       jlt::reciprocal_polynomial<S,g>& p);
+			       jlt::reciprocal_polynomial<S>& p);
 
 } // namespace jlt
 
@@ -109,7 +109,7 @@ int main()
   for (int k = 1; k < g; ++k) to_try *= 2*Trmax[k]+1;
   cerr << "Cases to try:                  " << to_try << endl;
 
-  reciprocal_polynomial<int,g> p;
+  reciprocal_polynomial<int> p(2*g);
 
   T x0 = 1.2*lambdamax;
 
@@ -215,11 +215,12 @@ int main()
 
 namespace jlt {
 
-template<class S, int g, class T>
-inline T findroot(const reciprocal_polynomial<S,g>& p,
-		  const T x0, const T tol)
+template<class S, class T>
+inline T findroot(const reciprocal_polynomial<S>& p,
+	   const T x0, const T tol)
 {
   T px(p(x0)), x(x0);
+
   int i = 0;
   const int itmax = 10;
 
@@ -240,8 +241,8 @@ inline T findroot(const reciprocal_polynomial<S,g>& p,
 
 #ifdef DOUBLECHECK_SPECTRAL_RADIUS
 // Spectral radius (magnitude of largest eigenvalue) of polynomial.
-template<class S, int g, class T>
-void spectral_radius(const reciprocal_polynomial<S,g>& p, T& sr)
+template<class S, class T>
+inline void spectral_radius(const reciprocal_polynomial<S>& p, T& sr)
 {
   const int n = p.degree();
   mathmatrix<T> M(n,n);
@@ -296,16 +297,15 @@ inline bool increment_vector(std::vector<T>& a,
 }
 
 
-template<class S, int g>
+template<class S>
 bool traces_to_reciprocal_poly(const std::vector<S>& Tr,
-			       jlt::reciprocal_polynomial<S,g>& p)
+			       jlt::reciprocal_polynomial<S>& p)
 {
-  const int n = 2*g;
-  // The degree of p is automatically n because of the template parameter g.
-  // We also have p[0]==p[n]==1 always in the reciprocal_polynomial class.
+  const int n = p.degree();
+  // We have p[0]==p[n]==1 always in the reciprocal_polynomial class.
 
   // Find coefficients: See Silva, J. Math. Phys. 39, 6206 (1998), Theorem 1.
-  for (int k = 1; k <= g; ++k)
+  for (int k = 1; k <= n/2; ++k)
     {
       p[n-k] = -Tr[k-1];
       for (int m = 1; m <= k-1; ++m)
