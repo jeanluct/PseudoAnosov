@@ -101,6 +101,7 @@ int main()
   for (int k = 0; k < g; ++k)
     {
       T pw = jlt::Pow(lambdamax,k+1);
+      /* Could be adapted to n odd.  See PseudoAnosov.m */
       Trmax[k] = (int)(g * (pw + 1/pw));
       Trmin[k] = -Trmax[k];
     }

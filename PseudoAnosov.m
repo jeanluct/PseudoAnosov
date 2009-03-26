@@ -28,11 +28,9 @@ ReciprocalPolynomial::usage = "ReciprocalPolynomial[x,n] returns a reciprocal po
 
 ReciprocalPolynomialQ::usage = "ReciprocalPolynomialQ[P] returns true if P is a reciprocal polynomial, i.e. of the form a[0] x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + a[0].";
 
-ReciprocalPolynomialCoefficientBounds::usage = "ReciprocalPolynomialCoefficientBounds[n,t] lists the bound on the magnitude of the coefficients {a[1],...,a[Floor[n/2]]} of a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1, given that its largest eigenvalue is h with t = h + 1/h.";
-
-ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,amax] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with coefficients bounded by |a[k]| <= amax[k].  For n even, only one of each polynomials pair P(-x)=P(x) is listed.";
-
 ReciprocalPolynomialFromTraces::usage = "ReciprocalPolynomialFromTraces[x,n,T] creates a reciprocal polynomial of degree n from a list of traces of powers of its associated matrix.  ReciprocalPolynomialFromTraces[x,T] creates a polynomial of degree 2 Length[T]."
+
+ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,r] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with Perron root less than r.  For n even, only one of each polynomials pair P(-x)=P(x) is listed.";
 
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
@@ -71,6 +69,8 @@ MaxLefschetz::usage = "MaxLefschetz is an option to LefschetzNumbersTestQ and St
 
 PerronRootSign::usage = "PerronRootSign is an option to StratumOrbits (Lefschetz numbers form) to specify whether the Perron root is positive or negative.  Set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic)."
 
+EqualityTolerance::usage = "EqualityTolerance is an option to pseudoAnosovPerronRootQ to decide whether two numbers are \"equal enough\"."
+
 BasisOrder::usage = "BasisOrder is an option to HomologyAction: set to \"abab\" or \"aabb\" to specify whether the standard basis for homology should be ordered by hole or by type."
 
 (* Rule labels for orbit structure of a stratum *)
@@ -104,7 +104,8 @@ PolynomialDegree[p_] := Module[{x = polynomialvariable[p]},
 
 PolynomialRoots[p_,opts:OptionsPattern[]] := Module[
     {x = polynomialvariable[p]},
-    Sort[x/.NSolve[p == 0, x, opts], Abs[#2] < Abs[#1] &]
+    Sort[x/.NSolve[p == 0, x, Sequence @@ FilterRules[{opts},Options[NSolve]]],
+        Abs[#2] < Abs[#1] &]
 ]
 (* PolynomialRoots inherits the options for NSolve *)
 Options[PolynomialRoots] = Options[NSolve]
@@ -116,7 +117,7 @@ Options[PerronRoot] = Options[NSolve]
 
 
 (* Test for the Perron root *)
-pseudoAnosovPerronRootQ[p_,lmax_:0,opts:OptionsPattern[]] := Module[
+pseudoAnosovPerronRootQ[p_,lmax___:0,opts:OptionsPattern[]] := Module[
     {prl, pr, degen, testdegen},
     If[PolynomialDegree[p] < 2, Return[False]];
     degen = OptionValue[EqualityTolerance];
@@ -126,7 +127,11 @@ pseudoAnosovPerronRootQ[p_,lmax_:0,opts:OptionsPattern[]] := Module[
         Return[True]
     ];
     (* Take the first two roots (presorted by magnitude) *)
-    prl = Take[PolynomialRoots[p,opts], 2];
+    (* The way options work in Mathematica is tedious: just because I
+       set the default value to $MachinePrecision below, it doesn't
+       get passed on to PolynomialRoots automatically. *)
+    prl = Take[PolynomialRoots[p,
+        WorkingPrecision -> OptionValue[WorkingPrecision]]];
     pr = Abs[prl[[1]]];
     (* First criterion: largest eigenvalue is greater than 1 *)
     If[!testdegen[Abs[pr-1]], Return[False]];
@@ -194,70 +199,47 @@ ReciprocalPolynomialQ[p_] := Module[
 ]
 
 
-ReciprocalPolynomialCoefficientBounds[n_,t_] := Module[
-    {poly,h,hh,c,ssol},
-    (* Make a reciprocal polynomial with eigenvalues h and 1/h,
-       with Floor[n/2]-fold degeneracy each. *)
-    poly = Collect[((x-h)(x-1/h))^Floor[n/2],x,Simplify];
-    (* If odd, need an extra -1 eigenvalue to make it reciprocal. *)
-    If[OddQ[n], poly = poly (x+1)];
-    c = CoefficientList[poly,x];
-    (* Solve for h, where h + 1/h = t.  Keep positive solution. *)
-    hsub = Solve[t == h + 1/h,h][[2,1]];
-    (* Finally, take coefficients and assume all eigenvalues are as
-       large as possible. *)
-    Simplify[Table[(-1)^k c[[k+1]]/.hsub,{k,n/2}]]
-]
-
-
-(* Very kludgy: eliminate 'by hand' the duplicate polynomials that are
-   related by P(X)=P(-X), since these have the same dominant
-   eigenvalue.  Only hand-coded for n=2,4,6,8 for now. *)
-(* To do: implement the elimination of P(-x) for any even n. *)
-ReciprocalPolynomialBoundedList[x_,n_,a_List] := Module[
-    {p,c,l,l2},
-    p = ReciprocalPolynomial[x,n,c];
-    If[n == 2 || n == 4 || (n > 8 && EvenQ[n]),
-        l = Flatten[Fold[
-	    Table[#1,{c[#2],-a[[#2]],a[[#2]]}]&, p, Table[k,{k,2,n/2}]
-        ]];
-        Flatten[Table[l,{c[1],-a[[1]],0}]]
-    ,
-    If[n == 6 || n == 8,
-        (* First list the cases with c[1]<0 *)
-        l = Table[p,{c[1],-a[[1]],-1}];
-        l = Flatten[Fold[
-	    Table[#1,{c[#2],-a[[#2]],a[[#2]]}]&, l, Table[k,{k,2,n/2}]
-        ]];
-        (* Then list the cases with c[1]=0, c[3]<=0 *)
-        l2 = Table[p/.c[1]->0,{c[3],-a[[3]],0},{c[2],-a[[2]],a[[2]]}];
-        l2 = Flatten[Fold[
-	    Table[#1,{c[#2],-a[[#2]],a[[#2]]}]&, l2, Table[k,{k,4,n/2}]]];
-	Join[l,l2]
-        ,
-        (* If all else fails, just include everything. *)
-	Flatten[Fold[
-	    Table[#1,{c[#2],-a[[#2]],a[[#2]]}]&, p, Table[k,{k,n/2}]
-        ]]
-    ]
-    ]
-]
-
-
 ReciprocalPolynomialFromTraces[x_,T_List] :=
     ReciprocalPolynomialFromTraces[x,2 Length[T],T]
 
 
-ReciprocalPolynomialFromTraces[x_,n_Integer,T_List] := Module[
-    {tl, a},
-    If[n > 2 Length[T],
+ReciprocalPolynomialFromTraces[x_,n_Integer,T_List] := Module[{a},
+    If[n > 2 Length[T] + 1,
         Message[ReciprocalPolynomialFromTraces::toofewtraces]; Return[]];
-    tl = TracesPower[ReciprocalPolynomial[x,n,a],{n/2}];
-    ReciprocalPolynomial[x,n,
-        Table[a[k],{k,n/2}] /.
-        Solve[Table[T[[k]] == tl[[k]],{k,n/2}], Table[a[k],{k,n/2}]][[1]]]
+    Do[a[k] = (-T[[k]] - Sum[a[m] T[[k-m]],{m,k-1}])/k,{k,Floor[n/2]}];
+    ReciprocalPolynomial[x,n,a]
 ]
 ReciprocalPolynomialFromTraces::toofewtraces = "Error: list of traces should ne at least n/2, where n is the degree of the polynomial."
+
+
+iReciprocalPolynomialTracesBounds[n_Integer,r_] :=
+    Floor[n/2 (r^# + r^-#)] & /@ Range[n/2] /; EvenQ[n]
+
+
+iReciprocalPolynomialTracesBounds[n_Integer,r_] :=
+    Floor[(n-1)/2 (r^# + r^-#) + 1] & /@ Range[n/2] /; OddQ[n]
+
+
+ReciprocalPolynomialBoundedList[x_,n_Integer,r_,opts:OptionsPattern[]] :=
+Module[
+    {p,pl,sl,T,Tm = iReciprocalPolynomialTracesBounds[n,r]},
+    p = ReciprocalPolynomialFromTraces[x,n,Table[T[k],{k,Floor[n/2]}]];
+    pl = Flatten[Fold[
+        Table[#1,{T[#2],-Tm[[#2]],Tm[[#2]]}]&, p, Range[Floor[n/2]]
+    ]];
+    (* Discard the polynomials that don't have integer coefficients *)
+    sl = And @@ # & /@  (IntegerQ /@ # & /@ (CoefficientList[#,x] & /@ pl));
+    pl = Pick[pl,sl];
+    (* Discard the ones without the proper Perron root (not real or
+       too large) *)
+    pl = Pick[pl,pseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
+    (* Make all roots positive, discard duplicates *)
+    pl = Union[If[PerronRoot[#] > 0, #, #/.x->-x] & /@ pl];
+    (* Sort by Perron root *)
+    (* Note that we computed the Perron root many times: a waste *)
+    Sort[pl, PerronRoot[#1] < PerronRoot[#2] &]
+]
+Options[ReciprocalPolynomialBoundedList] = Options[pseudoAnosovPerronRootQ]
 
 
 IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
