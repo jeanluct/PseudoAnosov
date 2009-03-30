@@ -50,7 +50,7 @@ int main()
 
   typedef double T;
 
-  const int g = 6;
+  const int g = 5;
   long long int N = 0;
   long long int Np = 0; // Number of candidate polynomials found.
   long long int N_found_positive_root = 0;
@@ -92,6 +92,10 @@ int main()
     {
       lambdamax = 1.19266542682899;
     }
+  else if (g == 8)
+    {
+      lambdamax = 1.16806133151324;
+    }
   else
     {
       cerr << "What should the maximum root be?\n";
@@ -120,12 +124,28 @@ int main()
   Tr[0] = 0;
   for (int m = 1; m < g; ++m) Tr[m] = Trmin[m];
 
-  std::ofstream ostr("poly.m");
+  std::ofstream ostr("/home/jeanluc/nosync/poly_g8.m");
   ostr << "{";
 
   do
     {
       ++N;
+      // Print current status to stderr once in a while. 
+      const int topr = 5;
+      if (g > topr) 
+	{ 
+	  bool prnt = true; 
+	  for (int i = g-topr; i < g; ++i) 
+	    if (Tr[i] != 0) { prnt = false; break; } 
+	  if (prnt) 
+	    { 
+	      for (int i = 0; i < g-topr; ++i) 
+		{ 
+		  cerr << "Tr[" << i << "]=" << Tr[i] << "\t"; 
+		} 
+	      cerr << "\tN=" << N << endl; 
+	    } 
+	}
 
       // traces-to_poly returns false if the current list of traces do
       // not give a polynomial over Z.
