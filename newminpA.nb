@@ -1,0 +1,294 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[      9974,        285]
+NotebookOptionsPosition[      9290,        260]
+NotebookOutlinePosition[      9648,        276]
+CellTagsIndexPosition[      9605,        273]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{3.442796227094639*^9}],
+
+Cell[BoxData[
+ RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
+ CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"gmax", "=", "15"}], ";"}]], "Input",
+ CellChangeTimes->{{3.447261422465456*^9, 3.447261431483102*^9}, 
+   3.447261479396521*^9, {3.447261912683154*^9, 3.4472619139329042`*^9}, {
+   3.447261982921809*^9, 3.447261983405364*^9}, {3.447263120276566*^9, 
+   3.447263121095736*^9}, {3.44726360955945*^9, 3.447263610193548*^9}, {
+   3.447264597244817*^9, 3.447264598949935*^9}, {3.44726589880546*^9, 
+   3.4472659232746696`*^9}, {3.4472660196021423`*^9, 3.4472660216446247`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"P", "=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"Simplify", "[", 
+     RowBox[{"Factor", "[", 
+      RowBox[{"1", "-", 
+       SuperscriptBox["x", 
+        RowBox[{"g", "-", "1"}]], "-", 
+       SuperscriptBox["x", "g"], "-", 
+       SuperscriptBox["x", 
+        RowBox[{"g", "+", "1"}]], "+", 
+       SuperscriptBox["x", 
+        RowBox[{"2", "g"}]]}], "]"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"g", ",", "gmax"}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.447261252522991*^9, 3.4472614355835342`*^9}, {
+   3.447261468785367*^9, 3.44726151564359*^9}, {3.447261556266061*^9, 
+   3.4472615580334263`*^9}, 3.4472618071343307`*^9, 3.447264740825767*^9}],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"g", ",", 
+      RowBox[{"P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], 
+      ",", 
+      RowBox[{"PerronRoot", "[", 
+       RowBox[{"P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], 
+       "]"}], ",", 
+      RowBox[{"N", "[", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"3", "+", 
+            SqrtBox["5"]}], ")"}], "/", "2"}], ")"}], 
+        RowBox[{"1", "/", "g"}]], "]"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"g", ",", "2", ",", "gmax"}], "}"}]}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.44726152152387*^9, 3.447261550786496*^9}, {
+  3.447261795044942*^9, 3.447261827698163*^9}, {3.44726475302247*^9, 
+  3.447264761505808*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"t", "=", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"StratumOrbits", "[", 
+         RowBox[{"#", ",", 
+          RowBox[{
+          "P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}]}], 
+         "]"}], "&"}], "/@", 
+       RowBox[{"OrientableStrataList", "[", "g", "]"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"g", ",", "gmax"}], "}"}]}], "]"}]}], ";", "\n", 
+   RowBox[{"t", "=", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"Select", "[", 
+       RowBox[{
+        RowBox[{"t", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], 
+        ",", 
+        RowBox[{
+         RowBox[{"#", "\[NotEqual]", 
+          RowBox[{"{", "}"}]}], "&"}]}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"g", ",", "gmax"}], "}"}]}], "]"}]}], ";", "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Length", "/@", "t"}], "\n", 
+     RowBox[{"printstratum", "[", "s_", "]"}]}], ":=", 
+    RowBox[{
+     RowBox[{"Row", "[", 
+      RowBox[{"{", 
+       RowBox[{"\"\<(\>\"", ",", 
+        RowBox[{"Row", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"Superscript", "@@", "#"}], ")"}], "&"}], "/@", "s"}], 
+          ",", "\"\<,\>\""}], "]"}], ",", "\"\<)\>\""}], "}"}], "]"}], "\n", 
+     RowBox[{"TableForm", "[", 
+      RowBox[{
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"g", ",", 
+           RowBox[{
+           "P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], ",", 
+           RowBox[{"PerronRoot", "[", 
+            RowBox[{
+            "P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], 
+            "]"}], ",", 
+           RowBox[{"printstratum", "/@", 
+            RowBox[{"Flatten", "[", 
+             RowBox[{
+              RowBox[{"Stratum", "/.", 
+               RowBox[{
+               "t", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}]}], 
+              ",", "1"}], "]"}]}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"g", ",", "2", ",", "gmax"}], "}"}]}], "]"}], ",", 
+       RowBox[{"TableSpacing", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "1"}], "}"}]}]}], "]"}]}]}]}], "*)"}]], "Input",
+ CellChangeTimes->{{3.447261609590847*^9, 3.4472616754158363`*^9}, {
+   3.447261847692319*^9, 3.4472618858245487`*^9}, {3.44726202825966*^9, 
+   3.447262057453343*^9}, 3.4472620918863583`*^9, {3.447264819629004*^9, 
+   3.447264827218041*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"te", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"StratumOrbits", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"3", "g"}], "-", "2"}], ",", 
+         RowBox[{"g", "-", "2"}]}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], "/.", 
+        RowBox[{"x", "\[Rule]", 
+         RowBox[{"-", "x"}]}]}], ",", 
+       RowBox[{"MaxLefschetz", "\[Rule]", "400"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"g", ",", "2", ",", "gmax", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"to", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"StratumOrbits", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"3", "g"}], "-", "1"}], ",", 
+         RowBox[{"g", "-", "3"}]}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], "/.", 
+        RowBox[{"x", "\[Rule]", 
+         RowBox[{"-", "x"}]}]}], ",", 
+       RowBox[{"MaxLefschetz", "\[Rule]", "400"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"g", ",", "3", ",", "gmax", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"to2", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"StratumOrbits", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"3", "g"}], "-", "3"}], ",", 
+         RowBox[{"g", "-", "1"}]}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], "/.", 
+        RowBox[{"x", "\[Rule]", 
+         RowBox[{"-", "x"}]}]}], ",", 
+       RowBox[{"MaxLefschetz", "\[Rule]", "400"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"g", ",", "3", ",", "gmax", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.447261609590847*^9, 3.4472616754158363`*^9}, {
+   3.447261847692319*^9, 3.4472618858245487`*^9}, {3.44726202825966*^9, 
+   3.447262057453343*^9}, 3.4472620918863583`*^9, {3.447263811529973*^9, 
+   3.4472638745883923`*^9}, {3.447264834539403*^9, 3.4472648615548697`*^9}, {
+   3.447265585428521*^9, 3.447265630792281*^9}, {3.447265934248364*^9, 
+   3.447265975034802*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Length", "/@", "te"}], "\[IndentingNewLine]", 
+ RowBox[{"Length", "/@", "to"}], "\[IndentingNewLine]", 
+ RowBox[{"Length", "/@", "to2"}]}], "Input",
+ CellChangeTimes->{{3.447265763235568*^9, 3.447265776452043*^9}}],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"StratumOrbitsTable", "[", 
+   RowBox[{
+    RowBox[{"Drop", "[", 
+     RowBox[{"te", ",", "1"}], "]"}], ",", "30"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.447266001267219*^9, 3.447266007247954*^9}, {
+  3.447266057855637*^9, 3.4472660605435333`*^9}, {3.447269620130892*^9, 
+  3.447269623143412*^9}, {3.44727038637486*^9, 3.447270404740361*^9}, {
+  3.447270494402129*^9, 3.447270494578779*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<a.png\>\"", ",", 
+   RowBox[{"TableForm", "[", "%", "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.447269505063818*^9, 3.447269512413392*^9}, {
+  3.447269586741171*^9, 3.447269589844076*^9}}],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"StratumOrbitsTable", "[", "to", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.447266001267219*^9, 3.447266007247954*^9}, {
+  3.447266057855637*^9, 3.4472660605435333`*^9}, {3.447266107586359*^9, 
+  3.4472661080648518`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"StratumOrbitsTable", "[", "to2", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.447266001267219*^9, 3.447266007247954*^9}, {
+   3.447266057855637*^9, 3.4472660605435333`*^9}, {3.447266107586359*^9, 
+   3.4472661080648518`*^9}, 3.447266159247514*^9}]
+},
+WindowSize->{1270, 945},
+WindowMargins->{{0, Automatic}, {Automatic, 25}},
+ShowSelection->True,
+FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 176, 4, 32, "Input"],
+Cell[724, 26, 126, 2, 32, "Input"],
+Cell[853, 30, 507, 8, 32, "Input"],
+Cell[1363, 40, 702, 18, 32, "Input"],
+Cell[2068, 60, 848, 23, 43, "Input"],
+Cell[2919, 85, 2526, 70, 121, "Input"],
+Cell[5448, 157, 2309, 63, 77, "Input"],
+Cell[7760, 222, 239, 4, 77, "Input"],
+Cell[8002, 228, 452, 9, 32, "Input"],
+Cell[8457, 239, 246, 5, 32, "Input"],
+Cell[8706, 246, 276, 5, 32, "Input"],
+Cell[8985, 253, 301, 5, 32, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

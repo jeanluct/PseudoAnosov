@@ -1,0 +1,389 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     13226,        380]
+NotebookOptionsPosition[     12380,        351]
+NotebookOutlinePosition[     12738,        367]
+CellTagsIndexPosition[     12695,        364]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{3.442796227094639*^9}],
+
+Cell[BoxData[
+ RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
+ CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"gmax", "=", "11"}], ";"}]], "Input",
+ CellChangeTimes->{{3.447261422465456*^9, 3.447261431483102*^9}, 
+   3.447261479396521*^9, {3.447261912683154*^9, 3.4472619139329042`*^9}, {
+   3.447261982921809*^9, 3.447261983405364*^9}, {3.447263120276566*^9, 
+   3.447263121095736*^9}, {3.44726360955945*^9, 3.447263610193548*^9}, {
+   3.447264597244817*^9, 3.447264598949935*^9}, {3.44726589880546*^9, 
+   3.4472659232746696`*^9}, {3.4472660196021423`*^9, 
+   3.4472660216446247`*^9}, {3.44726723504394*^9, 3.447267237283845*^9}, {
+   3.447267763331698*^9, 3.4472677640325336`*^9}, {3.447267800480241*^9, 
+   3.447267800918603*^9}}],
+
+Cell[BoxData[
+ RowBox[{"glist", "=", 
+  RowBox[{"Range", "[", 
+   RowBox[{"3", ",", "gmax", ",", "2"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.447267453698641*^9, 3.447267464661601*^9}}],
+
+Cell[BoxData[
+ RowBox[{"P", "=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"Simplify", "[", 
+     RowBox[{"Factor", "[", 
+      RowBox[{"1", "+", "x", "-", 
+       SuperscriptBox["x", 
+        RowBox[{"g", "-", "2"}]], "-", 
+       SuperscriptBox["x", 
+        RowBox[{"g", "-", "1"}]], "-", 
+       SuperscriptBox["x", "g"], "-", 
+       SuperscriptBox["x", 
+        RowBox[{"g", "+", "1"}]], "-", 
+       SuperscriptBox["x", 
+        RowBox[{"g", "+", "2"}]], "+", 
+       SuperscriptBox["x", 
+        RowBox[{
+         RowBox[{"2", "g"}], "-", "1"}]], "+", 
+       SuperscriptBox["x", 
+        RowBox[{"2", "g"}]]}], "]"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"g", ",", "glist"}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.447261252522991*^9, 3.4472614355835342`*^9}, {
+   3.447261468785367*^9, 3.44726151564359*^9}, {3.447261556266061*^9, 
+   3.4472615580334263`*^9}, 3.4472618071343307`*^9, 3.447264740825767*^9, {
+   3.4472672511116133`*^9, 3.4472673326505632`*^9}, {3.447267474743886*^9, 
+   3.447267475331821*^9}}],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"glist", "\[LeftDoubleBracket]", "#", "\[RightDoubleBracket]"}],
+       ",", 
+      RowBox[{"P", "\[LeftDoubleBracket]", "#", "\[RightDoubleBracket]"}], 
+      ",", 
+      RowBox[{"PerronRoot", "[", 
+       RowBox[{"P", "\[LeftDoubleBracket]", "#", "\[RightDoubleBracket]"}], 
+       "]"}]}], "}"}], "&"}], "/@", 
+   RowBox[{"Range", "[", 
+    RowBox[{"Length", "[", "glist", "]"}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.44726152152387*^9, 3.447261550786496*^9}, {
+  3.447261795044942*^9, 3.447261827698163*^9}, {3.44726475302247*^9, 
+  3.447264761505808*^9}, {3.4472672778645678`*^9, 3.447267279175536*^9}, {
+  3.447267325881637*^9, 3.447267327894363*^9}, {3.447267497977957*^9, 
+  3.4472675901943207`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"t", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"StratumOrbits", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{
+          RowBox[{"P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}],
+           "/.", 
+          RowBox[{"x", "\[Rule]", 
+           RowBox[{"-", "x"}]}]}]}], "]"}], "&"}], "/@", 
+      RowBox[{"OrientableStrataList", "[", 
+       RowBox[{
+       "glist", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], 
+       "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", 
+       RowBox[{"Length", "[", "glist", "]"}]}], "}"}]}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.44726737684774*^9, 3.447267380458343*^9}, {
+  3.44726760199013*^9, 3.447267632337728*^9}, {3.447267675801972*^9, 
+  3.447267677014627*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"t", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"Select", "[", 
+      RowBox[{
+       RowBox[{"t", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], 
+       ",", 
+       RowBox[{
+        RowBox[{"#", "\[NotEqual]", 
+         RowBox[{"{", "}"}]}], "&"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", 
+       RowBox[{"Length", "[", "glist", "]"}]}], "}"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{"Length", "/@", "t"}]}], "Input",
+ CellChangeTimes->{{3.447267734280541*^9, 3.447267747282076*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"printstratum", "[", "s_", "]"}], ":=", 
+  RowBox[{"Row", "[", 
+   RowBox[{"{", 
+    RowBox[{"\"\<(\>\"", ",", 
+     RowBox[{"Row", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"Superscript", "@@", "#"}], ")"}], "&"}], "/@", "s"}], ",", 
+       "\"\<,\>\""}], "]"}], ",", "\"\<)\>\""}], "}"}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+       "glist", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], ",", 
+       RowBox[{"P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], 
+       ",", 
+       RowBox[{"PerronRoot", "[", 
+        RowBox[{"P", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], 
+        "]"}], ",", 
+       RowBox[{"printstratum", "/@", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{"Stratum", "/.", 
+           RowBox[{
+           "t", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}]}], ",",
+           "1"}], "]"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", 
+       RowBox[{"Length", "[", "glist", "]"}]}], "}"}]}], "]"}], ",", 
+   RowBox[{"TableSpacing", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"5", ",", "1"}], "}"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.447267410028954*^9, 3.447267412114279*^9}, {
+  3.447267622606094*^9, 3.447267660197278*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"t", "=", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"StratumOrbits", "[", 
+         RowBox[{"#", ",", 
+          RowBox[{
+          "P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}]}], 
+         "]"}], "&"}], "/@", 
+       RowBox[{"OrientableStrataList", "[", "g", "]"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"g", ",", "gmax"}], "}"}]}], "]"}]}], ";", "\n", 
+   RowBox[{"t", "=", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"Select", "[", 
+       RowBox[{
+        RowBox[{"t", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], 
+        ",", 
+        RowBox[{
+         RowBox[{"#", "\[NotEqual]", 
+          RowBox[{"{", "}"}]}], "&"}]}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"g", ",", "gmax"}], "}"}]}], "]"}]}], ";", "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Length", "/@", "t"}], "\n", 
+     RowBox[{"printstratum", "[", "s_", "]"}]}], ":=", 
+    RowBox[{
+     RowBox[{"Row", "[", 
+      RowBox[{"{", 
+       RowBox[{"\"\<(\>\"", ",", 
+        RowBox[{"Row", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"Superscript", "@@", "#"}], ")"}], "&"}], "/@", "s"}], 
+          ",", "\"\<,\>\""}], "]"}], ",", "\"\<)\>\""}], "}"}], "]"}], "\n", 
+     RowBox[{"TableForm", "[", 
+      RowBox[{
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"g", ",", 
+           RowBox[{
+           "P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], ",", 
+           RowBox[{"PerronRoot", "[", 
+            RowBox[{
+            "P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], 
+            "]"}], ",", 
+           RowBox[{"printstratum", "/@", 
+            RowBox[{"Flatten", "[", 
+             RowBox[{
+              RowBox[{"Stratum", "/.", 
+               RowBox[{
+               "t", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}]}], 
+              ",", "1"}], "]"}]}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"g", ",", "2", ",", "gmax"}], "}"}]}], "]"}], ",", 
+       RowBox[{"TableSpacing", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "1"}], "}"}]}]}], "]"}]}]}]}], "*)"}]], "Input",
+ CellChangeTimes->{{3.447261609590847*^9, 3.4472616754158363`*^9}, {
+   3.447261847692319*^9, 3.4472618858245487`*^9}, {3.44726202825966*^9, 
+   3.447262057453343*^9}, 3.4472620918863583`*^9, {3.447264819629004*^9, 
+   3.447264827218041*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"te", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"StratumOrbits", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"3", "g"}], "-", "2"}], ",", 
+         RowBox[{"g", "-", "2"}]}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], "/.", 
+        RowBox[{"x", "\[Rule]", 
+         RowBox[{"-", "x"}]}]}], ",", 
+       RowBox[{"MaxLefschetz", "\[Rule]", "400"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"g", ",", "2", ",", "gmax", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"to", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"StratumOrbits", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"3", "g"}], "-", "1"}], ",", 
+         RowBox[{"g", "-", "3"}]}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], "/.", 
+        RowBox[{"x", "\[Rule]", 
+         RowBox[{"-", "x"}]}]}], ",", 
+       RowBox[{"MaxLefschetz", "\[Rule]", "400"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"g", ",", "3", ",", "gmax", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"to2", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"StratumOrbits", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"3", "g"}], "-", "3"}], ",", 
+         RowBox[{"g", "-", "1"}]}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"P", "\[LeftDoubleBracket]", "g", "\[RightDoubleBracket]"}], "/.", 
+        RowBox[{"x", "\[Rule]", 
+         RowBox[{"-", "x"}]}]}], ",", 
+       RowBox[{"MaxLefschetz", "\[Rule]", "400"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"g", ",", "3", ",", "gmax", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.447261609590847*^9, 3.4472616754158363`*^9}, {
+   3.447261847692319*^9, 3.4472618858245487`*^9}, {3.44726202825966*^9, 
+   3.447262057453343*^9}, 3.4472620918863583`*^9, {3.447263811529973*^9, 
+   3.4472638745883923`*^9}, {3.447264834539403*^9, 3.4472648615548697`*^9}, {
+   3.447265585428521*^9, 3.447265630792281*^9}, {3.447265934248364*^9, 
+   3.447265975034802*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Length", "/@", "te"}], "\[IndentingNewLine]", 
+ RowBox[{"Length", "/@", "to"}], "\[IndentingNewLine]", 
+ RowBox[{"Length", "/@", "to2"}]}], "Input",
+ CellChangeTimes->{{3.447265763235568*^9, 3.447265776452043*^9}}],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"StratumOrbitsTable", "[", "te", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.447266001267219*^9, 3.447266007247954*^9}, {
+  3.447266057855637*^9, 3.4472660605435333`*^9}, {3.447270348256521*^9, 
+  3.447270372723832*^9}}],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"StratumOrbitsTable", "[", "to", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.447266001267219*^9, 3.447266007247954*^9}, {
+  3.447266057855637*^9, 3.4472660605435333`*^9}, {3.447266107586359*^9, 
+  3.4472661080648518`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"StratumOrbitsTable", "[", "to2", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.447266001267219*^9, 3.447266007247954*^9}, {
+   3.447266057855637*^9, 3.4472660605435333`*^9}, {3.447266107586359*^9, 
+   3.4472661080648518`*^9}, 3.447266159247514*^9}]
+},
+WindowSize->{1270, 945},
+WindowMargins->{{0, Automatic}, {Automatic, 25}},
+ShowSelection->True,
+FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 176, 4, 32, "Input"],
+Cell[724, 26, 126, 2, 32, "Input"],
+Cell[853, 30, 658, 11, 32, "Input"],
+Cell[1514, 43, 188, 4, 32, "Input"],
+Cell[1705, 49, 1046, 27, 32, "Input"],
+Cell[2754, 78, 829, 19, 32, "Input"],
+Cell[3586, 99, 832, 24, 32, "Input"],
+Cell[4421, 125, 557, 16, 55, "Input"],
+Cell[4981, 143, 396, 12, 32, "Input"],
+Cell[5380, 157, 1053, 28, 55, "Input"],
+Cell[6436, 187, 2526, 70, 121, "Input"],
+Cell[8965, 259, 2309, 63, 77, "Input"],
+Cell[11277, 324, 239, 4, 77, "Input"],
+Cell[11519, 330, 274, 5, 32, "Input"],
+Cell[11796, 337, 276, 5, 32, "Input"],
+Cell[12075, 344, 301, 5, 32, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
