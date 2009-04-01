@@ -20,7 +20,7 @@ WindowFrame->Normal*)
 Notebook[{
 Cell[BoxData[
  RowBox[{"SetDirectory", "[", 
-  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole\>\"", 
+  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole/Mathematica\>\"", 
   "]"}]], "Input",
  CellChangeTimes->{3.442796227094639*^9}],
 
