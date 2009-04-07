@@ -1,0 +1,7 @@
+Maximum traces:                16      16      17      19      21      23      26      30
+Cases to try:                  5003426573145
+Discarded fractional poly:     5003302931347
+Found positive candidate root: 1189765	(1189407 discarded)
+Found negative candidate root: 1674258	(1674078 discarded)
+Failed to converge:            7906690
+Found 538/5003426573145 candidates.
