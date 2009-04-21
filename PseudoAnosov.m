@@ -896,6 +896,10 @@ Begin["`Homology`"]
 
 (* There are 3g-1 Dehn twists that generate the mapping class group. *)
 
+(* This is overkill, though: really only need 2g of these: all of the
+    B's and C's, and one of the A's.  However, many words are shorter
+    if all the A's are included. *)
+
 (* The direction of a positive twist is given by a curve "turning
    right" as it approaches the Dehn-twist curve. *)
 
