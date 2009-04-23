@@ -28,6 +28,8 @@ ReciprocalPolynomial::usage = "ReciprocalPolynomial[x,n] returns a reciprocal po
 
 ReciprocalPolynomialQ::usage = "ReciprocalPolynomialQ[P] returns true if P is a reciprocal polynomial, i.e. of the form a[0] x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + a[0].";
 
+PolynomialFromTraces::usage = "PolynomialFromTraces[x,T,det] creates a polynomial of degree Length[T]+1 from the determinant det (defaults to 1) and a list T of traces of powers of its associated matrix."
+
 ReciprocalPolynomialFromTraces::usage = "ReciprocalPolynomialFromTraces[x,n,T] creates a reciprocal polynomial of degree n from a list of traces of powers of its associated matrix.  ReciprocalPolynomialFromTraces[x,T] creates a polynomial of degree 2 Length[T]."
 
 ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,r] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with Perron root less than r.  For n even, only one of each polynomials pair P(-x)=P(x) is listed.";
@@ -196,6 +198,12 @@ ReciprocalPolynomialQ[p_] := Module[
     c = CoefficientList[Collect[p,x],x];
     n = Length[c]-1;
     Return[Simplify[p - x^n (p/.x->1/x)] === 0]
+]
+
+
+PolynomialFromTraces[x_,T_List,det_:1] := Module[{c, n = Length[T]+1},
+    Do[c[k] = (-T[[k]] - Sum[c[m] T[[k-m]],{m,k-1}])/k,{k,n-1}];
+    x^n + Sum[c[k] x^(n-k), {k,n-1}] + det
 ]
 
 
