@@ -32,7 +32,9 @@ PolynomialFromTraces::usage = "PolynomialFromTraces[x,T,det] creates a polynomia
 
 ReciprocalPolynomialFromTraces::usage = "ReciprocalPolynomialFromTraces[x,n,T] creates a reciprocal polynomial of degree n from a list of traces of powers of its associated matrix.  ReciprocalPolynomialFromTraces[x,T] creates a polynomial of degree 2 Length[T]."
 
-ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,r] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with Perron root less than r.  For n even, only one of each polynomials pair P(-x)=P(x) is listed.";
+PolynomialBoundedList::usage = "PolynomialBoundedList[x,n,r,a[n]] returns a list of polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[n-2] x^2 + a[n-1] x + a[n] with Perron root less than r.  For n even, only one of each polynomial pair P(-x)=P(x) is listed.  If not specified, a[n] (determinant) defaults to 1.";
+
+ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,r] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with Perron root less than r.  For n even, only one of each polynomial pair P(-x)=P(x) is listed.";
 
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
@@ -242,12 +244,43 @@ Module[
        too large) *)
     pl = Pick[pl,pseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
     (* Make all roots positive, discard duplicates *)
-    pl = Union[If[PerronRoot[#] > 0, #, #/.x->-x] & /@ pl];
+    (* Only do this for even n: for odd n, the leading term changes sign. *)
+    If[EvenQ[n],
+      pl = Union[If[PerronRoot[#] > 0, #, #/.x->-x] & /@ pl]
+    ];
     (* Sort by Perron root *)
     (* Note that we computed the Perron root many times: a waste *)
     Sort[pl, PerronRoot[#1] < PerronRoot[#2] &]
 ]
 Options[ReciprocalPolynomialBoundedList] = Options[pseudoAnosovPerronRootQ]
+
+
+iPolynomialTracesBounds[n_Integer,r_] := Floor[n r^#] & /@ Range[n-1]
+
+
+PolynomialBoundedList[x_,n_Integer,r_,det_Integer:1,opts:OptionsPattern[]] :=
+Module[
+    {p,pl,sl,T,Tm = iPolynomialTracesBounds[n,r]},
+    p = PolynomialFromTraces[x,Table[T[k],{k,n-1}],det];
+    pl = Flatten[Fold[
+        Table[#1,{T[#2],-Tm[[#2]],Tm[[#2]]}]&, p, Range[n-1]
+    ]];
+    (* Discard the polynomials that don't have integer coefficients *)
+    sl = And @@ # & /@  (IntegerQ /@ # & /@ (CoefficientList[#,x] & /@ pl));
+    pl = Pick[pl,sl];
+    (* Discard the ones without the proper Perron root (not real or
+       too large) *)
+    pl = Pick[pl,pseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
+    (* Make all roots positive, discard duplicates *)
+    (* Only do this for even n: for odd n, the leading term changes sign. *)
+    If[EvenQ[n],
+      pl = Union[If[PerronRoot[#] > 0, #, #/.x->-x] & /@ pl]
+    ];
+    (* Sort by Perron root *)
+    (* Note that we computed the Perron root many times: a waste *)
+    Sort[pl, PerronRoot[#1] < PerronRoot[#2] &]
+]
+Options[PolynomialBoundedList] = Options[pseudoAnosovPerronRootQ]
 
 
 IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
