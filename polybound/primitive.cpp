@@ -9,19 +9,26 @@ template<class T>
 bool increment_vector(std::vector<T>& a,
 		      const std::vector<T>& amax);
 
+#ifdef ROWSUM
 template<class T>
-bool increment_row_vector(std::vector<T>& a, const int n,
-			  int& norm, const int maxnorm);
+bool increment_upper_triangle(std::vector<T>& a, const int n,
+			      T& norm,
+			      const T maxnorm,
+			      std::vector<T>& colsum,
+			      const T maxmincolsum);
+#else
+template<class T>
+bool increment_upper_triangle(std::vector<T>& a, const int n,
+			      T& norm, const T maxnorm);
+#endif
 
 template<class T>
-T rowcol_bound(jlt::mathmatrix<T>& A);
+T rowsum_bound(jlt::mathmatrix<T>& A);
 
 bool skipstring(std::ifstream& strm, const std::string& s);
 
 int main()
 {
-  static const int debug = 0;
-
   using jlt::operator<<;
   using std::cout;
   using std::cerr;
@@ -117,9 +124,6 @@ int main()
     }
 
   llint N = 0;
-  llint normexceeded = 0;	// Total times exceeded matrix norm?
-  llint rowcolsumexceeded = 0;	// Total times exceeded matrix column sum?
-  llint colsumexceeded = 0;	// Total times exceeded matrix column sum?
   llint rowsumexceeded = 0;	// Total times exceeded matrix row sum?
 
   int maxnorm = std::ceil(std::pow(lambdamax,(double)n)) + n - 1;
@@ -130,14 +134,23 @@ int main()
     {
       // Calculate the norm for the lower matrix.
       int Alownorm = 0;
+#ifdef ROWSUM
+      Vec rowsum(n);
+#endif
       for (int i = 0; i < n; ++i)
 	{
 	  for (int j = 0; j < n; ++j)
 	    {
+#ifdef ROWSUM
+	      rowsum[i] += li->operator()(j,i);
+#endif
 	      Alownorm += li->operator()(i,j);
 	    }
 	}
       cout << "Norm of lower = " << Alownorm << endl;
+#ifdef ROWSUM
+      cout << "Row sums of lower = " << rowsum << endl;
+#endif
       int Aupnorm = 0;
 
       do
@@ -147,65 +160,14 @@ int main()
 	  for (int k = 0; k < Nup; ++k) A(rowidx[k],colidx[k]) = a[k];
 
 	  ++N;
-	  if (!(N % 100000))
+	  if (!(N % 200000))
 	    { cerr << "a = " << a << endl; }
 
-	  if (rowcol_bound(A) > lambdamax)
+	  if (rowsum_bound(A) > lambdamax)
 	    {
 	      // cerr << "row/column sum bound exceeded.\n";
-	      ++rowcolsumexceeded;
-	    }
-#if 0
-	  int Mnorm = 0, colsummin = 0, rowsummin = 0;
-	  for (int i = 0; i < n; ++i)
-	    {
-	      int colsum = 0, rowsum = 0;
-	      for (int j = 0; j < n; ++j)
-		{
-		  colsum += A(j,i);
-		  rowsum += A(i,j);
-		}
-	      Mnorm += colsum;
-	      if (Mnorm > maxnorm)
-		{
-		  if (debug)
-		    {
-		      std::cerr << "Exceeded matrix norm ";
-		    }
-		  ++normexceeded;
-		  continue;
-
-		}
-	      if (colsum < colsummin || colsummin == 0) colsummin = colsum;
-	      if (rowsum < rowsummin || rowsummin == 0) rowsummin = rowsum;
-	    }
-
-	  // The minimum column sum is a lower bound on the spectral radius.
-	  if (colsummin > lambdamax)
-	    {
-	      if (debug)
-		{
-		  std::cerr << "Exceeded column sum at pathlength ";
-		}
-	      ++colsumexceeded;
-	      continue;
-	    }
-	  // The minimum row sum is also a lower bound on the spectral radius.
-	  if (rowsummin > lambdamax)
-	    {
-	      if (debug)
-		{
-		  std::cerr << "Exceeded row sum at pathlength ";
-		}
 	      ++rowsumexceeded;
-	      continue;
 	    }
-#endif
-	  /*
-	  cout << "norm = " << Mnorm;
-	  cout << " colsum = " << colsummin;
-	  cout << " rowsum = " << rowsummin << endl;
-	  */
 
 	  // Compute characteristic polynomial.
 #if 0
@@ -217,10 +179,14 @@ int main()
 	    }
 #endif
 	}
-      while(increment_row_vector(a,n,Aupnorm,maxnorm-Alownorm));
+#ifdef ROWSUM
+      while(increment_upper_triangle(a,n,Aupnorm,maxnorm-Alownorm,rowsum,1));
+#else
+      while(increment_upper_triangle(a,n,Aupnorm,maxnorm-Alownorm));
+#endif
     }
 
-    cout << rowcolsumexceeded << endl;
+    cout << rowsumexceeded << endl;
     cout << N << endl;
 }
 
@@ -248,9 +214,18 @@ inline bool increment_vector(std::vector<T>& a,
 }
 
 
+#ifdef ROWSUM
 template<class T>
-inline bool increment_row_vector(std::vector<T>& a, const int n,
-				 int& norm, const int maxnorm)
+bool increment_upper_triangle(std::vector<T>& a, const int n,
+			      T& norm,
+			      const T maxnorm,
+			      std::vector<T>& rowsum,
+			      const T maxminrowsum)
+#else
+template<class T>
+bool increment_upper_triangle(std::vector<T>& a, const int n,
+			      T& norm, const T maxnorm)
+#endif
 {
   int m0 = 0;
   for (int k = 0; k < n; ++k)
@@ -260,7 +235,32 @@ inline bool increment_row_vector(std::vector<T>& a, const int n,
 	  int m = m0 + (l-(k+1));
 	  ++a[m];
 	  ++norm;
-	  if (norm > maxnorm) { norm -= a[m]; a[m] = 0; continue; }
+#ifdef ROWSUM
+	  ++rowsum[l];
+#endif
+	  if (norm > maxnorm)
+	    {
+	      norm -= a[m];
+#ifdef ROWSUM
+	      rowsum[l] -= a[m];
+#endif
+	      a[m] = 0; continue;
+	    }
+#ifdef ROWSUM
+	  typename std::vector<T>::iterator
+	    minrowsum = min_element(rowsum.begin(),rowsum.end());
+	  using jlt::operator<<;
+	  // std::cerr << "rowsum = " << rowsum << std::endl;
+	  // std::cerr << "minrowsum = " << *minrowsum << std::endl;
+	  if (*minrowsum > maxminrowsum)
+	    {
+	      // std::cout << "Row sum exceeded.\n";
+	      norm -= a[m];
+	      rowsum[l] -= a[m];
+	      a[m] = 0;
+	      continue;
+	    }
+#endif
 
 #if 0
 	  // Sanity check.
@@ -282,22 +282,20 @@ inline bool increment_row_vector(std::vector<T>& a, const int n,
 
 
 template<class T>
-inline T rowcol_bound(jlt::mathmatrix<T>& A)
+inline T rowsum_bound(jlt::mathmatrix<T>& A)
 {
-  T colsummin = 0, rowsummin = 0;
+  T rowsummin = -1;
   int n = A.dim();
-  for (int i = 0; i < n; ++i)
+  for (int j = 0; j < n; ++j)
     {
-      int colsum = 0, rowsum = 0;
-      for (int j = 0; j < n; ++j)
+      int rowsum = 0;
+      for (int i = 0; i < n; ++i)
 	{
-	  colsum += A(j,i);
 	  rowsum += A(i,j);
 	}
-      if (colsum < colsummin || colsummin == 0) colsummin = colsum;
-      if (rowsum < rowsummin || rowsummin == 0) rowsummin = rowsum;
+      if (rowsum < rowsummin || rowsummin == -1) rowsummin = rowsum;
     }
-  return std::max(rowsummin,colsummin);
+  return rowsummin;
 }
 
 
