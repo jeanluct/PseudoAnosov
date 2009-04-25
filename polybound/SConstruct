@@ -10,3 +10,4 @@ if int(profile):
    env.PrependUnique(LINKFLAGS = ['-pg'])
 
 env.Program('polybound.cpp')
+env.Program('primitive.cpp')
