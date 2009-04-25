@@ -7,10 +7,14 @@
 
 template<class T>
 bool increment_vector(std::vector<T>& a,
-		      const std::vector<T>& amin,
-		      const std::vector<T>& amax,
-		      const std::vector<T>& astart,
-		      const std::vector<T>& aend);
+		      const std::vector<T>& amax);
+
+template<class T>
+bool increment_row_vector(std::vector<T>& a, const int n,
+			  int& norm, const int maxnorm);
+
+template<class T>
+T rowcol_bound(jlt::mathmatrix<T>& A);
 
 bool skipstring(std::ifstream& strm, const std::string& s);
 
@@ -33,14 +37,14 @@ int main()
   typedef PVec::const_iterator			PVeccit;
   typedef long long int				llint;
 
-  const int n = 6;
   std::ifstream indata;
   indata.open("polycoeffs_n=6.m");
 
   PVec pl;
 
-#if 1
-  double lambdamax = 1.840;
+#if 0
+  const int n = 6;
+  double lambdamax = 1.8311;
 
   while (skipstring(indata,"{"))
     {
@@ -59,6 +63,9 @@ int main()
 
   Poly p = pl.front();
 #else
+  const int n = 4;
+  double lambdamax = 1.73;
+
   Poly p;
   p[0] = 1;
   p[n] = 1;
@@ -73,7 +80,7 @@ int main()
   std::list<Mat> Alow;
   // Vector of positions of the "1" entry.
   // 0 <= al[k] <= k+1.  al[k]=k+1 corresponds to no 1 at all.
-  Vec al(n), almin(n), almax(n);
+  Vec al(n), almax(n);
   for (int k = 0; k < n; ++k) almax[k] = k+1;
   do
     {
@@ -86,7 +93,7 @@ int main()
 	}
       if (trA == tr) Alow.push_back(A);
     }
-  while(increment_vector(al,almin,almax,almin,almax));
+  while(increment_vector(al,almax));
   // Now figure out which matrices lead to a zero determinant.
   /* */
 
@@ -97,8 +104,8 @@ int main()
   //
   std::list<Mat> Aup;
   int Nup = (n*(n-1))/2, aupmax = 2;
-  Vec a(Nup), amin(Nup), amax(Nup);
-  for (int k = 0; k < Nup; ++k) amax[k] = aupmax;
+  Vec a(Nup), amax(Nup);
+  for (int k = 0; k < Nup; ++k) { amax[k] = aupmax; }
   // Make index pair for eack k.
   Vec rowidx(Nup), colidx(Nup);
   int row = 0, col = 1;
@@ -109,7 +116,9 @@ int main()
       if (col == n) { ++row; col = row+1; }
     }
 
+  llint N = 0;
   llint normexceeded = 0;	// Total times exceeded matrix norm?
+  llint rowcolsumexceeded = 0;	// Total times exceeded matrix column sum?
   llint colsumexceeded = 0;	// Total times exceeded matrix column sum?
   llint rowsumexceeded = 0;	// Total times exceeded matrix row sum?
 
@@ -117,14 +126,36 @@ int main()
   cout << "maxnorm = " << maxnorm << endl;
 
   //  for (std::list<Mat>::const_iterator li = Alow.begin(); li != Alow.end(); ++li)
-  std::list<Mat>::const_iterator li = Alow.begin();
+    std::list<Mat>::const_iterator li = Alow.begin();
     {
+      // Calculate the norm for the lower matrix.
+      int Alownorm = 0;
+      for (int i = 0; i < n; ++i)
+	{
+	  for (int j = 0; j < n; ++j)
+	    {
+	      Alownorm += li->operator()(i,j);
+	    }
+	}
+      cout << "Norm of lower = " << Alownorm << endl;
+      int Aupnorm = 0;
+
       do
 	{
 	  // Form matrix.
 	  Mat A(*li);
 	  for (int k = 0; k < Nup; ++k) A(rowidx[k],colidx[k]) = a[k];
 
+	  ++N;
+	  if (!(N % 100000))
+	    { cerr << "a = " << a << endl; }
+
+	  if (rowcol_bound(A) > lambdamax)
+	    {
+	      // cerr << "row/column sum bound exceeded.\n";
+	      ++rowcolsumexceeded;
+	    }
+#if 0
 	  int Mnorm = 0, colsummin = 0, rowsummin = 0;
 	  for (int i = 0; i < n; ++i)
 	    {
@@ -169,7 +200,7 @@ int main()
 	      ++rowsumexceeded;
 	      continue;
 	    }
-
+#endif
 	  /*
 	  cout << "norm = " << Mnorm;
 	  cout << " colsum = " << colsummin;
@@ -177,48 +208,96 @@ int main()
 	  */
 
 	  // Compute characteristic polynomial.
+#if 0
 	  Poly cpoly(A.charpoly());
 
 	  if (cpoly == p)
 	    {
 	      cout << "Got it!\n";
 	    }
+#endif
 	}
-      while(increment_vector(a,amin,amax,amin,amax));
+      while(increment_row_vector(a,n,Aupnorm,maxnorm-Alownorm));
     }
+
+    cout << rowcolsumexceeded << endl;
+    cout << N << endl;
 }
 
 
 template<class T>
 inline bool increment_vector(std::vector<T>& a,
-			     const std::vector<T>& amin,
-			     const std::vector<T>& amax,
-			     const std::vector<T>& astart,
-			     const std::vector<T>& aend)
+			     const std::vector<T>& amax)
 {
   //
   // Increment elements of the vector a (from the last element),
-  // resetting each position a[m] to amin[m] if it passes amax[m].
+  // resetting each position a[m] to 0 if it passes amax[m].
   //
   const int n = a.size();
   bool incr = false;
   for (int m = n-1; m >= 0; --m)
     {
-      // The sequence that coefficients cycle through is
-      // astart[m]...aend[m] for a[m], 0 <= m < n, rolling over from
-      // amax[m] to amin[m] if necessary.
+      // The sequence that coefficients cycle through is 0...amax,
+      // rolling over from amax to 0 if necessary.
       ++a[m];
-      // aend[m]=0 is the same as aend[m]=-1, since we skip 0.
-      if (a[m] == aend[m]+1 || (a[m] == 0 && aend[m] == 0))
-	{ a[m] = astart[m]; continue; }
-      if (a[m] > amax[m]) { a[m] = amin[m]; }
-      // Skip 0.
-      if (a[m] == 0) ++a[m];
+      if (a[m] > amax[m]) { a[m] = 0; continue; }
       incr = true;
       break;
     }
-
   return incr;
+}
+
+
+template<class T>
+inline bool increment_row_vector(std::vector<T>& a, const int n,
+				 int& norm, const int maxnorm)
+{
+  int m0 = 0;
+  for (int k = 0; k < n; ++k)
+    {
+      for (int l = k+1; l < n; ++l)
+	{
+	  int m = m0 + (l-(k+1));
+	  ++a[m];
+	  ++norm;
+	  if (norm > maxnorm) { norm -= a[m]; a[m] = 0; continue; }
+
+#if 0
+	  // Sanity check.
+	  int checknorm = 0;
+	  for (int i = 0; i < (n*(n-1))/2; ++i) checknorm += a[i];
+	  if (norm != checknorm)
+	    {
+	      std::cerr << "Norms don't match...\n";
+	      exit(-1);
+	    }
+#endif
+
+	  return true;
+	}
+      m0 += (n-1-k);
+    }
+  return false;
+}
+
+
+template<class T>
+inline T rowcol_bound(jlt::mathmatrix<T>& A)
+{
+  T colsummin = 0, rowsummin = 0;
+  int n = A.dim();
+  for (int i = 0; i < n; ++i)
+    {
+      int colsum = 0, rowsum = 0;
+      for (int j = 0; j < n; ++j)
+	{
+	  colsum += A(j,i);
+	  rowsum += A(i,j);
+	}
+      if (colsum < colsummin || colsummin == 0) colsummin = colsum;
+      if (rowsum < rowsummin || rowsummin == 0) rowsummin = rowsum;
+    }
+  return std::max(rowsummin,colsummin);
 }
 
 
