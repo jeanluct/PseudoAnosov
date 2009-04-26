@@ -78,15 +78,31 @@ int main()
   Poly p = pl[0];
   double lambdamax = 1.40127;
 #endif
-#if 1
+#if 0
   // x^6 - x^5 + x^4 - 3 x^3 + x^2 - x + 1
   // No matrices found!  But it can clearly be realized with 7x7.
   Poly p = pl[1];
   double lambdamax = 1.46557;
 #endif
+#if 1
+  // x^6 - x^5 - x^3 - x + 1
+  Poly p = pl[2];
+  double lambdamax = 1.50614;
+#endif
 #if 0
+  // x^6 - x^5 - x^4 + x^3 - x^2 - x + 1
+  Poly p = pl[3];
+  double lambdamax = 1.55603;
+#endif
+#if 0
+  // x^6 - 2 x^5 + x^3 - 2 x - x + 1
+  Poly p = pl[17];
+  double lambdamax = 1.83108;
+#endif
+#if 0
+  // x^6 - x^4 - 4 x^3 - x^2 + 1
   Poly p = pl.back();
-  double lambdamax = 1.840;
+  double lambdamax = 1.83929;
 #endif
 
 #else
@@ -121,8 +137,6 @@ int main()
       if (trA == tr) Alow.push_back(A);
     }
   while(increment_vector(al,almax));
-  // Now figure out which matrices lead to a zero determinant.
-  /* Not worth it... they get sifted out in the next step. */
 
   cerr << Alow.size() << " lower-triangular forms\n";
   int todo = Alow.size();
@@ -152,18 +166,18 @@ int main()
   int maxnorm = std::ceil(std::pow(lambdamax,(double)n)) + n - 1;
   cerr << "maxnorm = " << maxnorm << endl;
 
-  std::vector<std::vector<Vec> > pattern;
+  cout << "{\n";
+  bool thefirst = true;
 
   for (int li = 0; li < (int)todo; ++li)
-    // int li = 0;
     {
       // Calculate the norm for the lower matrix.
       int Alownorm = matrix_norm(Alow[li]);
-      cerr << "Lower-triangular form " << setw(3) << li+1;
+      cerr << "Lower-triangular form " << setw(4) << li+1;
       cerr << " (norm " << Alownorm << "): ";
 
-      pattern.push_back(std::vector<Vec>());
-
+      // Vector of allowable patterns.
+      std::vector<Vec> pattern;
       int n1min = -1, n1max = -1;
 
       do
@@ -181,7 +195,7 @@ int main()
 		  if (!A.isReducible())
 		    {
 		      ++validpatterns;
-		      pattern.back().push_back(a);
+		      pattern.push_back(a);
 		      int n1 = std::count(a.begin(),a.end(),1);
 		      if (n1 < n1min || n1min == -1) n1min = n1;
 		      if (n1 > n1max || n1max == -1) n1max = n1;
@@ -202,78 +216,25 @@ int main()
 	    }
 	}
       while(increment_vector(a,amax));
-      cerr << setw(5) << pattern[li].size() << " valid patterns";
-      if (n1min != -1)
-	{
-	  cerr << " (size ";
-	  cerr << setw(2) << n1min+Alownorm << " to ";
-	  cerr << setw(2) << n1max+Alownorm << ")";
-	}
-      cerr << endl;
-    }
 
-  cerr << validpatterns << endl;
-  cerr << reduciblepatterns << endl;
-  cerr << colsumexceeded << endl;
-  cerr << maxnormexceeded << endl;
-  cerr << N << endl;
+      cerr << setw(5) << pattern.size() << " valid patterns";
 
-  // Compact the list of lower-triangular matrices and patterns.
-  /* This is terrible since it duplicates the lists unnecessarily. */
-#if 0
-  {
-    MVec Alow2;
-    std::vector<std::vector<Vec> > pattern2;
-
-    for (int li = 0; li < (int)todo; ++li)
-      {
-	if (pattern[li].size() != 0)
-	  {
-	    Alow2.push_back(Alow[li]);
-	    pattern2.push_back(pattern[li]);
-	  }
-      }
-    Alow = Alow2;
-    pattern = pattern2;
-  }
-#endif
-
-  // Count allowable lower-triangular forms.
-  int allowablelowertriang = 0;
-  for (int li = 0; li < (int)todo; ++li)
-    {
-      if (!pattern[li].empty()) ++allowablelowertriang;
-    }
-
-  cerr << "Checking valid patterns with " << allowablelowertriang;
-  cerr << " lower-triangular forms\n";
-
-  cout << "{\n";
-  bool thefirst = true;
-
-  for (int li = 0; li < (int)Alow.size(); ++li)
-    {
       // Skip lower-triangular forms with no allowable patterns.
-      if (pattern[li].empty()) continue;
+      if (pattern.empty()) { cerr << endl; continue; }
 
-      // Calculate the norm for the lower matrix.
-      int Alownorm = matrix_norm(Alow[li]);
-      cerr << "Lower-triangular form " << setw(3) << li+1 << endl;
+      cerr << " (size ";
+      cerr << setw(2) << n1min+Alownorm << " to ";
+      cerr << setw(2) << n1max+Alownorm << ")\n";
 
-      for (int pa = 0; pa < (int)pattern[li].size(); ++pa)
+      for (int pa = 0; pa < (int)pattern.size(); ++pa)
 	{
-#if 0
-	  cerr << "  Pattern " << setw(3) << pa+1 << " / ";
-	  cerr << pattern[li].size() << endl;
-#endif
-
-	  Nup = std::count(pattern[li][pa].begin(),pattern[li][pa].end(),1);
+	  Nup = std::count(pattern[pa].begin(),pattern[pa].end(),1);
 	  // Make index pair for eack k.
 	  Vec rowidx(Nup), colidx(Nup);
 	  int row = 0, col = 1, m = 0;
 	  for (int k = 0; k < (n*(n-1))/2; ++k)
 	    {
-	      if (pattern[li][pa][k] == 1)
+	      if (pattern[pa][k] == 1)
 		{
 		  rowidx[m] = row;
 		  colidx[m] = col;
@@ -286,6 +247,7 @@ int main()
 	  Vec a(Nup,1);
 	  int Aupnorm = a.size();
 
+	  // Now loop over vales of the entries of the pattern
 	  do
 	    {
 	      // Form matrix.
@@ -294,18 +256,11 @@ int main()
 
 	      ++N;
 	      /*
-	      if (!(N % 1000000))
+		if (!(N % 1000000))
 		{ cerr << "a = " << a << endl; }
 	      */
 
-	      if (mincolsum(A) > lambdamax)
-		{
-		  // cerr << "row/column sum bound exceeded.\n";
-		  ++colsumexceeded;
-		}
-
 	      // Compute characteristic polynomial.
-#if 1
 	      Poly cpoly(A.charpoly());
 
 	      if (cpoly == p)
@@ -314,14 +269,19 @@ int main()
 		  if (!thefirst) cout << "," << endl; else thefirst = false;
 		  A.printMathematicaForm(cout);
 		}
-#endif
 	    }
 	  while(increment_upper_triangle(a,Aupnorm,maxnorm-Alownorm));
 	}
     }
 
+
   cout << "\n}\n";
 
+  cerr << validpatterns << endl;
+  cerr << reduciblepatterns << endl;
+  cerr << colsumexceeded << endl;
+  cerr << maxnormexceeded << endl;
+  cerr << N << endl;
 }
 
 
