@@ -72,9 +72,9 @@ int main()
   cerr << "Checking " << pl.size() << " polynomials:\n";
   for (PVeccit pi = pl.begin(); pi != pl.end(); ++pi) { cerr << *pi << endl;} 
 
-#if 0
+#if 1
   // x^6 - x^4 - x^3 - x^2 + 1
-  // 1710 matrices: all of type (0^27,1^9) or (0^28,1^8)
+  // 1710 matrices: all of type (0^28,1^8) or (0^27,1^9)
   Poly p = pl[0];
   double lambdamax = 1.40127;
 #endif
@@ -84,8 +84,9 @@ int main()
   Poly p = pl[1];
   double lambdamax = 1.46557;
 #endif
-#if 1
+#if 0
   // x^6 - x^5 - x^3 - x + 1
+  // 1129 matrices: type (0^28,1^8), (0^27,1^9), (0^26,1^10), (0^26,1^9,2^1)
   Poly p = pl[2];
   double lambdamax = 1.50614;
 #endif
@@ -144,18 +145,20 @@ int main()
   //
   // Upper-triangle of matrices: find valid patterns
   //
-  int Nup = (n*(n-1))/2, aupmax = 1;
-  Vec a(Nup), amax(Nup);
-  for (int k = 0; k < Nup; ++k) { amax[k] = aupmax; }
+  int Nup = (n*(n-1))/2;
+  Vec aup(Nup), aupmax(Nup);
+  for (int k = 0; k < Nup; ++k) { aupmax[k] = 1; }
   // Make index pair for eack k.
   Vec rowidx(Nup), colidx(Nup);
-  int row = 0, col = 1;
-  for (int k = 0; k < Nup; ++k)
-    {
-      rowidx[k] = row;
-      colidx[k] = col++;
-      if (col == n) { ++row; col = row+1; }
-    }
+  {
+    int row = 0, col = 1;
+    for (int k = 0; k < Nup; ++k)
+      {
+	rowidx[k] = row;
+	colidx[k] = col++;
+	if (col == n) { ++row; col = row+1; }
+      }
+  }
 
   llint N = 0;
   llint colsumexceeded = 0;	// Total times exceeded matrix row sum?
@@ -163,7 +166,7 @@ int main()
   llint validpatterns = 0;
   llint reduciblepatterns = 0;
 
-  int maxnorm = std::ceil(std::pow(lambdamax,(double)n)) + n - 1;
+  int maxnorm = (int)std::ceil(std::pow(lambdamax,(double)n)) + n - 1;
   cerr << "maxnorm = " << maxnorm << endl;
 
   cout << "{\n";
@@ -184,7 +187,7 @@ int main()
 	{
 	  // Form matrix.
 	  Mat A(Alow[li]);
-	  for (int k = 0; k < Nup; ++k) A(rowidx[k],colidx[k]) = a[k];
+	  for (int k = 0; k < Nup; ++k) A(rowidx[k],colidx[k]) = aup[k];
 
 	  ++N;
 
@@ -195,8 +198,8 @@ int main()
 		  if (!A.isReducible())
 		    {
 		      ++validpatterns;
-		      pattern.push_back(a);
-		      int n1 = std::count(a.begin(),a.end(),1);
+		      pattern.push_back(aup);
+		      int n1 = std::count(aup.begin(),aup.end(),1);
 		      if (n1 < n1min || n1min == -1) n1min = n1;
 		      if (n1 > n1max || n1max == -1) n1max = n1;
 		    }
@@ -215,7 +218,7 @@ int main()
 	      ++colsumexceeded;
 	    }
 	}
-      while(increment_vector(a,amax));
+      while(increment_vector(aup,aupmax));
 
       cerr << setw(5) << pattern.size() << " valid patterns";
 
@@ -228,36 +231,39 @@ int main()
 
       for (int pa = 0; pa < (int)pattern.size(); ++pa)
 	{
-	  Nup = std::count(pattern[pa].begin(),pattern[pa].end(),1);
+	  int Npat = std::count(pattern[pa].begin(),pattern[pa].end(),1);
 	  // Make index pair for eack k.
-	  Vec rowidx(Nup), colidx(Nup);
-	  int row = 0, col = 1, m = 0;
-	  for (int k = 0; k < (n*(n-1))/2; ++k)
-	    {
-	      if (pattern[pa][k] == 1)
-		{
-		  rowidx[m] = row;
-		  colidx[m] = col;
-		  ++m;
-		}
-	      if (++col == n) { ++row; col = row+1; }
-	    }
+	  Vec patrowidx(Npat), patcolidx(Npat);
+	  {
+	    int row = 0, col = 1, m = 0;
+	    for (int k = 0; k < (n*(n-1))/2; ++k)
+	      {
+		if (pattern[pa][k] == 1)
+		  {
+		    patrowidx[m] = row;
+		    patcolidx[m] = col;
+		    ++m;
+		  }
+		if (++col == n) { ++row; col = row+1; }
+	      }
+	  }
 
 	  // Start with the pattern equal to all ones.
-	  Vec a(Nup,1);
-	  int Aupnorm = a.size();
+	  Vec apat(Npat,1);
+	  int Aupnorm = apat.size();
 
 	  // Now loop over vales of the entries of the pattern
 	  do
 	    {
 	      // Form matrix.
 	      Mat A(Alow[li]);
-	      for (int k = 0; k < Nup; ++k) A(rowidx[k],colidx[k]) = a[k];
+	      for (int k = 0; k < Npat; ++k)
+		A(patrowidx[k],patcolidx[k]) = apat[k];
 
 	      ++N;
 	      /*
 		if (!(N % 1000000))
-		{ cerr << "a = " << a << endl; }
+		{ cerr << "a = " << apat << endl; }
 	      */
 
 	      // Compute characteristic polynomial.
@@ -270,7 +276,7 @@ int main()
 		  A.printMathematicaForm(cout);
 		}
 	    }
-	  while(increment_upper_triangle(a,Aupnorm,maxnorm-Alownorm));
+	  while(increment_upper_triangle(apat,Aupnorm,maxnorm-Alownorm));
 	}
     }
 
