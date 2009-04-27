@@ -18,6 +18,9 @@ T mincolsum(jlt::mathmatrix<T>& A);
 template<class T>
 T matrix_norm(const jlt::mathmatrix<T>& A);
 
+template<class T>
+double spectral_lower_bound(const jlt::mathmatrix<T>& A);
+
 bool skipstring(std::ifstream& strm, const std::string& s);
 
 int main()
@@ -193,7 +196,7 @@ int main()
 
 	  if (mincolsum(A) <= lambdamax)
 	    {
-	      if (matrix_norm(A) <= maxnorm)
+	      if (spectral_lower_bound(A) <= lambdamax)
 		{
 		  if (!A.isReducible())
 		    {
@@ -373,6 +376,23 @@ inline T matrix_norm(const jlt::mathmatrix<T>& A)
 	}
     }
   return norm;
+}
+
+
+template<class T>
+double spectral_lower_bound(const jlt::mathmatrix<T>& A)
+{
+  int n = A.dim();
+  double bound = 0;
+  double bound2 = jlt::Pow((double)(matrix_norm(A)-n+1),(double)1/n);
+  for (int j = 0; j < n; ++j)
+    {
+      for (int i = 0; i < n; ++i)
+	{
+	  bound += jlt::Sqrt((double)A(i,j)*A(j,i));
+	}
+    }
+  return std::max(bound/n,bound2);
 }
 
 
