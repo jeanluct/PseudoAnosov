@@ -3,6 +3,7 @@
 #include <vector>
 #include <jlt/mathmatrix.hpp>
 #include <jlt/polynomial.hpp>
+#include <jlt/exceptions.hpp>
 #include <jlt/eigensystem.hpp> // for spectral radius
 
 template<class T>
@@ -10,8 +11,7 @@ bool increment_vector(std::vector<T>& a,
 		      const std::vector<T>& amax);
 
 template<class T>
-bool increment_upper_triangle(std::vector<T>& a,
-			      const jlt::mathmatrix<T>& Alow,
+bool increment_upper_triangle(jlt::mathmatrix<T>& A,
 			      const std::vector<T>& rowidx,
 			      const std::vector<T>& colidx,
 			      const double lambdamax);
@@ -21,6 +21,9 @@ double spectral_radius(const jlt::mathmatrix<T>& A);
 
 template<class T>
 inline T matrix_norm(const jlt::mathmatrix<T>& A);
+
+template<class S, class T>
+T findroot(const jlt::polynomial<S>& p, const T x0, const T tol);
 
 bool skipstring(std::ifstream& strm, const std::string& s);
 
@@ -50,7 +53,7 @@ int main()
 
   PVec pl;
 
-#if 0
+#if 1
   const int n = 6;
 
   // Read in Mathematica file of polynomials.
@@ -73,31 +76,25 @@ int main()
       pl.push_back(p);
     }
   while (skipstring(indata,","));
-  cerr << "Checking " << pl.size() << " polynomials:\n";
-  for (PVeccit pi = pl.begin(); pi != pl.end(); ++pi) { cerr << *pi << endl;} 
 
-#if 1
+#if 0
   // x^6 - x^4 - x^3 - x^2 + 1
   // 1710 matrices: all of type (0^28,1^8) or (0^27,1^9)
   Poly p = pl[0];
-  double lambdamax = 1.40127;
 #endif
 #if 0
   // x^6 - x^5 + x^4 - 3 x^3 + x^2 - x + 1
   // No matrices found!  But it can clearly be realized with 7x7.
   Poly p = pl[1];
-  double lambdamax = 1.46557;
 #endif
 #if 0
   // x^6 - x^5 - x^3 - x + 1
   // 1129 matrices: type (0^28,1^8), (0^27,1^9), (0^26,1^10), (0^26,1^9,2^1)
   Poly p = pl[2];
-  double lambdamax = 1.50614;
 #endif
 #if 0
   // x^6 - x^5 - x^4 + x^3 - x^2 - x + 1
   Poly p = pl[3];
-  double lambdamax = 1.55603;
 #endif
 #if 0
   // x^6 - 2 x^5 + x^3 - 2 x - x + 1
@@ -113,17 +110,14 @@ int main()
   // (0^23,1^12,2^1)
   // (0^23,1^13)
   Poly p = pl[17];
-  double lambdamax = 1.83108;
 #endif
-#if 0
+#if 1
   // x^6 - x^4 - 4 x^3 - x^2 + 1
   Poly p = pl.back();
-  double lambdamax = 1.83929;
 #endif
 
 #else
   const int n = 4;
-  double lambdamax = 1.73;
 
   Poly p;
   p[0] = 1;
@@ -134,6 +128,10 @@ int main()
 #endif
 
   int tr = -p[n-1];
+
+  cerr << "Checking polynomial " << p;
+  double lambdamax = findroot(p,2.0,1e-8);
+  cerr << " with root  " << lambdamax << endl;
 
   // Create lower-triangle of matrices.
   MVec Alow;
@@ -251,20 +249,15 @@ int main()
 	      }
 	  }
 
+	  // Form matrix.
 	  // Start with the pattern equal to all ones.
-	  Vec apat(Npat,1);
+	  Mat A(Alow[li]);
+	  for (int k = 0; k < Npat; ++k) A(patrowidx[k],patcolidx[k]) = 1;
 
 	  // Now loop over vales of the entries of the pattern
 	  do
 	    {
-	      // Form matrix.
-	      Mat A(Alow[li]);
-	      for (int k = 0; k < Npat; ++k)
-		A(patrowidx[k],patcolidx[k]) = apat[k];
-
 	      ++N;
-		if (!(N % 1000000))
-		{ cerr << "a = " << apat << endl; }
 
 	      // Compute characteristic polynomial.
 	      Poly cpoly(A.charpoly());
@@ -276,7 +269,7 @@ int main()
 		  A.printMathematicaForm(cout);
 		}
 	    }
-	  while(increment_upper_triangle(apat,Alow[li],patrowidx,patcolidx,lambdamax));
+	  while(increment_upper_triangle(A,patrowidx,patcolidx,lambdamax));
 	}
     }
 
@@ -314,20 +307,23 @@ inline bool increment_vector(std::vector<T>& a,
 
 
 template<class T>
-bool increment_upper_triangle(std::vector<T>& a,
-			      const jlt::mathmatrix<T>& A,
-			      const std::vector<T>& rowidx,
-			      const std::vector<T>& colidx,
+bool increment_upper_triangle(jlt::mathmatrix<T>& A,
+			      const std::vector<T>& row,
+			      const std::vector<T>& col,
 			      const double lambdamax)
 {
-  const int n = a.size();
+  const int n = row.size();
+
   for (int m = n-1; m >= 0; --m)
     {
-      ++a[m];
+      ++A(row[m],col[m]);
 
-      jlt::mathmatrix<int> Ad(A);
-      for (int k = 0; k < n; ++k) Ad(rowidx[k],colidx[k]) = a[k];
-      if (spectral_radius(Ad) > lambdamax) { a[m] = 1; continue; }
+      if (spectral_radius(A) > lambdamax)
+	{
+	  A(row[m],col[m]) = 1;
+	  continue;
+	}
+
       return true;
     }
   return false;
@@ -360,6 +356,31 @@ inline T matrix_norm(const jlt::mathmatrix<T>& A)
 	}
     }
   return norm;
+}
+
+
+template<class S, class T>
+inline T findroot(const jlt::polynomial<S>& p,
+	   const T x0, const T tol)
+{
+  using jlt::Abs;
+  T px(p(x0)), x(x0);
+
+  int i = 0;
+  const int itmax = 100;
+
+  while (Abs(px) > tol && i++ < itmax)
+    {
+      x = x - px / p.derivative_at(x);
+      px = p(x);
+    }
+
+  if (i == itmax)
+    throw
+      jlt::failed_to_converge<T>
+      ("Failed to converge to specified accuracy.\n",Abs(px));
+  else
+    return x;
 }
 
 
