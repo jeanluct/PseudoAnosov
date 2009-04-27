@@ -17,13 +17,10 @@ bool increment_upper_triangle(std::vector<T>& a,
 			      const double lambdamax);
 
 template<class T>
-T mincolsum(jlt::mathmatrix<T>& A);
+double spectral_radius(const jlt::mathmatrix<T>& A);
 
 template<class T>
-T matrix_norm(const jlt::mathmatrix<T>& A);
-
-template<class T>
-double spectral_lower_bound(const jlt::mathmatrix<T>& A);
+inline T matrix_norm(const jlt::mathmatrix<T>& A);
 
 bool skipstring(std::ifstream& strm, const std::string& s);
 
@@ -53,7 +50,7 @@ int main()
 
   PVec pl;
 
-#if 1
+#if 0
   const int n = 6;
 
   // Read in Mathematica file of polynomials.
@@ -179,24 +176,16 @@ int main()
   }
 
   llint N = 0;
-  llint colsumexceeded = 0;	// Total times exceeded matrix row sum?
-  llint maxnormexceeded = 0;
-  llint symmetricnormexceeded = 0;
   llint validpatterns = 0;
   llint reduciblepatterns = 0;
-
-  int maxnorm = (int)std::floor(std::pow(lambdamax,(double)n)) + n - 1;
-  cerr << "maxnorm = " << maxnorm << endl;
+  llint rootexceeded = 0;
 
   cout << "{\n";
   bool thefirst = true;
 
   for (int li = 0; li < (int)todo; ++li)
     {
-      // Calculate the norm for the lower matrix.
-      int Alownorm = matrix_norm(Alow[li]);
-      cerr << "Lower-triangular form " << setw(4) << li+1;
-      cerr << " (norm " << Alownorm << "): ";
+      cerr << "Lower-triangular form " << setw(4) << li+1 << ": ";
 
       // Vector of allowable patterns.
       std::vector<Vec> pattern;
@@ -210,31 +199,24 @@ int main()
 
 	  ++N;
 
-	  if (mincolsum(A) <= lambdamax)
+	  if (spectral_radius(A) <= lambdamax)
 	    {
-	      if (spectral_lower_bound(A) <= lambdamax)
+	      if (!A.isReducible())
 		{
-		  if (!A.isReducible())
-		    {
-		      ++validpatterns;
-		      pattern.push_back(aup);
-		      int n1 = std::count(aup.begin(),aup.end(),1);
-		      if (n1 < n1min || n1min == -1) n1min = n1;
-		      if (n1 > n1max || n1max == -1) n1max = n1;
-		    }
-		  else
-		    {
-		      ++reduciblepatterns;
-		    }
+		  ++validpatterns;
+		  pattern.push_back(aup);
+		  int n1 = std::count(aup.begin(),aup.end(),1);
+		  if (n1 < n1min || n1min == -1) n1min = n1;
+		  if (n1 > n1max || n1max == -1) n1max = n1;
 		}
 	      else
 		{
-		  ++maxnormexceeded;
+		  ++reduciblepatterns;
 		}
 	    }
 	  else
 	    {
-	      ++colsumexceeded;
+	      ++rootexceeded;
 	    }
 	}
       while(increment_vector(aup,aupmax));
@@ -245,6 +227,7 @@ int main()
       if (pattern.empty()) { cerr << endl; continue; }
 
       cerr << " (size ";
+      int Alownorm = matrix_norm(Alow[li]);
       cerr << setw(2) << n1min+Alownorm << " to ";
       cerr << setw(2) << n1max+Alownorm << ")\n";
 
@@ -270,7 +253,6 @@ int main()
 
 	  // Start with the pattern equal to all ones.
 	  Vec apat(Npat,1);
-	  int Aupnorm = apat.size();
 
 	  // Now loop over vales of the entries of the pattern
 	  do
@@ -303,9 +285,7 @@ int main()
 
   cerr << validpatterns << endl;
   cerr << reduciblepatterns << endl;
-  cerr << colsumexceeded << endl;
-  cerr << maxnormexceeded << endl;
-  cerr << symmetricnormexceeded << endl;
+  cerr << rootexceeded << endl;
   cerr << N << endl;
 }
 
@@ -335,7 +315,7 @@ inline bool increment_vector(std::vector<T>& a,
 
 template<class T>
 bool increment_upper_triangle(std::vector<T>& a,
-			      const jlt::mathmatrix<T>& Alow,
+			      const jlt::mathmatrix<T>& A,
 			      const std::vector<T>& rowidx,
 			      const std::vector<T>& colidx,
 			      const double lambdamax)
@@ -345,14 +325,9 @@ bool increment_upper_triangle(std::vector<T>& a,
     {
       ++a[m];
 
-      // Form matrix.
-      int nn = Alow.dim();
-      jlt::mathmatrix<double> A(nn,nn);
-      for (int i = 0; i < nn; ++i)
-	for (int j = 0; j < nn; ++j) A(i,j) = Alow(i,j);
-
-      for (int k = 0; k < n; ++k) A(rowidx[k],colidx[k]) = a[k];
-      if (jlt::spectral_radius(A) > lambdamax) { a[m] = 1; continue; }
+      jlt::mathmatrix<int> Ad(A);
+      for (int k = 0; k < n; ++k) Ad(rowidx[k],colidx[k]) = a[k];
+      if (spectral_radius(Ad) > lambdamax) { a[m] = 1; continue; }
       return true;
     }
   return false;
@@ -360,20 +335,15 @@ bool increment_upper_triangle(std::vector<T>& a,
 
 
 template<class T>
-inline T mincolsum(jlt::mathmatrix<T>& A)
+double spectral_radius(const jlt::mathmatrix<T>& A)
 {
-  T colsummin = -1;
   int n = A.dim();
-  for (int j = 0; j < n; ++j)
-    {
-      int colsum = 0;
-      for (int i = 0; i < n; ++i)
-	{
-	  colsum += A(i,j);
-	}
-      if (colsum < colsummin || colsummin == -1) colsummin = colsum;
-    }
-  return colsummin;
+  jlt::mathmatrix<double> Ad(n,n);
+
+  for (int i = 0; i < n; ++i)
+    for (int j = 0; j < n; ++j) Ad(i,j) = A(i,j);
+
+  return jlt::spectral_radius(Ad);
 }
 
 
@@ -390,23 +360,6 @@ inline T matrix_norm(const jlt::mathmatrix<T>& A)
 	}
     }
   return norm;
-}
-
-
-template<class T>
-double spectral_lower_bound(const jlt::mathmatrix<T>& A)
-{
-  int n = A.dim();
-  double bound = 0;
-  double bound2 = jlt::Pow((double)(matrix_norm(A)-n+1),(double)1/n);
-  for (int j = 0; j < n; ++j)
-    {
-      for (int i = 0; i < n; ++i)
-	{
-	  bound += jlt::Sqrt((double)A(i,j)*A(j,i));
-	}
-    }
-  return std::max(bound/n,bound2);
 }
 
 
