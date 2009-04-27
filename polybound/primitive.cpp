@@ -10,9 +10,7 @@ bool increment_vector(std::vector<T>& a,
 
 template<class T>
 bool increment_upper_triangle(std::vector<T>& a,
-			      T& norm, const T maxnorm,
-			      double& Gnorm, const double maxGnorm,
-			      const std::vector<T>& lowones);
+			      T& norm, const T maxnorm);
 
 template<class T>
 T mincolsum(jlt::mathmatrix<T>& A);
@@ -51,7 +49,7 @@ int main()
 
   PVec pl;
 
-#if 1
+#if 0
   const int n = 6;
 
   // Read in Mathematica file of polynomials.
@@ -145,7 +143,7 @@ int main()
   while(increment_vector(al,almax));
 
   cerr << Alow.size() << " lower-triangular forms\n";
-  int todo = 5;//Alow.size();
+  int todo = Alow.size();
 
   //
   // Upper-triangle of matrices: find valid patterns
@@ -174,8 +172,6 @@ int main()
 
   int maxnorm = (int)std::floor(std::pow(lambdamax,(double)n)) + n - 1;
   cerr << "maxnorm = " << maxnorm << endl;
-  double maxGnorm = .5*(n*lambdamax - tr);
-  cerr << "maxGnorm = " << maxGnorm << endl;
 
   cout << "{\n";
   bool thefirst = true;
@@ -257,19 +253,6 @@ int main()
 	      }
 	  }
 
-	  // Note position of 1's in lower-triangular matrix, for use
-	  // with symmetric norm.
-	  Vec lowones(Npat);
-	  double Gnorm = 0;
-	  for (int k = 0; k < Npat; ++k)
-	    {
-	      if (Alow[li](patcolidx[k],patrowidx[k]) == 1)
-		{
-		  lowones[k] = 1;
-		  Gnorm += 1;
-		}
-	    }
-
 	  // Start with the pattern equal to all ones.
 	  Vec apat(Npat,1);
 	  int Aupnorm = apat.size();
@@ -286,34 +269,6 @@ int main()
 		if (!(N % 1000000))
 		{ cerr << "a = " << apat << endl; }
 
-#if 0
-	      // Check symmetric norm.
-	      double checkGnorm = 0;
-	      for (int i = 0; i < n; ++i)
-		{
-		  for (int j = i+1; j < n; ++j)
-		    {
-		      checkGnorm += jlt::Sqrt((double)A(i,j)*A(j,i));
-		    }
-		}
-	      cerr << "Check: " << (2*checkGnorm+tr)/n << "\t"
-		   << spectral_lower_bound(A) << endl;
-	      if (jlt::Abs(Gnorm-checkGnorm) > 1e-8)
-		{
-		  cerr << Gnorm << "\t" << checkGnorm << endl;
-		  cerr << "Norms don't match...\n";
-		  exit(-1);
-		}
-
-	      if (spectral_lower_bound(A) > lambdamax)
-		{
-		  cerr << "reject\n";
-		  cerr << Gnorm << "\t" << maxGnorm << endl;
-		  ++symmetricnormexceeded;
-		}
-#endif
-
-#if 0
 	      // Compute characteristic polynomial.
 	      Poly cpoly(A.charpoly());
 
@@ -323,9 +278,8 @@ int main()
 		  if (!thefirst) cout << "," << endl; else thefirst = false;
 		  A.printMathematicaForm(cout);
 		}
-#endif
 	    }
-	  while(increment_upper_triangle(apat,Aupnorm,maxnorm-Alownorm,Gnorm,maxGnorm,lowones));
+	  while(increment_upper_triangle(apat,Aupnorm,maxnorm-Alownorm));
 	}
     }
 
@@ -366,31 +320,14 @@ inline bool increment_vector(std::vector<T>& a,
 
 template<class T>
 bool increment_upper_triangle(std::vector<T>& a,
-			      T& norm, const T maxnorm,
-			      double& Gnorm, const double maxGnorm,
-			      const std::vector<T>& lowones)
+			      T& norm, const T maxnorm)
 {
   const int n = a.size();
   for (int m = n-1; m >= 0; --m)
     {
       ++a[m];
       ++norm;
-      if (lowones[m])
-	{
-	  Gnorm -= jlt::Sqrt((double)a[m]-1);
-	  Gnorm += jlt::Sqrt((double)a[m]);
-	}
-      if (norm > maxnorm || Gnorm > maxGnorm)
-	{
-	  norm -= (a[m]-1);
-	  if (lowones[m])
-	    {
-	      Gnorm -= jlt::Sqrt((double)a[m]);
-	      Gnorm += 1;
-	    }
-	  a[m] = 1;
-	  continue;
-	}
+      if (norm > maxnorm) { norm -= (a[m]-1); a[m] = 1; continue; }
 
 #if 0
       // Sanity check.
@@ -401,19 +338,6 @@ bool increment_upper_triangle(std::vector<T>& a,
 	  std::cerr << "Norms don't match...\n";
 	  exit(-1);
 	}
-
-      double checkGnorm = 0;
-      for (int i = 0; i < n; ++i)
-	{
-	  if (lowones[i]) checkGnorm += jlt::Sqrt((double)a[i]);
-	}
-      if (jlt::Abs(Gnorm-checkGnorm) > 1e-6)
-	{
-	  std::cerr << Gnorm << "\t" << checkGnorm << std::endl;
-	  std::cerr << "Norms don't match...\n";
-	  exit(-1);
-	}
-
 #endif
 
       return true;
