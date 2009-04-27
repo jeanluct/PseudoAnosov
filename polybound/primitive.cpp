@@ -3,6 +3,7 @@
 #include <vector>
 #include <jlt/mathmatrix.hpp>
 #include <jlt/polynomial.hpp>
+#include <jlt/eigensystem.hpp> // for spectral radius
 
 template<class T>
 bool increment_vector(std::vector<T>& a,
@@ -10,7 +11,10 @@ bool increment_vector(std::vector<T>& a,
 
 template<class T>
 bool increment_upper_triangle(std::vector<T>& a,
-			      T& norm, const T maxnorm);
+			      const jlt::mathmatrix<T>& Alow,
+			      const std::vector<T>& rowidx,
+			      const std::vector<T>& colidx,
+			      const double lambdamax);
 
 template<class T>
 T mincolsum(jlt::mathmatrix<T>& A);
@@ -49,7 +53,7 @@ int main()
 
   PVec pl;
 
-#if 0
+#if 1
   const int n = 6;
 
   // Read in Mathematica file of polynomials.
@@ -75,7 +79,7 @@ int main()
   cerr << "Checking " << pl.size() << " polynomials:\n";
   for (PVeccit pi = pl.begin(); pi != pl.end(); ++pi) { cerr << *pi << endl;} 
 
-#if 0
+#if 1
   // x^6 - x^4 - x^3 - x^2 + 1
   // 1710 matrices: all of type (0^28,1^8) or (0^27,1^9)
   Poly p = pl[0];
@@ -98,8 +102,19 @@ int main()
   Poly p = pl[3];
   double lambdamax = 1.55603;
 #endif
-#if 1
+#if 0
   // x^6 - 2 x^5 + x^3 - 2 x - x + 1
+  // 9241 matrices:
+  // (0^26,1^9,2^1)
+  // (0^26,1^10)
+  // (0^25,1^10,3^1)
+  // (0^25,1^10,2^1)
+  // (0^25,1^11)
+  // (0^24,1^11,3^1)
+  // (0^24,1^11,2^1)
+  // (0^24,1^12)
+  // (0^23,1^12,2^1)
+  // (0^23,1^13)
   Poly p = pl[17];
   double lambdamax = 1.83108;
 #endif
@@ -279,7 +294,7 @@ int main()
 		  A.printMathematicaForm(cout);
 		}
 	    }
-	  while(increment_upper_triangle(apat,Aupnorm,maxnorm-Alownorm));
+	  while(increment_upper_triangle(apat,Alow[li],patrowidx,patcolidx,lambdamax));
 	}
     }
 
@@ -320,26 +335,24 @@ inline bool increment_vector(std::vector<T>& a,
 
 template<class T>
 bool increment_upper_triangle(std::vector<T>& a,
-			      T& norm, const T maxnorm)
+			      const jlt::mathmatrix<T>& Alow,
+			      const std::vector<T>& rowidx,
+			      const std::vector<T>& colidx,
+			      const double lambdamax)
 {
   const int n = a.size();
   for (int m = n-1; m >= 0; --m)
     {
       ++a[m];
-      ++norm;
-      if (norm > maxnorm) { norm -= (a[m]-1); a[m] = 1; continue; }
 
-#if 0
-      // Sanity check.
-      int checknorm = 0;
-      for (int i = 0; i < n; ++i) checknorm += a[i];
-      if (norm != checknorm)
-	{
-	  std::cerr << "Norms don't match...\n";
-	  exit(-1);
-	}
-#endif
+      // Form matrix.
+      int nn = Alow.dim();
+      jlt::mathmatrix<double> A(nn,nn);
+      for (int i = 0; i < nn; ++i)
+	for (int j = 0; j < nn; ++j) A(i,j) = Alow(i,j);
 
+      for (int k = 0; k < n; ++k) A(rowidx[k],colidx[k]) = a[k];
+      if (jlt::spectral_radius(A) > lambdamax) { a[m] = 1; continue; }
       return true;
     }
   return false;
