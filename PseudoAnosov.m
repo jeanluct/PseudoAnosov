@@ -36,9 +36,15 @@ PolynomialBoundedList::usage = "PolynomialBoundedList[x,n,r,a[n]] returns a list
 
 ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,r] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with Perron root less than r.  For n even, only one of each polynomial pair P(-x)=P(x) is listed.";
 
+ReciprocalPolynomialBoundedList2::usage = "Kludge: list without ruling out non-pA polynomials.  Needed for non-orientable systole.";
+
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
 OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the (even) degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.  Use Tally/@OrientableStrataList[g] to group by multiplicities.";
+
+StrataList::usage = "StrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@StrataList[g] to group singularities by multiplicity.  Use Tally/@StrataList[g] to group by multiplicities.  (Punctures not yet implemented.)";
+
+StratumDoubleCover::usage := "StratumDoubleCover[S] gives the stratum corresponding to the orientating double-cover of the stratum S={k_1,...,k_m}."
 
 StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k_1,...,k_m}."
 
@@ -255,6 +261,35 @@ Module[
 Options[ReciprocalPolynomialBoundedList] = Options[pseudoAnosovPerronRootQ]
 
 
+(* Kludge: list without ruling out non-pA polynomials.  Needed for non-orientable systole. *)
+ReciprocalPolynomialBoundedList2[x_,n_Integer,r_,opts:OptionsPattern[]] :=
+Module[
+    {p,pl,sl,T,Tm = iReciprocalPolynomialTracesBounds[n,r]},
+    p = ReciprocalPolynomialFromTraces[x,n,Table[T[k],{k,Floor[n/2]}]];
+    pl = Flatten[Fold[
+        Table[#1,{T[#2],-Tm[[#2]],Tm[[#2]]}]&, p, Range[Floor[n/2]]
+    ]];
+    (* Discard the polynomials that don't have integer coefficients *)
+    sl = And @@ # & /@  (IntegerQ /@ # & /@ (CoefficientList[#,x] & /@ pl));
+    pl = Pick[pl,sl];
+    pl = Select[pl, Abs[PerronRoot[#]] <= r &];
+(*
+    (* Discard the ones without the proper Perron root (not real or
+       too large) *)
+    pl = Pick[pl,pseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
+    (* Make all roots positive, discard duplicates *)
+    (* Only do this for even n: for odd n, the leading term changes sign. *)
+    If[EvenQ[n],
+      pl = Union[If[PerronRoot[#] > 0, #, #/.x->-x] & /@ pl]
+    ];
+    (* Sort by Perron root *)
+    (* Note that we computed the Perron root many times: a waste *)
+*)
+    Sort[pl, Abs[PerronRoot[#1]] < Abs[PerronRoot[#2]] &]
+]
+Options[ReciprocalPolynomialBoundedList] = Options[pseudoAnosovPerronRootQ]
+
+
 iPolynomialTracesBounds[n_Integer,r_] := Floor[n r^#] & /@ Range[n-1]
 
 
@@ -293,6 +328,18 @@ IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
 
 
 OrientableStrataList[g_Integer] := 2 IntegerPartitions[2g-2]
+
+
+(* TODO: punctures *)
+StrataList[g_Integer] := IntegerPartitions[4g-4]
+
+
+StratumDoubleCover[s_List] :=
+    Sort[Flatten[
+        Table[
+            If[EvenQ[s[[i]]], {s[[i]], s[[i]]}, {2 (s[[i]] + 1)}]
+        , {i, Length[s]}]
+    ], Greater]
 
 
 StratumToGenus[s_List] := (Plus @@ s + 4)/4
