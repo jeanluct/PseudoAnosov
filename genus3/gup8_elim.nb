@@ -10,14 +10,42 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[      5486,        157]
-NotebookOptionsPosition[      4921,        135]
-NotebookOutlinePosition[      5279,        151]
-CellTagsIndexPosition[      5236,        148]
+NotebookDataLength[      6678,        188]
+NotebookOptionsPosition[      5998,        163]
+NotebookOutlinePosition[      6356,        179]
+CellTagsIndexPosition[      6313,        176]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AppendTo", "[", 
+   RowBox[{"$Path", ",", " ", 
+    RowBox[{"ToFileName", "[", 
+     RowBox[{"{", 
+      RowBox[{
+      "$HomeDirectory", ",", 
+       "\"\<Projects/articles/topo/ttauto/pubs/systole/Mathematica\>\""}], 
+      "}"}], "]"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.448100116609247*^9, 3.448100119384217*^9}}],
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole/genus3\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{
+  3.442796227094639*^9, {3.448100022751694*^9, 3.448100027485006*^9}, {
+   3.448100135534417*^9, 3.448100138782777*^9}, {3.449853115128272*^9, 
+   3.449853123030297*^9}, {3.449853254135535*^9, 3.44985326139461*^9}, {
+   3.449910634346561*^9, 3.4499106442376013`*^9}, {3.450265768619165*^9, 
+   3.450265778530273*^9}, {3.4502666673581533`*^9, 3.450266668509577*^9}, {
+   3.454729154815712*^9, 3.45472915745857*^9}}],
+
+Cell[BoxData[
+ RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
+ CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}],
+
 Cell[BoxData[
  RowBox[{
   RowBox[{"sl", "=", 
@@ -150,15 +178,18 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[545, 20, 178, 4, 32, "Input"],
-Cell[726, 26, 126, 2, 32, "Input"],
-Cell[855, 30, 281, 7, 32, "Input"],
-Cell[1139, 39, 163, 3, 32, "Input"],
-Cell[1305, 44, 374, 8, 55, "Input"],
-Cell[1682, 54, 664, 15, 55, "Input"],
-Cell[2349, 71, 807, 19, 99, "Input"],
-Cell[3159, 92, 853, 19, 99, "Input"],
-Cell[4015, 113, 902, 20, 99, "Input"]
+Cell[545, 20, 366, 10, 32, "Input"],
+Cell[914, 32, 576, 10, 32, "Input"],
+Cell[1493, 44, 126, 2, 32, "Input"],
+Cell[1622, 48, 178, 4, 32, "Input"],
+Cell[1803, 54, 126, 2, 32, "Input"],
+Cell[1932, 58, 281, 7, 32, "Input"],
+Cell[2216, 67, 163, 3, 32, "Input"],
+Cell[2382, 72, 374, 8, 55, "Input"],
+Cell[2759, 82, 664, 15, 55, "Input"],
+Cell[3426, 99, 807, 19, 99, "Input"],
+Cell[4236, 120, 853, 19, 99, "Input"],
+Cell[5092, 141, 902, 20, 99, "Input"]
 }
 ]
 *)

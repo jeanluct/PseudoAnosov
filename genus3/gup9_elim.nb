@@ -1,0 +1,364 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     13410,        355]
+NotebookOptionsPosition[     12303,        319]
+NotebookOutlinePosition[     12661,        335]
+CellTagsIndexPosition[     12618,        332]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AppendTo", "[", 
+   RowBox[{"$Path", ",", " ", 
+    RowBox[{"ToFileName", "[", 
+     RowBox[{"{", 
+      RowBox[{
+      "$HomeDirectory", ",", 
+       "\"\<Projects/articles/topo/ttauto/pubs/systole/Mathematica\>\""}], 
+      "}"}], "]"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.448100116609247*^9, 3.448100119384217*^9}}],
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole/genus3\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{
+  3.442796227094639*^9, {3.448100022751694*^9, 3.448100027485006*^9}, {
+   3.448100135534417*^9, 3.448100138782777*^9}, {3.449853115128272*^9, 
+   3.449853123030297*^9}, {3.449853254135535*^9, 3.44985326139461*^9}, {
+   3.449910634346561*^9, 3.4499106442376013`*^9}, {3.450265768619165*^9, 
+   3.450265778530273*^9}, {3.4502666673581533`*^9, 3.450266668509577*^9}, {
+   3.454729154815712*^9, 3.45472915745857*^9}}],
+
+Cell[BoxData[
+ RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
+ CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"sl", "=", 
+   RowBox[{"<<", "\"\<gup9_testW_elim.m\>\""}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.455168989085313*^9, 3.455169024160703*^9}, {
+  3.45518056776716*^9, 3.455180568043164*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "sl", "]"}]], "Input",
+ CellChangeTimes->{{3.455169027712208*^9, 3.455169029075654*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", 
+  RowBox[{"Flatten", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+     "&"}], "/@", "sl"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.455169031418616*^9, 3.455169069171823*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"PerronRoot", "/@", 
+     RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+    "&"}], ")"}], "/@", "sl"}]], "Input",
+ CellChangeTimes->{{3.455180580506098*^9, 3.455180600448559*^9}}],
+
+Cell[BoxData[
+ RowBox[{"sl", "\[LeftDoubleBracket]", "1", 
+  "\[RightDoubleBracket]"}]], "Input",
+ CellChangeTimes->{{3.455169094396627*^9, 3.455169097092027*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"S", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"1", ",", "1", ",", "2"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"1", ",", "2", ",", "1"}], "\[RightDoubleBracket]"}]}]}], "Input",
+ CellChangeTimes->{{3.455169101886902*^9, 3.45516912718489*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{
+   RowBox[{"StratumOrbits", "[", 
+    RowBox[{"S", ",", "P"}], "]"}], ",", "20"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{
+   RowBox[{"StratumOrbits", "[", 
+    RowBox[{"S", ",", 
+     RowBox[{"P", "/.", 
+      RowBox[{"x", "\[Rule]", 
+       RowBox[{"-", "x"}]}]}]}], "]"}], ",", "20"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.45516915238946*^9, 3.455169155753271*^9}, {
+  3.45517313938043*^9, 3.455173231664027*^9}, {3.455173284916257*^9, 
+  3.45517328702149*^9}, {3.455173332047751*^9, 3.455173334931994*^9}, {
+  3.455173498178159*^9, 3.455173502073022*^9}, {3.455180663703881*^9, 
+  3.455180665609944*^9}, {3.455181161402969*^9, 3.455181163348789*^9}, {
+  3.455181219761467*^9, 3.455181221825114*^9}}],
+
+Cell[BoxData[
+ RowBox[{"sl", "\[LeftDoubleBracket]", "2", 
+  "\[RightDoubleBracket]"}]], "Input",
+ CellChangeTimes->{{3.455180823780498*^9, 3.455180826353688*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"S", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"2", ",", "1", ",", "2"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"2", ",", "2", ",", "1"}], "\[RightDoubleBracket]"}]}], "\n", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", "P"}], "]"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", 
+    RowBox[{"P", "/.", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"-", "x"}]}]}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.455169101886902*^9, 3.45516912718489*^9}, {
+  3.455169427397818*^9, 3.455169451487909*^9}, {3.455172695471452*^9, 
+  3.455172702748894*^9}}],
+
+Cell[BoxData[
+ RowBox[{"sl", "\[LeftDoubleBracket]", "3", 
+  "\[RightDoubleBracket]"}]], "Input",
+ CellChangeTimes->{{3.455180823780498*^9, 3.455180826353688*^9}, {
+  3.455181093043397*^9, 3.455181093189294*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"S", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"3", ",", "1", ",", "2"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"3", ",", "2", ",", "1"}], "\[RightDoubleBracket]"}]}], "\n", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", "P"}], "]"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", 
+    RowBox[{"P", "/.", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"-", "x"}]}]}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.455169101886902*^9, 3.45516912718489*^9}, {
+  3.455169427397818*^9, 3.455169451487909*^9}, {3.455172695471452*^9, 
+  3.455172702748894*^9}, {3.455181097314208*^9, 3.45518109828738*^9}}],
+
+Cell[BoxData[
+ RowBox[{"sl", "\[LeftDoubleBracket]", "4", 
+  "\[RightDoubleBracket]"}]], "Input",
+ CellChangeTimes->{{3.455180823780498*^9, 3.455180826353688*^9}, {
+  3.455181093043397*^9, 3.455181093189294*^9}, {3.455181268898644*^9, 
+  3.455181269117553*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"S", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"4", ",", "1", ",", "2"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"4", ",", "2", ",", "1"}], "\[RightDoubleBracket]"}]}], "\n", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", "P"}], "]"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", 
+    RowBox[{"P", "/.", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"-", "x"}]}]}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.455169101886902*^9, 3.45516912718489*^9}, {
+  3.455169427397818*^9, 3.455169451487909*^9}, {3.455172695471452*^9, 
+  3.455172702748894*^9}, {3.455181097314208*^9, 3.45518109828738*^9}, {
+  3.455181272228355*^9, 3.455181273166107*^9}}],
+
+Cell[BoxData[
+ RowBox[{"sl", "\[LeftDoubleBracket]", "5", 
+  "\[RightDoubleBracket]"}]], "Input",
+ CellChangeTimes->{{3.455180823780498*^9, 3.455180826353688*^9}, {
+  3.455181093043397*^9, 3.455181093189294*^9}, {3.455181268898644*^9, 
+  3.455181269117553*^9}, {3.455181350318945*^9, 3.455181350477385*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"S", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"5", ",", "1", ",", "2"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"5", ",", "2", ",", "1"}], "\[RightDoubleBracket]"}]}], "\n", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", "P"}], "]"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", 
+    RowBox[{"P", "/.", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"-", "x"}]}]}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.455169101886902*^9, 3.45516912718489*^9}, {
+  3.455169427397818*^9, 3.455169451487909*^9}, {3.455172695471452*^9, 
+  3.455172702748894*^9}, {3.455181097314208*^9, 3.45518109828738*^9}, {
+  3.455181272228355*^9, 3.455181273166107*^9}, {3.455181354546104*^9, 
+  3.455181356527205*^9}}],
+
+Cell[BoxData[
+ RowBox[{"sl", "\[LeftDoubleBracket]", "6", 
+  "\[RightDoubleBracket]"}]], "Input",
+ CellChangeTimes->{{3.455180823780498*^9, 3.455180826353688*^9}, {
+  3.455181093043397*^9, 3.455181093189294*^9}, {3.455181268898644*^9, 
+  3.455181269117553*^9}, {3.455181350318945*^9, 3.455181350477385*^9}, {
+  3.455181395631971*^9, 3.455181396364481*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"S", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"6", ",", "1", ",", "2"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"6", ",", "2", ",", "1"}], "\[RightDoubleBracket]"}]}], "\n", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", "P"}], "]"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", 
+    RowBox[{"P", "/.", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"-", "x"}]}]}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.455169101886902*^9, 3.45516912718489*^9}, {
+  3.455169427397818*^9, 3.455169451487909*^9}, {3.455172695471452*^9, 
+  3.455172702748894*^9}, {3.455181097314208*^9, 3.45518109828738*^9}, {
+  3.455181272228355*^9, 3.455181273166107*^9}, {3.455181354546104*^9, 
+  3.455181356527205*^9}, {3.455181399483041*^9, 3.455181400779785*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"sl", "\[LeftDoubleBracket]", "7", 
+  "\[RightDoubleBracket]"}], "\[IndentingNewLine]", 
+ RowBox[{"S", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"7", ",", "1", ",", "2"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"7", ",", "2", ",", "1"}], "\[RightDoubleBracket]"}]}], "\n", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", "P"}], "]"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", 
+    RowBox[{"P", "/.", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"-", "x"}]}]}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.455181430346509*^9, 3.455181444831262*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"S", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"7", ",", "1", ",", "2"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"7", ",", "2", ",", "2"}], "\[RightDoubleBracket]"}]}], "\n", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", "P"}], "]"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", 
+    RowBox[{"P", "/.", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"-", "x"}]}]}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.455181430346509*^9, 3.455181444831262*^9}, {
+  3.455181480661267*^9, 3.455181480743722*^9}, {3.455181924743634*^9, 
+  3.455181930566885*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"sl", "\[LeftDoubleBracket]", "8", 
+  "\[RightDoubleBracket]"}], "\[IndentingNewLine]", 
+ RowBox[{"S", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"8", ",", "1", ",", "2"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"P", "=", 
+  RowBox[{"sl", "\[LeftDoubleBracket]", 
+   RowBox[{"8", ",", "2", ",", "1"}], "\[RightDoubleBracket]"}]}], "\n", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", "P"}], "]"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{"S", ",", 
+    RowBox[{"P", "/.", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"-", "x"}]}]}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.455181430346509*^9, 3.455181444831262*^9}, {
+  3.455181480661267*^9, 3.455181480743722*^9}, {3.455181531564905*^9, 
+  3.455181533862167*^9}, {3.455181574991894*^9, 3.455181575952755*^9}}]
+},
+WindowSize->{1014, 689},
+WindowMargins->{{0, Automatic}, {Automatic, 25}},
+ShowSelection->True,
+FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 366, 10, 32, "Input"],
+Cell[914, 32, 576, 10, 32, "Input"],
+Cell[1493, 44, 126, 2, 32, "Input"],
+Cell[1622, 48, 226, 5, 32, "Input"],
+Cell[1851, 55, 126, 2, 32, "Input"],
+Cell[1980, 59, 281, 7, 32, "Input"],
+Cell[2264, 68, 269, 7, 32, "Input"],
+Cell[2536, 77, 163, 3, 32, "Input"],
+Cell[2702, 82, 374, 8, 55, "Input"],
+Cell[3079, 92, 808, 17, 55, "Input"],
+Cell[3890, 111, 163, 3, 32, "Input"],
+Cell[4056, 116, 807, 19, 99, "Input"],
+Cell[4866, 137, 212, 4, 32, "Input"],
+Cell[5081, 143, 852, 19, 99, "Input"],
+Cell[5936, 164, 261, 5, 32, "Input"],
+Cell[6200, 171, 901, 20, 99, "Input"],
+Cell[7104, 193, 307, 5, 32, "Input"],
+Cell[7414, 200, 950, 21, 99, "Input"],
+Cell[8367, 223, 356, 6, 32, "Input"],
+Cell[8726, 231, 996, 21, 99, "Input"],
+Cell[9725, 254, 808, 19, 121, "Input"],
+Cell[10536, 275, 808, 19, 99, "Input"],
+Cell[11347, 296, 952, 21, 121, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
