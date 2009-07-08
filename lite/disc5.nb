@@ -1,0 +1,472 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     16278,        463]
+NotebookOptionsPosition[     14254,        396]
+NotebookOutlinePosition[     14591,        411]
+CellTagsIndexPosition[     14548,        408]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Systole for the disc with 5 punctures", "Subtitle",
+ CellChangeTimes->{{3.455806893855211*^9, 3.455806900801966*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Copyright", "Subsection",
+ CellChangeTimes->{{3.455962823423869*^9, 3.455962824453886*^9}}],
+
+Cell["\<\
+Copyright 2009 Jean-Luc Thiffeault (jeanluc@mailaps.org)
+
+This file is part of PseudoAnosov.
+
+PseudoAnosov is free software: you can redistribute it and/or modify it under \
+the terms of the GNU General Public License as published by the Free Software \
+Foundation, either version 3 of the License, or (at your option) any later \
+version. PseudoAnosov is distributed in the hope that it will be useful, but \
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or \
+FITNESS FOR A PARTICULAR PURPOSE.See the GNU General Public License for more \
+details.
+
+You should have received a copy of the GNU General Public License along with \
+PseudoAnosov. If not, see < http : // www.gnu.org/licenses/ > .\
+\>", "Text",
+ CellChangeTimes->{{3.455962844090739*^9, 3.455962920902326*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Initialization", "Subsection",
+ CellChangeTimes->{{3.428440492914269*^9, 3.428440495831313*^9}, {
+  3.428540333832511*^9, 3.428540338498201*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"ToFileName", "[", 
+    RowBox[{"{", 
+     RowBox[{
+     "$HomeDirectory", ",", 
+      "\"\<Projects/articles/topo/ttauto/pubs/braids/code_abridged\>\""}], 
+     "}"}], "]"}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.428884774763236*^9, 3.428884825673253*^9}, 
+   3.428884881303703*^9, 3.455191060337423*^9, {3.455516230403562*^9, 
+   3.455516261772574*^9}, {3.455806960649579*^9, 3.455806987942188*^9}}],
+
+Cell[BoxData[
+ RowBox[{"<<", "PseudoAnosovLite.m"}]], "Input",
+ CellChangeTimes->{{3.455516332236447*^9, 3.455516336099663*^9}, {
+  3.455962951013515*^9, 3.455962951419246*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Case 1", "Subsection",
+ CellChangeTimes->{{3.455799626697747*^9, 3.455799647467078*^9}, {
+  3.455799851353069*^9, 3.455799851570454*^9}, {3.455799885132262*^9, 
+  3.455799887418308*^9}, {3.455800171056674*^9, 3.455800171468648*^9}, {
+  3.455803726736648*^9, 3.45580372685976*^9}}],
+
+Cell["\<\
+The first stratum to consider is for a genus 2 surface with 5 regular fixed \
+points that are permuted amongst each other, and a single degree 4 \
+singularity :\
+\>", "Text",
+ CellChangeTimes->{{3.455807011952278*^9, 3.455807063221906*^9}, {
+  3.45580709919258*^9, 3.455807107450797*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"S", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"4", ",", "1"}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"g", "=", "2"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dilmax", "=", "1.72208"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.455799656458714*^9, 3.455799758551952*^9}, {
+  3.455799896123576*^9, 3.455799921508314*^9}, {3.455800180681688*^9, 
+  3.455800205845809*^9}, {3.455803742603242*^9, 3.455803773524432*^9}}],
+
+Cell["\<\
+There are no allowable reciprocal polynomials of degree 2 g with Perron root \
+less than dilmax, so we are done:\
+\>", "Text",
+ CellChangeTimes->{{3.455807116117935*^9, 3.455807151787918*^9}, {
+  3.455847924186353*^9, 3.45584792481371*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl", "=", 
+  RowBox[{"ReciprocalPolynomialBoundedList", "[", 
+   RowBox[{"x", ",", 
+    RowBox[{"2", "g"}], ",", "dilmax"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.455537150060263*^9, 3.455537165121484*^9}, {
+  3.455537205226327*^9, 3.455537205502269*^9}, {3.455799734006488*^9, 
+  3.455799764352859*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Case 2", "Subsection",
+ CellChangeTimes->{{3.455799626697747*^9, 3.455799647467078*^9}, {
+  3.455799851353069*^9, 3.455799851570454*^9}, {3.455799885132262*^9, 
+  3.455799887418308*^9}, {3.455800171056674*^9, 3.455800171468648*^9}, {
+  3.455803726736648*^9, 3.45580372685976*^9}, {3.455803833195518*^9, 
+  3.455803833358393*^9}}],
+
+Cell["\<\
+The second stratum to consider is for a genus 2 surface with 5 regular fixed \
+points that are permuted or fixed amongst each other, two more such points, \
+and a single degree 4 singularity :\
+\>", "Text",
+ CellChangeTimes->{{3.455807011952278*^9, 3.455807063221906*^9}, {
+  3.45580709919258*^9, 3.455807107450797*^9}, {3.455807162020177*^9, 
+  3.455807197836237*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"S", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "2"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"4", ",", "1"}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"g", "=", "2"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dilmax", "=", "1.72208"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.455799656458714*^9, 3.455799758551952*^9}, {
+  3.455799896123576*^9, 3.455799921508314*^9}, {3.455800180681688*^9, 
+  3.455800205845809*^9}, {3.455803742603242*^9, 3.455803773524432*^9}, {
+  3.455803871329869*^9, 3.455803873265008*^9}}],
+
+Cell["Again, there are no polynomials to consider.", "Text",
+ CellChangeTimes->{{3.455807116117935*^9, 3.455807151787918*^9}, {
+  3.455807208550472*^9, 3.455807215644692*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl", "=", 
+  RowBox[{"ReciprocalPolynomialBoundedList", "[", 
+   RowBox[{"x", ",", 
+    RowBox[{"2", "g"}], ",", "dilmax"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.455537150060263*^9, 3.455537165121484*^9}, {
+  3.455537205226327*^9, 3.455537205502269*^9}, {3.455799734006488*^9, 
+  3.455799764352859*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Case 3", "Subsection",
+ CellChangeTimes->{{3.455799626697747*^9, 3.455799647467078*^9}, {
+  3.455799851353069*^9, 3.455799851570454*^9}, {3.455799885132262*^9, 
+  3.455799887418308*^9}, {3.455800171056674*^9, 3.455800171468648*^9}, {
+  3.455803898633955*^9, 3.455803898731231*^9}}],
+
+Cell["Third stratum :", "Text",
+ CellChangeTimes->{{3.455807227983234*^9, 3.455807233136077*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"S", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "2"}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"g", "=", "2"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dilmax", "=", "2.1537"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.455799656458714*^9, 3.455799758551952*^9}, {
+  3.455799896123576*^9, 3.455799921508314*^9}, {3.455800180681688*^9, 
+  3.455800205845809*^9}, {3.455803926914038*^9, 3.455803942086584*^9}, {
+  3.455803974809451*^9, 3.455803975745362*^9}, {3.455804011394964*^9, 
+  3.455804012579516*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Column", "[", 
+  RowBox[{"pl", "=", 
+   RowBox[{"ReciprocalPolynomialBoundedList", "[", 
+    RowBox[{"x", ",", 
+     RowBox[{"2", "g"}], ",", "dilmax"}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.455537150060263*^9, 3.455537165121484*^9}, {
+  3.455537205226327*^9, 3.455537205502269*^9}, {3.455799734006488*^9, 
+  3.455799764352859*^9}, {3.455807246905241*^9, 3.455807254267976*^9}}],
+
+Cell["\<\
+This time there are 3 polynomials that we need to eliminate, since they have \
+a Perron root below dilmax.\
+\>", "Text",
+ CellChangeTimes->{{3.455807241127479*^9, 3.455807289428589*^9}}],
+
+Cell[BoxData[
+ RowBox[{"PerronRoot", "/@", "pl"}]], "Input",
+ CellChangeTimes->{{3.455799781022835*^9, 3.45579978549136*^9}}],
+
+Cell["\<\
+We try to find an orbit structure for the three polynomials that is \
+compatible with this stratum , but find none :\
+\>", "Text",
+ CellChangeTimes->{{3.455807292855423*^9, 3.45580729514273*^9}, {
+  3.4558073777148*^9, 3.455807408111726*^9}}],
+
+Cell[BoxData[
+ RowBox[{"t", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"StratumOrbits", "[", 
+     RowBox[{"S", ",", "#"}], "]"}], "&"}], "/@", "pl"}]}]], "Input",
+ CellChangeTimes->{{3.455537272177004*^9, 3.455537272348981*^9}, {
+  3.455537306287508*^9, 3.455537315601744*^9}, {3.45580002639517*^9, 
+  3.45580002725593*^9}, {3.455807298857865*^9, 3.455807301347445*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Case 4", "Subsection",
+ CellChangeTimes->{{3.455799626697747*^9, 3.455799647467078*^9}, {
+  3.455799851353069*^9, 3.455799851570454*^9}, {3.455799885132262*^9, 
+  3.455799887418308*^9}, {3.455800171056674*^9, 3.455800171468648*^9}}],
+
+Cell["\<\
+The final stratum for a disc with 5 punctures lifts to a surface of genus 3.\
+\>", "Text",
+ CellChangeTimes->{{3.455807415900547*^9, 3.455807439898687*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"S", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"4", ",", "2"}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"g", "=", "3"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dilmax", "=", "2.015"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.455799656458714*^9, 3.455799758551952*^9}, {
+  3.455799896123576*^9, 3.455799921508314*^9}, {3.455800180681688*^9, 
+  3.455800205845809*^9}, {3.455804096815608*^9, 3.455804122413396*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Column", "[", 
+  RowBox[{"pl", "=", 
+   RowBox[{"ReciprocalPolynomialBoundedList", "[", 
+    RowBox[{"x", ",", 
+     RowBox[{"2", "g"}], ",", "dilmax"}], "]"}]}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Length", "[", "pl", "]"}]}], "Input",
+ CellChangeTimes->{{3.455537150060263*^9, 3.455537165121484*^9}, {
+   3.455537205226327*^9, 3.455537205502269*^9}, {3.455799734006488*^9, 
+   3.455799764352859*^9}, {3.455807453884972*^9, 3.455807469925781*^9}, {
+   3.455807678993809*^9, 3.455807692229391*^9}, 3.455807725396573*^9}],
+
+Cell["\<\
+There are 41 polynomials to consider.  They all have Perron root below dilmax.\
+\>", "Text",
+ CellChangeTimes->{{3.455807471804174*^9, 3.455807496581392*^9}, 
+   3.455807733627835*^9}],
+
+Cell[BoxData[
+ RowBox[{"PerronRoot", "/@", "pl"}]], "Input",
+ CellChangeTimes->{{3.455799781022835*^9, 3.45579978549136*^9}}],
+
+Cell["\<\
+Now we find polynomials that can lead to a compatible periodic orbit \
+structure.  For instance, the 13 th polynomial has 3 allowable structures on \
+the stratum S:\
+\>", "Text",
+ CellChangeTimes->{{3.455807745819977*^9, 3.455807772861836*^9}, {
+   3.455807805353196*^9, 3.455807822324473*^9}, {3.455808280374898*^9, 
+   3.455808296053018*^9}, 3.455808532523086*^9}],
+
+Cell[BoxData[
+ RowBox[{"StratumOrbits", "[", 
+  RowBox[{"S", ",", 
+   RowBox[{"pl", "\[LeftDoubleBracket]", "13", "\[RightDoubleBracket]"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.455807779510407*^9, 3.455807794548031*^9}}],
+
+Cell["Let's test all the polynomials :", "Text",
+ CellChangeTimes->{{3.455807876854693*^9, 3.455807885926838*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"t", "=", 
+   RowBox[{"Select", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"StratumOrbits", "[", 
+        RowBox[{"S", ",", "#"}], "]"}], "&"}], "/@", "pl"}], ",", 
+     RowBox[{
+      RowBox[{"#", "=!=", 
+       RowBox[{"{", "}"}]}], "&"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Length", "[", "t", "]"}]}], "Input",
+ CellChangeTimes->{{3.455537272177004*^9, 3.455537272348981*^9}, {
+   3.455537306287508*^9, 3.455537315601744*^9}, {3.45580002639517*^9, 
+   3.45580002725593*^9}, {3.45580750316278*^9, 3.455807505487791*^9}, 
+   3.455807889173465*^9, {3.455808043259539*^9, 3.455808101816147*^9}}],
+
+Cell["There are only three polynomials that \"work\" :", "Text",
+ CellChangeTimes->{{3.455808103757004*^9, 3.455808113891334*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Column", "[", 
+  RowBox[{"pl", "=", 
+   RowBox[{"Union", "[", 
+    RowBox[{"Flatten", "[", 
+     RowBox[{"Polynomial", "/.", "t"}], "]"}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.455808119104053*^9, 3.455808158510048*^9}}],
+
+Cell["\<\
+These all have positive dominant root.  However, if they are truly the lifts \
+of pseudo - Anosovs of the disc, then they must also give a pseudo - Anosov \
+upstairs with a negative root when acting on homology.\
+\>", "Text",
+ CellChangeTimes->{{3.455808161596494*^9, 3.455808217117351*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"t", "=", 
+   RowBox[{"Select", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"StratumOrbits", "[", 
+        RowBox[{"S", ",", 
+         RowBox[{"#", "/.", 
+          RowBox[{"x", "\[Rule]", 
+           RowBox[{"-", "x"}]}]}]}], "]"}], "&"}], "/@", "pl"}], ",", 
+     RowBox[{
+      RowBox[{"#", "=!=", 
+       RowBox[{"{", "}"}]}], "&"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Length", "[", "t", "]"}]}], "Input",
+ CellChangeTimes->{{3.455537272177004*^9, 3.455537272348981*^9}, {
+   3.455537306287508*^9, 3.455537315601744*^9}, {3.45580002639517*^9, 
+   3.45580002725593*^9}, {3.45580750316278*^9, 3.455807505487791*^9}, 
+   3.455807889173465*^9, {3.455808043259539*^9, 3.455808101816147*^9}, {
+   3.455808231150714*^9, 3.45580823282667*^9}}],
+
+Cell["\<\
+One of these polynomials is not allowed for negative dominant root, so we are \
+left with only 2 :\
+\>", "Text",
+ CellChangeTimes->{{3.455808354887272*^9, 3.455808377475305*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Column", "[", 
+  RowBox[{"pl", "=", 
+   RowBox[{"Union", "[", 
+    RowBox[{"Flatten", "[", 
+     RowBox[{"Polynomial", "/.", "t"}], "]"}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.455808119104053*^9, 3.455808158510048*^9}}],
+
+Cell["These must be eliminated via other means (see paper).", "Text",
+ CellChangeTimes->{{3.45580838197446*^9, 3.455808390989428*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{640, 623},
+WindowMargins->{{64, Automatic}, {Automatic, 36}},
+FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 123, 1, 53, "Subtitle"],
+Cell[CellGroupData[{
+Cell[715, 27, 97, 1, 39, "Subsection"],
+Cell[815, 30, 811, 16, 271, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[1663, 51, 151, 2, 31, "Subsection"],
+Cell[1817, 55, 476, 11, 99, "Input"],
+Cell[2296, 68, 177, 3, 32, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2510, 76, 286, 4, 31, "Subsection"],
+Cell[2799, 82, 298, 6, 51, "Text"],
+Cell[3100, 90, 581, 15, 77, "Input"],
+Cell[3684, 107, 250, 5, 51, "Text"],
+Cell[3937, 114, 331, 7, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4305, 126, 335, 5, 39, "Subsection"],
+Cell[4643, 133, 379, 7, 71, "Text"],
+Cell[5025, 142, 693, 18, 77, "Input"],
+Cell[5721, 162, 175, 2, 31, "Text"],
+Cell[5899, 166, 331, 7, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6267, 178, 287, 4, 39, "Subsection"],
+Cell[6557, 184, 97, 1, 31, "Text"],
+Cell[6657, 187, 741, 19, 77, "Input"],
+Cell[7401, 208, 413, 8, 32, "Input"],
+Cell[7817, 218, 196, 4, 51, "Text"],
+Cell[8016, 224, 125, 2, 32, "Input"],
+Cell[8144, 228, 252, 5, 51, "Text"],
+Cell[8399, 235, 369, 8, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8805, 248, 238, 3, 39, "Subsection"],
+Cell[9046, 253, 166, 3, 31, "Text"],
+Cell[9215, 258, 642, 17, 77, "Input"],
+Cell[9860, 277, 553, 11, 55, "Input"],
+Cell[10416, 290, 194, 4, 31, "Text"],
+Cell[10613, 296, 125, 2, 32, "Input"],
+Cell[10741, 300, 376, 7, 51, "Text"],
+Cell[11120, 309, 228, 5, 32, "Input"],
+Cell[11351, 316, 114, 1, 31, "Text"],
+Cell[11468, 319, 666, 16, 55, "Input"],
+Cell[12137, 337, 130, 1, 31, "Text"],
+Cell[12270, 340, 254, 6, 32, "Input"],
+Cell[12527, 348, 301, 5, 71, "Text"],
+Cell[12831, 355, 810, 20, 55, "Input"],
+Cell[13644, 377, 188, 4, 51, "Text"],
+Cell[13835, 383, 254, 6, 32, "Input"],
+Cell[14092, 391, 134, 1, 31, "Text"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
