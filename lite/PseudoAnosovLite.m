@@ -2,6 +2,7 @@
 
 (*
     Copyright 2009 Jean-Luc Thiffeault (jeanluc@mailaps.org)
+                   Erwan Lanneau       (lanneau@cpt.univ-mrs.fr)
 
     This file is part of PseudoAnosov.
 
