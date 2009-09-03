@@ -361,12 +361,6 @@ Regular[L_List, OptionsPattern[]] := Module[
     If[prs == Automatic, prs = Sign[Times @@ Take[L,-2]]];
     rpo = {-prs L[[1]]};
     If[rpo[[1]] < 0, Message[Regular::badLefschetz]; Return[rpo]];
-    If[prs < 0 && ((Times @@ Take[L,-2]) > 0),
-        Message[Regular::neednegativePerron]; Abort[]
-    ];
-    If[prs > 0 && ((Times @@ Take[L,-2] < 0) || Last[L] > 0),
-        Message[Regular::needpositivePerron]; Abort[]
-    ];
     Do[
         If[prs < 0,
             def = (-1)^(p+1) L[[p]] - sumorbits[p,rpo,IncludeLast->False]
@@ -381,8 +375,6 @@ Regular[L_List, OptionsPattern[]] := Module[
     rpo
 ]
 Options[Regular] = {PerronRootSign -> Automatic}
-Regular::needpositivePerron = "Error: This function only applies to positive Perron root."
-Regular::neednegativePerron = "Error: This function only applies to negative Perron root."
 Regular::badLefschetz = "Bad sequence of Lefschetz numbers."
 
 
