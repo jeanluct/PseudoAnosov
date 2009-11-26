@@ -34,7 +34,7 @@ PseudoAnosov::usage = "Functions for manipulating characteristic polynomials of 
 
 PolynomialRoots::usage = "PolynomialRoots[P] returns the roots of the polynomial P, sorted in decreasing order of magnitude.";
 
-PerronRoot::usage = "PerronRoot[P] returns the largest root (in magnitute) of the polynomial P.";
+PerronRoot::usage = "PerronRoot[P] returns the largest root (in magnitude) of the polynomial P.";
 
 pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[P] returns True if the largest root of the polynomial P is nondegenerate (in magnitude) and real.  pseudoAnosovPerronRootQ[P,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
 

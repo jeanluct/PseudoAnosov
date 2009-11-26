@@ -16,9 +16,9 @@ PolynomialDegree::usage = "PolynomialDegree[P] returns the degree of the polynom
 
 PolynomialRoots::usage = "PolynomialRoots[P] returns the roots of the polynomial P, sorted in decreasing order of magnitude.";
 
-PerronRoot::usage = "PerronRoot[P] returns the largest root (in magnitute) of the polynomial P.";
+PerronRoot::usage = "PerronRoot[P] returns the largest root (in magnitude) of the polynomial P.";
 
-pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[P] returns True if the largest root of the polynomial P is nondegenerate (in magnitute) and real.  pseudoAnosovPerronRootQ[P,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
+pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[P] returns True if the largest root of the polynomial P is nondegenerate (in magnitude) and real.  pseudoAnosovPerronRootQ[P,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
 
 MahlerMeasure::usage = "MahlerMeasure[P] returns the Mahler measure of the polynomial P, which is the absolute value of the product of roots outside the unit circle.";
 
@@ -40,9 +40,9 @@ ReciprocalPolynomialBoundedList2::usage = "Kludge: list without ruling out non-p
 
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
-OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the (even) degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.  Use Tally/@OrientableStrataList[g] to group by multiplicities.";
+OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the (even) degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.";
 
-StrataList::usage = "StrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@StrataList[g] to group singularities by multiplicity.  Use Tally/@StrataList[g] to group by multiplicities.  (Punctures not yet implemented.)";
+StrataList::usage = "StrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@StrataList[g] to group singularities by multiplicity.  (Punctures not yet implemented.)";
 
 StratumDoubleCover::usage := "StratumDoubleCover[S] gives the stratum corresponding to the orientating double-cover of the stratum S={k_1,...,k_m}."
 
