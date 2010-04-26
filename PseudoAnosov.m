@@ -48,6 +48,8 @@ StratumDoubleCover::usage := "StratumDoubleCover[S] gives the stratum correspond
 
 StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k_1,...,k_m}."
 
+UnTally::usage = "UnTally[L] where L is a tallied list (see Tally) undoes Tally, or leaves L alone if already untallied."
+
 LefschetzNumbers::usage = "LefschetzNumbers[P,k], where P is the characteristic polynomial of some matrix M, returns the Lefschetz number 2-Tr[M^k].  LefschetzNumbers[P,{k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for 1 <= k <= k2.  LefschetzNumbers[P,{k1,k2}] returns a list of Lefschetz numbers 2-Tr[M^k] for k1 <= k <= k2."
 
 LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz number.  If they are not the same length, then the blocks are repeated to the length of the longest list.\nLefschetzCombine[L1,L2,...,Lm,n] caps the total length at an integer n."
@@ -342,7 +344,10 @@ StratumDoubleCover[s_List] :=
     ], Greater]
 
 
-StratumToGenus[s_List] := (Plus @@ s + 4)/4
+StratumToGenus[s_List] := (Plus @@ UnTally[s] + 4)/4
+
+
+UnTally[s_] := If[ListQ[First[s]],Flatten[Table[#[[1]],{#[[2]]}] & /@ s],s]
 
 
 End[(* "`Private`" *)]
@@ -664,7 +669,8 @@ TestPositiveQ[s_List,L_, opts:OptionsPattern[]] := Module[
          PureStratumBQ,
          AlmostPureStratumAQ,
          AlmostPureStratumBQ}},
-    TestListQ[s,L,tests, Sequence @@ FilterRules[{opts},Options[TestListQ]]]
+    TestListQ[UnTally[s],L,tests,
+              Sequence @@ FilterRules[{opts},Options[TestListQ]]]
 ]
 Options[TestPositiveQ] = Options[TestListQ]
 
