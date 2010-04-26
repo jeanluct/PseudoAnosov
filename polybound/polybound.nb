@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     10183,        287]
-NotebookOptionsPosition[      9194,        254]
-NotebookOutlinePosition[      9554,        270]
-CellTagsIndexPosition[      9511,        267]
+NotebookDataLength[     10621,        286]
+NotebookOptionsPosition[      9630,        253]
+NotebookOutlinePosition[      9990,        269]
+CellTagsIndexPosition[      9947,        266]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -31,12 +31,18 @@ Cell[BoxData[
  CellChangeTimes->{{3.448100116609247*^9, 3.448100119384217*^9}}],
 
 Cell[BoxData[
- RowBox[{"SetDirectory", "[", 
-  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole/polybound\>\"\
-", "]"}]], "Input",
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"ToFileName", "[", 
+    RowBox[{"{", 
+     RowBox[{
+     "$HomeDirectory", ",", 
+      "\"\<Projects/articles/topo/ttauto/pubs/systole/polybound\>\""}], "}"}],
+     "]"}], "]"}], ";"}]], "Input",
  CellChangeTimes->{
   3.442796227094639*^9, {3.448100022751694*^9, 3.448100027485006*^9}, {
-   3.448100135534417*^9, 3.448100138782777*^9}}],
+   3.448100135534417*^9, 3.448100138782777*^9}, {3.481297245162266*^9, 
+   3.481297273403265*^9}}],
 
 Cell[BoxData[
  RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
@@ -45,8 +51,7 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{
   RowBox[{"plist", "=", 
-   RowBox[{"<<", "\"\</home/jeanluc/nosync/poly_g8.m\>\""}]}], ";"}]], "Input",\
-
+   RowBox[{"<<", "\"\<data/poly_g6.m\>\""}]}], ";"}]], "Input",
  CellChangeTimes->{{3.443288891614571*^9, 3.443288901882801*^9}, {
    3.443288964891171*^9, 3.4432889651645517`*^9}, {3.443397190251197*^9, 
    3.443397191620577*^9}, {3.44413060088052*^9, 3.444130623409643*^9}, {
@@ -55,7 +60,14 @@ Cell[BoxData[
    3.446894874717223*^9}, {3.447231962922058*^9, 3.447231963194599*^9}, {
    3.448100031934766*^9, 3.448100032801493*^9}, 3.448100189451297*^9, {
    3.455513853586286*^9, 3.455513868625057*^9}, {3.455516046043187*^9, 
-   3.455516048380826*^9}, {3.455516127533979*^9, 3.455516132883186*^9}}],
+   3.455516048380826*^9}, {3.455516127533979*^9, 3.455516132883186*^9}, {
+   3.481297281927854*^9, 3.481297291639502*^9}, {3.481297483156616*^9, 
+   3.481297483875165*^9}, {3.481297781343486*^9, 3.481297782716065*^9}, {
+   3.481297870427603*^9, 3.481297872137693*^9}, {3.481301457969492*^9, 
+   3.481301459359208*^9}, 3.481301527727144*^9, {3.481301677147542*^9, 
+   3.481301684601647*^9}, {3.481302207149991*^9, 3.48130220869986*^9}, {
+   3.48130246517487*^9, 3.481302466084778*^9}, {3.481302598963754*^9, 
+   3.481302600289337*^9}, {3.481302695507379*^9, 3.481302695647034*^9}}],
 
 Cell[BoxData[
  RowBox[{"Length", "[", "plist", "]"}]], "Input",
@@ -96,44 +108,31 @@ Cell[BoxData[
    3.446445725418442*^9}}],
 
 Cell[BoxData[
- RowBox[{"s", "=", 
-  RowBox[{"PerronRoot", "@", 
-   RowBox[{"Simplify", "[", 
-    RowBox[{
-     RowBox[{"Factor", "[", 
-      RowBox[{"1", "-", 
-       RowBox[{"2", 
-        SuperscriptBox["x", "g"]}], "-", 
-       RowBox[{"2", 
-        SuperscriptBox["x", 
-         RowBox[{"g", "+", "1"}]]}], "+", 
-       SuperscriptBox["x", 
-        RowBox[{
-         RowBox[{"2", "g"}], "+", "1"}]]}], "]"}], "/", 
-     RowBox[{"(", 
-      RowBox[{"x", "+", "1"}], ")"}]}], "]"}]}]}]], "Input",
+ RowBox[{"s", "=", "1.226"}]], "Input",
  CellChangeTimes->{{3.447260148204906*^9, 3.4472601957541037`*^9}, {
   3.4472602296265383`*^9, 3.447260232632257*^9}, {3.447260332988616*^9, 
-  3.44726033499853*^9}, {3.447260371085779*^9, 3.447260379592307*^9}}],
+  3.44726033499853*^9}, {3.447260371085779*^9, 3.447260379592307*^9}, {
+  3.48129730047269*^9, 3.481297301942466*^9}, {3.481301707674047*^9, 
+  3.481301718219071*^9}, {3.481302223628678*^9, 3.481302227290481*^9}}],
 
 Cell["\<\
 Eliminate polynomials with maximum root < 1 or > \[Lambda]max, as well as \
 those with degenerate largest roots.\
 \>", "Text",
- CellChangeTimes->{{3.442311390744789*^9, 3.442311435474143*^9}}],
+ CellChangeTimes->{{3.442311390744789*^9, 3.442311435474143*^9}, {
+  3.48130146283305*^9, 3.481301463681771*^9}}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"plistmin", "=", 
-   RowBox[{
-    RowBox[{"Pick", "[", 
-     RowBox[{"plist", ",", 
+ RowBox[{"plistmin", "=", 
+  RowBox[{
+   RowBox[{"Pick", "[", 
+    RowBox[{"plist", ",", 
+     RowBox[{
       RowBox[{
-       RowBox[{
-        RowBox[{"pseudoAnosovPerronRootQ", "[", 
-         RowBox[{"#", ",", "s", ",", 
-          RowBox[{"WorkingPrecision", "\[Rule]", "15"}]}], "]"}], "&"}], "/@",
-        "plist"}]}], "]"}], "//", "Factor"}]}], ";"}]], "Input",
+       RowBox[{"pseudoAnosovPerronRootQ", "[", 
+        RowBox[{"#", ",", "s", ",", 
+         RowBox[{"WorkingPrecision", "\[Rule]", "20"}]}], "]"}], "&"}], "/@", 
+      "plist"}]}], "]"}], "//", "Factor"}]}]], "Input",
  CellChangeTimes->{{3.442248692426225*^9, 3.442248727557484*^9}, {
    3.442248775062218*^9, 3.44224877829194*^9}, {3.442248845556428*^9, 
    3.442248848434854*^9}, {3.442248975153884*^9, 3.442248987918772*^9}, {
@@ -141,29 +140,29 @@ Cell[BoxData[
    3.44224914485939*^9}, 3.442249586754534*^9, {3.442310192310348*^9, 
    3.442310194161594*^9}, {3.442311208924211*^9, 3.442311210370511*^9}, {
    3.444909641830901*^9, 3.444909650438586*^9}, {3.446445754955481*^9, 
-   3.4464457551628103`*^9}}],
+   3.4464457551628103`*^9}, {3.481297792702932*^9, 3.481297818653678*^9}}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"prootsmin", "=", 
+ RowBox[{"prootsmin", "=", 
+  RowBox[{
    RowBox[{
-    RowBox[{
-     RowBox[{"PerronRoot", "[", "#", "]"}], "&"}], "/@", "plistmin"}]}], 
-  ";"}]], "Input",
+    RowBox[{"PerronRoot", "[", "#", "]"}], "&"}], "/@", 
+   "plistmin"}]}]], "Input",
  CellChangeTimes->{{3.442248950095929*^9, 3.442248958879148*^9}, {
    3.442248994288923*^9, 3.442248997230977*^9}, {3.442249058623475*^9, 
    3.442249082397703*^9}, 3.442249583506363*^9, {3.442310200263754*^9, 
    3.44231020201011*^9}, {3.442310244181097*^9, 3.4423102588154097`*^9}, {
    3.442310778669518*^9, 3.4423107800273523`*^9}, {3.444909673781685*^9, 
-   3.444909698855097*^9}, {3.446445762269167*^9, 3.4464457625451393`*^9}}],
+   3.444909698855097*^9}, {3.446445762269167*^9, 3.4464457625451393`*^9}, 
+   3.481297843883746*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"pdlistmin", "=", 
-   RowBox[{"Transpose", "[", 
-    RowBox[{"{", 
-     RowBox[{"plistmin", ",", "prootsmin"}], "}"}], "]"}]}], ";"}]], "Input",
- CellChangeTimes->{{3.4468495131204433`*^9, 3.446849531763174*^9}}],
+ RowBox[{"pdlistmin", "=", 
+  RowBox[{"Transpose", "[", 
+   RowBox[{"{", 
+    RowBox[{"plistmin", ",", "prootsmin"}], "}"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.4468495131204433`*^9, 3.446849531763174*^9}, 
+   3.481297848556059*^9}],
 
 Cell[BoxData[
  RowBox[{"Length", "[", "pdlistmin", "]"}]], "Input",
@@ -252,8 +251,8 @@ Cell[BoxData[
    RowBox[{"Background", "\[Rule]", "LightBlue"}]}], "]"}]], "Input",
  CellChangeTimes->{{3.444909905308641*^9, 3.444909932364853*^9}}]
 },
-WindowSize->{1014, 689},
-WindowMargins->{{306, Automatic}, {21, Automatic}},
+WindowSize->{1014, 868},
+WindowMargins->{{251, Automatic}, {Automatic, 53}},
 ShowSelection->True,
 FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
 StyleDefinitions->"Default.nb"
@@ -270,25 +269,25 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[545, 20, 366, 10, 32, "Input"],
-Cell[914, 32, 284, 6, 32, "Input"],
-Cell[1201, 40, 126, 2, 32, "Input"],
-Cell[1330, 44, 780, 13, 32, "Input"],
-Cell[2113, 59, 180, 3, 32, "Input"],
-Cell[2296, 64, 392, 11, 32, "Input"],
-Cell[2691, 77, 855, 18, 32, "Input"],
-Cell[3549, 97, 710, 19, 32, "Input"],
-Cell[4262, 118, 202, 4, 31, "Text"],
-Cell[4467, 124, 908, 19, 32, "Input"],
-Cell[5378, 145, 605, 12, 32, "Input"],
-Cell[5986, 159, 246, 6, 32, "Input"],
-Cell[6235, 167, 158, 3, 32, "Input"],
-Cell[6396, 172, 118, 1, 31, "Text"],
-Cell[6517, 175, 858, 24, 32, "Input"],
-Cell[7378, 201, 902, 22, 32, "Input"],
-Cell[8283, 225, 302, 9, 32, "Input"],
-Cell[8588, 236, 133, 2, 32, "Input"],
-Cell[8724, 240, 262, 6, 32, "Input"],
-Cell[8989, 248, 201, 4, 32, "Input"]
+Cell[914, 32, 453, 12, 32, "Input"],
+Cell[1370, 46, 126, 2, 32, "Input"],
+Cell[1499, 50, 1270, 19, 32, "Input"],
+Cell[2772, 71, 180, 3, 32, "Input"],
+Cell[2955, 76, 392, 11, 32, "Input"],
+Cell[3350, 89, 855, 18, 32, "Input"],
+Cell[4208, 109, 409, 6, 32, "Input"],
+Cell[4620, 117, 250, 5, 31, "Text"],
+Cell[4873, 124, 927, 18, 32, "Input"],
+Cell[5803, 144, 611, 12, 32, "Input"],
+Cell[6417, 158, 251, 6, 32, "Input"],
+Cell[6671, 166, 158, 3, 32, "Input"],
+Cell[6832, 171, 118, 1, 31, "Text"],
+Cell[6953, 174, 858, 24, 32, "Input"],
+Cell[7814, 200, 902, 22, 32, "Input"],
+Cell[8719, 224, 302, 9, 32, "Input"],
+Cell[9024, 235, 133, 2, 32, "Input"],
+Cell[9160, 239, 262, 6, 32, "Input"],
+Cell[9425, 247, 201, 4, 32, "Input"]
 }
 ]
 *)

@@ -50,7 +50,7 @@ int main()
 
   typedef double T;
 
-  const int g = 5;
+  const int g = 6;
   long long int N = 0;
   long long int Np = 0; // Number of candidate polynomials found.
   long long int N_found_positive_root = 0;
@@ -124,7 +124,7 @@ int main()
   Tr[0] = 0;
   for (int m = 1; m < g; ++m) Tr[m] = Trmin[m];
 
-  std::ofstream ostr("/home/jeanluc/nosync/poly_g8.m");
+  std::ofstream ostr("data/poly_g6.m");
   ostr << "{";
 
   do
@@ -243,7 +243,7 @@ inline T findroot(const reciprocal_polynomial<S>& p,
   T px(p(x0)), x(x0);
 
   int i = 0;
-  const int itmax = 10;
+  const int itmax = 100;
 
   while (Abs(px) > tol && i++ < itmax)
     {
