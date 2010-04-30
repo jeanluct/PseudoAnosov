@@ -1,0 +1,689 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     23766,        680]
+NotebookOptionsPosition[     20642,        586]
+NotebookOutlinePosition[     21000,        602]
+CellTagsIndexPosition[     20957,        599]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Initialization", "Section",
+ CellChangeTimes->{{3.454777938539942*^9, 3.454777941166803*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AppendTo", "[", 
+   RowBox[{"$Path", ",", " ", 
+    RowBox[{"ToFileName", "[", 
+     RowBox[{"{", 
+      RowBox[{
+      "$HomeDirectory", ",", 
+       "\"\<Projects/articles/topo/ttauto/pubs/systole/Mathematica\>\""}], 
+      "}"}], "]"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.448100116609247*^9, 3.448100119384217*^9}}],
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole/genus3\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{
+  3.442796227094639*^9, {3.448100022751694*^9, 3.448100027485006*^9}, {
+   3.448100135534417*^9, 3.448100138782777*^9}, {3.449853115128272*^9, 
+   3.449853123030297*^9}, {3.449853254135535*^9, 3.44985326139461*^9}, {
+   3.449910634346561*^9, 3.4499106442376013`*^9}, {3.450265768619165*^9, 
+   3.450265778530273*^9}, {3.4502666673581533`*^9, 3.450266668509577*^9}, {
+   3.454729154815712*^9, 3.45472915745857*^9}}],
+
+Cell[BoxData[
+ RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
+ CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["List of Strata", "Section",
+ CellChangeTimes->{{3.454777954957356*^9, 3.45477795861651*^9}}],
+
+Cell[BoxData[
+ RowBox[{"g", "=", "3"}]], "Input",
+ CellChangeTimes->{{3.454729384482208*^9, 3.454729384735554*^9}}],
+
+Cell[BoxData[
+ RowBox[{"s", "=", 
+  RowBox[{"StrataList", "[", "g", "]"}]}]], "Input",
+ CellChangeTimes->{{3.454729164711216*^9, 3.454729178022328*^9}, {
+  3.454730351022921*^9, 3.454730367049396*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "s", "]"}]], "Input",
+ CellChangeTimes->{{3.454729422909588*^9, 3.454729424171434*^9}, {
+  3.454730376219901*^9, 3.454730376316926*^9}}],
+
+Cell["Orientating double - cover of strata :", "Text",
+ CellChangeTimes->{{3.454731052211643*^9, 3.454731059628682*^9}}],
+
+Cell[BoxData[
+ RowBox[{"st", "=", 
+  RowBox[{"StratumDoubleCover", "/@", "s"}]}]], "Input",
+ CellChangeTimes->{{3.454730800608018*^9, 3.454730819401435*^9}}],
+
+Cell[BoxData[
+ RowBox[{"sst", "=", 
+  RowBox[{"Transpose", "[", 
+   RowBox[{"{", 
+    RowBox[{"s", ",", "st"}], "}"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.45477805752379*^9, 3.45477807382528*^9}}],
+
+Cell["The genus of the the double - cover strata :", "Text",
+ CellChangeTimes->{{3.454731066044921*^9, 3.454731080517482*^9}}],
+
+Cell[BoxData[
+ RowBox[{"gt", "=", 
+  RowBox[{"StratumToGenus", "/@", "st"}]}]], "Input",
+ CellChangeTimes->{{3.454730980041277*^9, 3.454730987199206*^9}, {
+   3.454731025371855*^9, 3.454731025939025*^9}, 3.45475457535722*^9}],
+
+Cell["Sort by genus of the the double - cover strata :", "Text",
+ CellChangeTimes->{{3.454754445168045*^9, 3.454754448496981*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"st", "=", 
+  RowBox[{"Sort", "[", 
+   RowBox[{"st", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"StratumToGenus", "[", "#1", "]"}], "<=", 
+      RowBox[{"StratumToGenus", "[", "#2", "]"}]}], "&"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"gt", "=", 
+  RowBox[{"StratumToGenus", "/@", "st"}]}]}], "Input",
+ CellChangeTimes->{{3.454737090229894*^9, 3.454737142067564*^9}, 
+   3.454754394623874*^9, 3.454754585554655*^9}],
+
+Cell["The ' co - genus' :", "Text",
+ CellChangeTimes->{{3.454731086730779*^9, 3.454731092149108*^9}}],
+
+Cell[BoxData[
+ RowBox[{"cog", "=", 
+  RowBox[{"gt", "-", "g"}]}]], "Input",
+ CellChangeTimes->{{3.454731039602265*^9, 3.454731045939451*^9}, {
+  3.4547310938567*^9, 3.45473109412968*^9}, {3.454754589019602*^9, 
+  3.454754593414332*^9}}],
+
+Cell["The max dilatation we' re aiming for (the orientable case) :", "Text",
+ CellChangeTimes->{{3.454754470795399*^9, 3.454754482161072*^9}}],
+
+Cell[BoxData[
+ RowBox[{"\[Delta]p3", "=", "1.40127"}]], "Input",
+ CellChangeTimes->{{3.454731151213278*^9, 3.454731159499764*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Genus 5 upstairs", "Subsection",
+ CellChangeTimes->{{3.454753943287703*^9, 3.454753944480688*^9}, {
+  3.454754790462259*^9, 3.45475479371571*^9}}],
+
+Cell[BoxData[
+ RowBox[{"st5", "=", 
+  RowBox[{"Pick", "[", 
+   RowBox[{"st", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"#", "\[Equal]", "5"}], "&"}], "/@", "gt"}]}], "]"}]}]], "Input",\
+
+ CellChangeTimes->{{3.454762488116407*^9, 3.454762556546733*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "st5", "]"}]], "Input",
+ CellChangeTimes->{{3.454762558198854*^9, 3.454762560280831*^9}}],
+
+Cell["\<\
+Strata with genus 5 upstairs: 5 cases.
+
+Degree of polynomial in H1odd is 2g=6
+Degree of polynomial in H1even is 2(gt-g)=2(5-3)=4
+
+H1odd corresponds to the action on H1 downstairs.  \[Lambda] (the dilatation) \
+cannot live in H1odd, since then this would correspond to an orientable \
+foliation.  Hence, the dilatation must come from H1even.  The polynomial in \
+H1even must be reciprocal, but we already know that reciprocal polynomials of \
+that degree have a min dilatation of 1.72.\
+\>", "Text",
+ CellChangeTimes->{{3.454753951917225*^9, 3.454753965006495*^9}, {
+  3.454754504395685*^9, 3.454754547401758*^9}, {3.454754601403251*^9, 
+  3.4547546261151*^9}, {3.454754685530499*^9, 3.454754766926032*^9}, {
+  3.45475487017124*^9, 3.454754893847297*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ReciprocalPolynomialBoundedList", "[", 
+  RowBox[{"x", ",", "4", ",", "1.73"}], "]"}]], "Input",
+ CellChangeTimes->{{3.454754914103576*^9, 3.45475493080623*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Genus 6 upstairs", "Subsection",
+ CellChangeTimes->{{3.454753943287703*^9, 3.454753944480688*^9}, {
+   3.454754790462259*^9, 3.45475479371571*^9}, 3.454755373096246*^9}],
+
+Cell["Strata with genus 6 upstairs : 9 cases.", "Text"],
+
+Cell[BoxData[
+ RowBox[{"st6", "=", 
+  RowBox[{"Pick", "[", 
+   RowBox[{"st", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"#", "\[Equal]", "6"}], "&"}], "/@", "gt"}]}], "]"}]}]], "Input",\
+
+ CellChangeTimes->{{3.454762488116407*^9, 3.454762532981107*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "st6", "]"}]], "Input",
+ CellChangeTimes->{{3.454762542166601*^9, 3.454762544076578*^9}}],
+
+Cell["\<\
+Degree of polynomial in H1odd is 2g=6
+Degree of polynomial in H1even is 2(gt-g)=2(6-3)=6
+
+The dilatation must come from H1even, and the polynomial in H1even must be \
+reciprocal.\
+\>", "Text",
+ CellChangeTimes->{{3.454753951917225*^9, 3.454753965006495*^9}, {
+  3.454754504395685*^9, 3.454754547401758*^9}, {3.454754601403251*^9, 
+  3.4547546261151*^9}, {3.454754685530499*^9, 3.454754766926032*^9}, {
+  3.45475487017124*^9, 3.454754893847297*^9}, {3.454755376709813*^9, 
+  3.454755417046347*^9}, {3.454763513817171*^9, 3.45476351434259*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ptry", "=", 
+  RowBox[{"Factor", "/@", 
+   RowBox[{"ReciprocalPolynomialBoundedList", "[", 
+    RowBox[{"x", ",", "6", ",", "\[Delta]p3"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.454754914103576*^9, 3.45475493080623*^9}, {
+  3.454755421540578*^9, 3.454755463697994*^9}, {3.454763609002562*^9, 
+  3.454763610224925*^9}}],
+
+Cell[BoxData[
+ RowBox[{"PerronRoot", "/@", "ptry"}]], "Input",
+ CellChangeTimes->{{3.454755470159474*^9, 3.454755474299588*^9}, {
+  3.454763613264283*^9, 3.454763614288787*^9}}],
+
+Cell["Only one polynomial to eliminate.", "Text",
+ CellChangeTimes->{{3.454755485250978*^9, 3.454755489101314*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"P", "=", 
+   RowBox[{"ptry", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+  " ", 
+  RowBox[{"(*", " ", "peven", " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{"r", "=", 
+  RowBox[{"PerronRoot", "[", "P", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.454755552393281*^9, 3.454755556935461*^9}, {
+  3.45476361780803*^9, 3.45476365095903*^9}, {3.454772498235803*^9, 
+  3.454772498365977*^9}, {3.454772761581768*^9, 3.454772766849553*^9}}],
+
+Cell["\<\
+Now we need to multiply by a polynomial Q of degree 6, such that Q has a \
+Perron root less than 1.32472 or is cyclotomic.\
+\>", "Text",
+ CellChangeTimes->{{3.454755560190404*^9, 3.454755601048442*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Ql", "=", 
+   RowBox[{"ReciprocalPolynomialBoundedList2", "[", 
+    RowBox[{"x", ",", "6", ",", 
+     RowBox[{"r", "-", 
+      SuperscriptBox["10", 
+       RowBox[{"-", "4"}]]}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.454761915864016*^9, 3.454761924585074*^9}, {
+  3.454761987848108*^9, 3.454761990451298*^9}, {3.454762628165308*^9, 
+  3.454762628658689*^9}, {3.454763442121936*^9, 3.454763444045878*^9}, {
+  3.454763635243766*^9, 3.454763642482545*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "Ql", "]"}]], "Input",
+ CellChangeTimes->{{3.454761993071439*^9, 3.454761994697094*^9}, {
+  3.454762631482638*^9, 3.454762631989875*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Abs", "/@", 
+  RowBox[{"(", 
+   RowBox[{"PerronRoot", "/@", "Ql"}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.454761999173236*^9, 3.454762003696398*^9}, {
+  3.454762053459115*^9, 3.454762058732665*^9}, {3.454762634468883*^9, 
+  3.454762634950131*^9}}],
+
+Cell["Check: Are the x -> -x cases all represented?", "Text",
+ CellChangeTimes->{{3.454762579487859*^9, 3.454762604467443*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Sort", "[", "Ql", "]"}], "-", 
+  RowBox[{"Sort", "[", 
+   RowBox[{"Ql", "/.", 
+    RowBox[{"x", "\[Rule]", 
+     RowBox[{"-", "x"}]}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.454762400214565*^9, 3.454762424264651*^9}, {
+  3.454762637714351*^9, 3.454762640173093*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Column", "[", 
+  RowBox[{"pl", "=", 
+   RowBox[{
+    RowBox[{"Factor", "/@", "P"}], " ", "Ql"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.454762615947891*^9, 3.454762686444935*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ReciprocalPolynomialQ", "/@", "pl"}]], "Input",
+ CellChangeTimes->{{3.454762704996078*^9, 3.454762723306849*^9}}],
+
+Cell[BoxData[
+ RowBox[{"PerronRoot", "/@", "pl"}]], "Input",
+ CellChangeTimes->{{3.454762730709084*^9, 3.454762734780215*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl2", "=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"Pick", "[", 
+     RowBox[{"pl", ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"LefschetzNumbersTestQ", "[", 
+         RowBox[{
+          RowBox[{
+          "st6", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], ",", 
+          "#"}], "]"}], "&"}], "/@", "pl"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", 
+      RowBox[{"Length", "[", "st6", "]"}]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.454762775170957*^9, 3.454762811078311*^9}, {
+  3.454762843355801*^9, 3.454762856095188*^9}, {3.454762922461859*^9, 
+  3.454762951479149*^9}, {3.454763148767247*^9, 3.454763149183993*^9}, {
+  3.454763218948287*^9, 3.454763219323909*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl2n", "=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"LefschetzNumbersTestQ", "[", 
+       RowBox[{
+        RowBox[{"st6", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}],
+         ",", 
+        RowBox[{"#", "/.", 
+         RowBox[{"x", "\[Rule]", 
+          RowBox[{"-", "x"}]}]}]}], "]"}], "&"}], "/@", 
+     RowBox[{"pl2", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}]}], 
+    ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", 
+      RowBox[{"Length", "[", "pl2", "]"}]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.454763211277289*^9, 3.454763319731969*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl2", "=", 
+  RowBox[{"Pick", "[", 
+   RowBox[{"pl2", ",", "pl2n"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.454763773347581*^9, 3.454763798556966*^9}, {
+  3.45476384154242*^9, 3.454763842093529*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Genus 7 upstairs", "Subsection",
+ CellChangeTimes->{{3.454753943287703*^9, 3.454753944480688*^9}, {
+   3.454754790462259*^9, 3.45475479371571*^9}, 3.454755373096246*^9, 
+   3.454764005376576*^9}],
+
+Cell["Strata with genus 7 upstairs : 5 cases.", "Text",
+ CellChangeTimes->{{3.454764008423244*^9, 3.454764019823644*^9}}],
+
+Cell[BoxData[
+ RowBox[{"st7", "=", 
+  RowBox[{"Pick", "[", 
+   RowBox[{"st", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"#", "\[Equal]", "7"}], "&"}], "/@", "gt"}]}], "]"}]}]], "Input",\
+
+ CellChangeTimes->{{3.454762488116407*^9, 3.454762532981107*^9}, {
+  3.454764010084774*^9, 3.454764012534341*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "st7", "]"}]], "Input",
+ CellChangeTimes->{{3.454762542166601*^9, 3.454762544076578*^9}, {
+  3.454764015529462*^9, 3.454764015917121*^9}}],
+
+Cell["\<\
+Degree of polynomial in H1odd is 2g=6
+Degree of polynomial in H1even is 2(gt-g)=2(7-3)=8
+
+The dilatation must come from H1even, and the polynomial in H1even must be \
+reciprocal.\
+\>", "Text",
+ CellChangeTimes->{{3.454753951917225*^9, 3.454753965006495*^9}, {
+  3.454754504395685*^9, 3.454754547401758*^9}, {3.454754601403251*^9, 
+  3.4547546261151*^9}, {3.454754685530499*^9, 3.454754766926032*^9}, {
+  3.45475487017124*^9, 3.454754893847297*^9}, {3.454755376709813*^9, 
+  3.454755417046347*^9}, {3.454763513817171*^9, 3.45476351434259*^9}, {
+  3.454764024022536*^9, 3.454764033098777*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ptry", "=", 
+  RowBox[{"Factor", "/@", 
+   RowBox[{"ReciprocalPolynomialBoundedList", "[", 
+    RowBox[{"x", ",", "8", ",", "\[Delta]p3"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.454754914103576*^9, 3.45475493080623*^9}, {
+  3.454755421540578*^9, 3.454755463697994*^9}, {3.454763609002562*^9, 
+  3.454763610224925*^9}, {3.454764041811633*^9, 3.45476404245272*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "ptry", "]"}]], "Input",
+ CellChangeTimes->{{3.454764206899186*^9, 3.4547642091698*^9}}],
+
+Cell[BoxData[
+ RowBox[{"PerronRoot", "/@", "ptry"}]], "Input",
+ CellChangeTimes->{{3.454755470159474*^9, 3.454755474299588*^9}, {
+  3.454763613264283*^9, 3.454763614288787*^9}}],
+
+Cell["Ten polynomials to eliminate.", "Text",
+ CellChangeTimes->{{3.454755485250978*^9, 3.454755489101314*^9}, {
+  3.454764152884643*^9, 3.45476415802136*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{"Candidates", " ", "for", " ", "5"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.454764435529027*^9, 3.45476444348704*^9}, {
+   3.454764478034896*^9, 3.454764478403596*^9}, {3.454764529992368*^9, 
+   3.454764532485314*^9}, {3.454764591917*^9, 3.454764592298542*^9}, {
+   3.454764640610295*^9, 3.454764640961937*^9}, 3.454773270835902*^9}],
+
+Cell[BoxData[{
+ RowBox[{"P", "=", 
+  RowBox[{
+  "ptry", "\[LeftDoubleBracket]", "1", 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"r", "=", 
+  RowBox[{"PerronRoot", "[", "P", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.454755552393281*^9, 3.454755556935461*^9}, {
+  3.45476361780803*^9, 3.45476365095903*^9}, {3.45476416069102*^9, 
+  3.45476416108297*^9}, {3.454764298383809*^9, 3.454764326588482*^9}, {
+  3.45476436469362*^9, 3.454764393429849*^9}, {3.454764446760146*^9, 
+  3.454764446979579*^9}, {3.454764480642803*^9, 3.454764480929344*^9}, {
+  3.454764534790038*^9, 3.454764535097037*^9}, {3.454764594113448*^9, 
+  3.45476459448594*^9}, {3.454764643344255*^9, 3.454764643936422*^9}, {
+  3.454773010355479*^9, 3.454773014590607*^9}, {3.454773265848818*^9, 
+  3.454773265957301*^9}}],
+
+Cell["\<\
+Now we need to multiply by a polynomial Q of degree 4, such that Q has a \
+Perron root less than r or is cyclotomic.\
+\>", "Text",
+ CellChangeTimes->{{3.454755560190404*^9, 3.454755601048442*^9}, {
+  3.454764171813929*^9, 3.454764183678447*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Ql", "=", 
+   RowBox[{"ReciprocalPolynomialBoundedList2", "[", 
+    RowBox[{"x", ",", "6", ",", 
+     RowBox[{"r", "-", 
+      SuperscriptBox["10", 
+       RowBox[{"-", "4"}]]}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.454761915864016*^9, 3.454761924585074*^9}, {
+   3.454761987848108*^9, 3.454761990451298*^9}, {3.454762628165308*^9, 
+   3.454762628658689*^9}, {3.454763442121936*^9, 3.454763444045878*^9}, {
+   3.454763635243766*^9, 3.454763642482545*^9}, 3.454764169904513*^9, 
+   3.454773124350084*^9}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "Ql", "]"}]], "Input",
+ CellChangeTimes->{{3.454761993071439*^9, 3.454761994697094*^9}, {
+  3.454762631482638*^9, 3.454762631989875*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Abs", "/@", 
+  RowBox[{"(", 
+   RowBox[{"PerronRoot", "/@", "Ql"}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.454761999173236*^9, 3.454762003696398*^9}, {
+  3.454762053459115*^9, 3.454762058732665*^9}, {3.454762634468883*^9, 
+  3.454762634950131*^9}}],
+
+Cell["Check: Are the x -> -x cases all represented?", "Text",
+ CellChangeTimes->{{3.454762579487859*^9, 3.454762604467443*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Sort", "[", "Ql", "]"}], "-", 
+  RowBox[{"Sort", "[", 
+   RowBox[{"Ql", "/.", 
+    RowBox[{"x", "\[Rule]", 
+     RowBox[{"-", "x"}]}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.454762400214565*^9, 3.454762424264651*^9}, {
+  3.454762637714351*^9, 3.454762640173093*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Column", "[", 
+  RowBox[{"pl", "=", 
+   RowBox[{
+    RowBox[{"Factor", "/@", "P"}], " ", "Ql"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.454762615947891*^9, 3.454762686444935*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ReciprocalPolynomialQ", "/@", "pl"}]], "Input",
+ CellChangeTimes->{{3.454762704996078*^9, 3.454762723306849*^9}}],
+
+Cell[BoxData[
+ RowBox[{"PerronRoot", "/@", "pl"}]], "Input",
+ CellChangeTimes->{{3.454762730709084*^9, 3.454762734780215*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl2", "=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"Pick", "[", 
+     RowBox[{"pl", ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"LefschetzNumbersTestQ", "[", 
+         RowBox[{
+          RowBox[{
+          "st7", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], ",", 
+          "#"}], "]"}], "&"}], "/@", "pl"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", 
+      RowBox[{"Length", "[", "st7", "]"}]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.454762775170957*^9, 3.454762811078311*^9}, {
+  3.454762843355801*^9, 3.454762856095188*^9}, {3.454762922461859*^9, 
+  3.454762951479149*^9}, {3.454763148767247*^9, 3.454763149183993*^9}, {
+  3.454763218948287*^9, 3.454763219323909*^9}, {3.454764254245276*^9, 
+  3.454764258009763*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl2n", "=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"LefschetzNumbersTestQ", "[", 
+       RowBox[{
+        RowBox[{"st7", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}],
+         ",", 
+        RowBox[{"#", "/.", 
+         RowBox[{"x", "\[Rule]", 
+          RowBox[{"-", "x"}]}]}]}], "]"}], "&"}], "/@", 
+     RowBox[{"pl2", "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}]}], 
+    ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", 
+      RowBox[{"Length", "[", "pl2", "]"}]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.454763211277289*^9, 3.454763319731969*^9}, {
+  3.454764265628267*^9, 3.454764265939095*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl2", "=", 
+  RowBox[{"Pick", "[", 
+   RowBox[{"pl2", ",", "pl2n"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.454763773347581*^9, 3.454763798556966*^9}, {
+  3.45476384154242*^9, 3.454763842093529*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"Sauvegarder", " ", "candidats"}], ",", " ", "strates"}], 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.454764720101322*^9, 3.454764728486251*^9}}],
+
+Cell[BoxData["st7"], "Input",
+ CellChangeTimes->{
+  3.454773381211598*^9, {3.454773445118548*^9, 3.454773445345828*^9}}],
+
+Cell[BoxData[
+ RowBox[{"StratumOrbitsTable", "[", 
+  RowBox[{"StratumOrbits", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"4", ",", "4", ",", "4", ",", "4", ",", "4", ",", "4"}], "}"}], 
+    ",", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       RowBox[{"2", " ", "x"}], "-", 
+       SuperscriptBox["x", "2"], "+", 
+       RowBox[{"4", " ", 
+        SuperscriptBox["x", "3"]}], "-", 
+       SuperscriptBox["x", "4"], "-", 
+       RowBox[{"2", " ", 
+        SuperscriptBox["x", "5"]}], "+", 
+       SuperscriptBox["x", "6"]}], ")"}], " ", 
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       SuperscriptBox["x", "3"], "-", 
+       SuperscriptBox["x", "4"], "-", 
+       SuperscriptBox["x", "5"], "+", 
+       SuperscriptBox["x", "8"]}], ")"}]}]}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.454773495868133*^9, 3.454773526641018*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1014, 689},
+WindowMargins->{{0, Automatic}, {Automatic, 25}},
+ShowSelection->True,
+FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 99, 1, 73, "Section"],
+Cell[669, 25, 366, 10, 32, "Input"],
+Cell[1038, 37, 576, 10, 32, "Input"],
+Cell[1617, 49, 126, 2, 32, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[1780, 56, 98, 1, 43, "Section"],
+Cell[1881, 59, 115, 2, 32, "Input"],
+Cell[1999, 63, 201, 4, 32, "Input"],
+Cell[2203, 69, 174, 3, 32, "Input"],
+Cell[2380, 74, 120, 1, 31, "Text"],
+Cell[2503, 77, 157, 3, 32, "Input"],
+Cell[2663, 82, 201, 5, 32, "Input"],
+Cell[2867, 89, 126, 1, 31, "Text"],
+Cell[2996, 92, 225, 4, 32, "Input"],
+Cell[3224, 98, 130, 1, 31, "Text"],
+Cell[3357, 101, 454, 12, 55, "Input"],
+Cell[3814, 115, 101, 1, 31, "Text"],
+Cell[3918, 118, 236, 5, 32, "Input"],
+Cell[4157, 125, 142, 1, 31, "Text"],
+Cell[4302, 128, 130, 2, 32, "Input"],
+Cell[CellGroupData[{
+Cell[4457, 134, 152, 2, 39, "Subsection"],
+Cell[4612, 138, 257, 8, 32, "Input"],
+Cell[4872, 148, 127, 2, 32, "Input"],
+Cell[5002, 152, 764, 15, 171, "Text"],
+Cell[5769, 169, 185, 3, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5991, 177, 175, 2, 39, "Subsection"],
+Cell[6169, 181, 55, 0, 31, "Text"],
+Cell[6227, 183, 257, 8, 32, "Input"],
+Cell[6487, 193, 127, 2, 32, "Input"],
+Cell[6617, 197, 552, 11, 91, "Text"],
+Cell[7172, 210, 347, 7, 32, "Input"],
+Cell[7522, 219, 177, 3, 32, "Input"],
+Cell[7702, 224, 115, 1, 31, "Text"],
+Cell[7820, 227, 482, 10, 55, "Input"],
+Cell[8305, 239, 212, 4, 51, "Text"],
+Cell[8520, 245, 500, 11, 32, "Input"],
+Cell[9023, 258, 175, 3, 32, "Input"],
+Cell[9201, 263, 274, 6, 32, "Input"],
+Cell[9478, 271, 127, 1, 31, "Text"],
+Cell[9608, 274, 305, 8, 32, "Input"],
+Cell[9916, 284, 205, 5, 32, "Input"],
+Cell[10124, 291, 137, 2, 32, "Input"],
+Cell[10264, 295, 126, 2, 32, "Input"],
+Cell[10393, 299, 751, 19, 32, "Input"],
+Cell[11147, 320, 644, 18, 32, "Input"],
+Cell[11794, 340, 225, 5, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12056, 350, 201, 3, 39, "Subsection"],
+Cell[12260, 355, 121, 1, 31, "Text"],
+Cell[12384, 358, 306, 9, 32, "Input"],
+Cell[12693, 369, 176, 3, 32, "Input"],
+Cell[12872, 374, 601, 12, 91, "Text"],
+Cell[13476, 388, 392, 7, 32, "Input"],
+Cell[13871, 397, 126, 2, 32, "Input"],
+Cell[14000, 401, 177, 3, 32, "Input"],
+Cell[14180, 406, 159, 2, 31, "Text"],
+Cell[14342, 410, 375, 6, 32, "Input"],
+Cell[14720, 418, 805, 15, 55, "Input"],
+Cell[15528, 435, 255, 5, 51, "Text"],
+Cell[15786, 442, 551, 12, 32, "Input"],
+Cell[16340, 456, 175, 3, 32, "Input"],
+Cell[16518, 461, 274, 6, 32, "Input"],
+Cell[16795, 469, 127, 1, 31, "Text"],
+Cell[16925, 472, 305, 8, 32, "Input"],
+Cell[17233, 482, 205, 5, 32, "Input"],
+Cell[17441, 489, 137, 2, 32, "Input"],
+Cell[17581, 493, 126, 2, 32, "Input"],
+Cell[17710, 497, 800, 20, 32, "Input"],
+Cell[18513, 519, 693, 19, 32, "Input"],
+Cell[19209, 540, 225, 5, 32, "Input"],
+Cell[19437, 547, 196, 5, 32, "Input"],
+Cell[19636, 554, 120, 2, 32, "Input"],
+Cell[19759, 558, 855, 24, 32, "Input"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
