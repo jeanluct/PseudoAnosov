@@ -820,8 +820,8 @@ Regular[L_List, OptionsPattern[]] := Module[
     rpo
 ]
 Options[Regular] = {PerronRootSign -> Automatic}
-Regular::needpositivePerron = "Error: This function only applies to positive Perron root."
-Regular::neednegativePerron = "Error: This function only applies to negative Perron root."
+Regular::needpositivePerron = "Error: This function only applies to positive Perron root, and the Lefschetz numbers sequence suggests a negative root.  Increasing the sequence length with the MaxLefschetz option might help if this is spurious."
+Regular::neednegativePerron = "Error: This function only applies to negative Perron root, and the Lefschetz numbers sequence suggests a positive root.  Increasing the sequence length with the MaxLefschetz option might help if this is spurious."
 Regular::badLefschetz = "Bad sequence of Lefschetz numbers."
 
 
