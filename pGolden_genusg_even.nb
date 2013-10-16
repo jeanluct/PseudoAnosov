@@ -1,0 +1,145 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[      3969,        136]
+NotebookOptionsPosition[      2960,        102]
+NotebookOutlinePosition[      3665,        125]
+CellTagsIndexPosition[      3622,        122]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Initialization", "Section",
+ CellChangeTimes->{{3.454777938539942*^9, 3.454777941166803*^9}}],
+
+Cell["This is the folder that contains PseudoAnosov.m:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AppendTo", "[", 
+   RowBox[{"$Path", ",", " ", 
+    RowBox[{"ToFileName", "[", 
+     RowBox[{"{", 
+      RowBox[{
+      "$HomeDirectory", ",", 
+       "\"\<Projects/articles/topo/ttauto/pubs/systole/Mathematica\>\""}], 
+      "}"}], "]"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.448100116609247*^9, 3.448100119384217*^9}}],
+
+Cell[BoxData[
+ RowBox[{"<<", "PseudoAnosov.m"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The \"Golden Ratio\" polynomial", "Section"],
+
+Cell["\<\
+This is the polynomial we conjecture gives the smallest orientable dilatation \
+for (even) genus g, with a negative eigenvalue on homology:\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pGolden", "[", 
+   RowBox[{"x_", ",", "g_"}], "]"}], ":=", 
+  RowBox[{
+   SuperscriptBox["x", 
+    RowBox[{"2", "g"}]], "-", 
+   SuperscriptBox["x", 
+    RowBox[{"g", "+", "1"}]], "-", 
+   SuperscriptBox["x", "g"], "-", 
+   SuperscriptBox["x", 
+    RowBox[{"g", "-", "1"}]], "+", "1"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"The", " ", "dilatation", " ", "is", " ", 
+  SuperscriptBox["GoldenRatio", 
+   RowBox[{"2", "/", "g"}]], " ", "for", " ", "large", " ", 
+  RowBox[{"g", "."}]}]], "Text"],
+
+Cell["\<\
+The polynomial always passes the Lefschetz test on the stratum {3g-2,g-2}.   \
+(Note: Need to make MaxLefschetz large enough for high genus.)  The outgoing \
+separatrices are cyclically permuted.  Long ago I think we showed that this \
+worked for arbitrary genus g (easy, I think).\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Column", "[", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"StratumOrbitsTable", "[", 
+     RowBox[{
+      RowBox[{"First", "@", 
+       RowBox[{"StratumOrbits", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"3", "g"}], "-", "2"}], ",", 
+           RowBox[{"g", "-", "2"}]}], "}"}], ",", 
+         RowBox[{"pGolden", "[", 
+          RowBox[{
+           RowBox[{"-", "x"}], ",", "g"}], "]"}], ",", 
+         RowBox[{"MaxLefschetz", "\[Rule]", "100"}]}], "]"}]}], ",", "36"}], 
+     "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"g", ",", "6", ",", "14", ",", "2"}], "}"}]}], "]"}], 
+  "]"}]], "Input"]
+}, Open  ]]
+},
+WindowSize->{1299, 715},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
+ShowSelection->True,
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
+StyleDefinitions->Notebook[{
+   Cell[
+    StyleData[StyleDefinitions -> "Default.nb"]], 
+   Cell[
+    StyleData["Text"], Background -> GrayLevel[0.85]]}, Visible -> False, 
+  FrontEndVersion -> "9.0 for Linux x86 (64-bit) (November 20, 2012)", 
+  StyleDefinitions -> "PrivateStylesheetFormatting.nb"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 99, 1, 81, "Section"],
+Cell[669, 25, 64, 0, 47, "Text"],
+Cell[736, 27, 366, 10, 32, "Input"],
+Cell[1105, 39, 58, 1, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1200, 45, 50, 0, 81, "Section"],
+Cell[1253, 47, 163, 3, 47, "Text"],
+Cell[1419, 52, 333, 11, 34, "Input"],
+Cell[1755, 65, 192, 4, 50, "Text"],
+Cell[1950, 71, 305, 5, 67, "Text"],
+Cell[2258, 78, 686, 21, 32, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
