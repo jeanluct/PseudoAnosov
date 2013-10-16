@@ -23,7 +23,7 @@
 BeginPackage["PseudoAnosovLite`"]
 
 
-Needs["Combinatorica`"] (* For "ToCycles" *)
+Quiet[Needs["Combinatorica`"],General::compat] (* For "ToCycles" *)
 
 
 (*
