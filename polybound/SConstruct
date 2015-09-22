@@ -1,6 +1,6 @@
 env = Environment(CC = 'gcc',
                   CCFLAGS = ['-Wall','-O3','-ffast-math'],
-		  CPPPATH = ['../../../code'],
+		  CPPPATH = ['../../../ttauto-code/extern/jlt'],
 		  LIBS = ['gfortran', 'lapack'])
 
 # Use profile=1 on the command-line to turn on profiling.

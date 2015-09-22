@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <jlt/math.hpp>
 #include <jlt/stlio.hpp>
 #include <jlt/exceptions.hpp>
 #include <jlt/reciprocal_polynomial.hpp>
@@ -43,7 +42,6 @@ int main()
   using jlt::reciprocal_polynomial;
   using jlt::operator<<;
   using jlt::is_candidate;
-  using jlt::Abs;
   using std::cout;
   using std::cerr;
   using std::endl;
@@ -64,7 +62,7 @@ int main()
   const T tol = 1e-4;
   T lambdamax;
   // Use bound from below as well: Penner's 2^1/(12g-12).
-  const T lambdamin = jlt::Pow(2.0,1.0/(12*g-12));
+  const T lambdamin = std::pow(2.0,1.0/(12*g-12));
 
   std::vector<int> Trmin(g), Trmax(g), Tr(g);
 
@@ -104,7 +102,7 @@ int main()
 
   for (int k = 0; k < g; ++k)
     {
-      T pw = jlt::Pow(lambdamax,k+1);
+      T pw = std::pow(lambdamax,k+1);
       /* Could be adapted to n odd.  See PseudoAnosov.m */
       Trmax[k] = (int)(g * (pw + 1/pw));
       Trmin[k] = -Trmax[k];
@@ -245,7 +243,7 @@ inline T findroot(const reciprocal_polynomial<S>& p,
   int i = 0;
   const int itmax = 100;
 
-  while (Abs(px) > tol && i++ < itmax)
+  while (std::abs(px) > tol && i++ < itmax)
     {
       x = x - px / p.derivative_at(x);
       px = p(x);
@@ -254,7 +252,7 @@ inline T findroot(const reciprocal_polynomial<S>& p,
   if (i == itmax)
     throw
       failed_to_converge<T>
-      ("Failed to converge to specified accuracy.\n",Abs(px));
+      ("Failed to converge to specified accuracy.\n",std::abs(px));
   else
     return x;
 }
@@ -280,7 +278,7 @@ inline void spectral_radius(const reciprocal_polynomial<S>& p, T& sr)
 template<class T>
 inline bool is_candidate(T const l, T const lmin, T const lmax)
 {
-  return (Abs(l) >= lmin && Abs(l) < lmax);
+  return (std::abs(l) >= lmin && std::abs(l) < lmax);
 }
 
 
