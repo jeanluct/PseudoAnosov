@@ -10,40 +10,28 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[      7061,        211]
-NotebookOptionsPosition[      6265,        182]
-NotebookOutlinePosition[      6623,        198]
-CellTagsIndexPosition[      6580,        195]
+NotebookDataLength[      6285,        195]
+NotebookOptionsPosition[      5489,        167]
+NotebookOutlinePosition[      5924,        184]
+CellTagsIndexPosition[      5881,        181]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-Cell[BoxData[
+Cell[BoxData[{
  RowBox[{
   RowBox[{"AppendTo", "[", 
    RowBox[{"$Path", ",", " ", 
     RowBox[{"ToFileName", "[", 
      RowBox[{"{", 
       RowBox[{
-      "$HomeDirectory", ",", 
-       "\"\<Projects/articles/topo/ttauto/pubs/systole/Mathematica\>\""}], 
-      "}"}], "]"}]}], "]"}], ";"}]], "Input",
- CellChangeTimes->{{3.448100116609247*^9, 3.448100119384217*^9}}],
-
-Cell[BoxData[
+      "$HomeDirectory", ",", "\"\<Projects/articles/topo/PseudoAnosov\>\""}], 
+      "}"}], "]"}]}], "]"}], ";"}], "\n", 
  RowBox[{"SetDirectory", "[", 
-  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole/polybound\>\"\
-", "]"}]], "Input",
- CellChangeTimes->{
-  3.442796227094639*^9, {3.448100022751694*^9, 3.448100027485006*^9}, {
-   3.448100135534417*^9, 3.448100138782777*^9}, {3.449853115128272*^9, 
-   3.449853123030297*^9}, {3.449853254135535*^9, 3.44985326139461*^9}, {
-   3.449910634346561*^9, 3.4499106442376013`*^9}, {3.450265768619165*^9, 
-   3.450265778530273*^9}, {3.4502666673581533`*^9, 3.450266668509577*^9}}],
-
-Cell[BoxData[
- RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
- CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}],
+  RowBox[{
+  "$HomeDirectory", "<>", 
+   "\"\</Projects/articles/topo/PseudoAnosov/genus3\>\""}], "]"}], "\n", 
+ RowBox[{"<<", "PseudoAnosov.m"}]}], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -53,10 +41,7 @@ Cell[BoxData[
 
 Cell[CellGroupData[{
 
-Cell["Genus above : 5", "Subsection",
- CellChangeTimes->{{3.450265783881629*^9, 3.450265795756197*^9}, {
-  3.45027234652507*^9, 3.450272346814476*^9}, {3.450284972798865*^9, 
-  3.45028497295872*^9}, {3.450285131514779*^9, 3.450285132186474*^9}}],
+Cell["Genus above: 5", "Subsection"],
 
 Cell[BoxData[{
  RowBox[{
@@ -181,9 +166,10 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{1014, 689},
-WindowMargins->{{0, Automatic}, {Automatic, 25}},
+WindowMargins->{{-10, Automatic}, {-8, Automatic}},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
 ShowSelection->True,
-FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -197,21 +183,19 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[545, 20, 366, 10, 32, "Input"],
-Cell[914, 32, 529, 9, 32, "Input"],
-Cell[1446, 43, 126, 2, 32, "Input"],
-Cell[1575, 47, 196, 4, 32, "Input"],
+Cell[545, 20, 460, 13, 77, "Input"],
+Cell[1008, 35, 196, 4, 32, "Input"],
 Cell[CellGroupData[{
-Cell[1796, 55, 245, 3, 39, "Subsection"],
-Cell[2044, 60, 699, 18, 55, "Input"],
-Cell[2746, 80, 548, 16, 32, "Input"],
-Cell[3297, 98, 210, 6, 32, "Input"],
-Cell[3510, 106, 127, 2, 32, "Input"],
-Cell[3640, 110, 123, 2, 32, "Input"],
-Cell[3766, 114, 128, 2, 32, "Input"],
-Cell[3897, 118, 254, 5, 32, "Input"],
-Cell[4154, 125, 992, 28, 99, "Input"],
-Cell[5149, 155, 1100, 24, 32, "Input"]
+Cell[1229, 43, 36, 0, 44, "Subsection"],
+Cell[1268, 45, 699, 18, 62, "Input"],
+Cell[1970, 65, 548, 16, 37, "Input"],
+Cell[2521, 83, 210, 6, 32, "Input"],
+Cell[2734, 91, 127, 2, 32, "Input"],
+Cell[2864, 95, 123, 2, 32, "Input"],
+Cell[2990, 99, 128, 2, 32, "Input"],
+Cell[3121, 103, 254, 5, 32, "Input"],
+Cell[3378, 110, 992, 28, 99, "Input"],
+Cell[4373, 140, 1100, 24, 32, "Input"]
 }, Open  ]]
 }
 ]

@@ -742,6 +742,9 @@ StratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     Off[Regular::badLefschetz];
     opts2 = Sequence @@ FilterRules[{opts},Options[Regular]];
     len = Min[Length[L],OptionValue[MaxLefschetz]];
+    (* TODO: Need more checking here. If Ls is garbage because MaxLefschetz
+       is not large enough, or because the polynomial is not Perron, then the
+       error messages are not very helpful. *)
     ro = Regular[
         LefschetzCombine[Take[L,len],
             -SingularitiesLefschetzBlock/.#,len],opts2] & /@ Ls;
@@ -889,11 +892,11 @@ SingularCyclic[Pk_List, m_Integer:1, prs_Integer:-1] := Module[
     Do[
         If[Pm1 == Range[m],
             If[Pk1 == Range[k/2+1],
-	        If[prs < 0,
+                If[prs < 0,
                     AppendTo[L,If[EvenQ[i], -m(k+1), m]]
-		,
+                ,
                     AppendTo[L,-m(k+1)]
-		]
+                ]
             ,
                 AppendTo[L,m]
             ];

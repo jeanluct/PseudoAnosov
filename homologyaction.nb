@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     18622,        563]
-NotebookOptionsPosition[     15865,        475]
-NotebookOutlinePosition[     16223,        491]
-CellTagsIndexPosition[     16180,        488]
+NotebookDataLength[     18106,        555]
+NotebookOptionsPosition[     15276,        466]
+NotebookOutlinePosition[     15710,        483]
+CellTagsIndexPosition[     15667,        480]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -25,17 +25,16 @@ Cell["Initialization", "Section",
 
 Cell[BoxData[
  RowBox[{"SetDirectory", "[", 
-  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole/Mathematica\>\
-\"", "]"}]], "Input",
- CellChangeTimes->{{3.44276268918027*^9, 3.442762713975093*^9}, {
-  3.447420876428257*^9, 3.4474208783321*^9}}],
+  RowBox[{
+  "$HomeDirectory", "<>", "\"\</Projects/articles/topo/PseudoAnosov\>\""}], 
+  "]"}]], "Input"],
 
 Cell[BoxData[
  RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
  CellChangeTimes->{
   3.44276975660726*^9, {3.442795192458606*^9, 3.442795195156436*^9}, {
    3.442834863802482*^9, 3.442834864300197*^9}}]
-}, Closed]],
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -84,8 +83,7 @@ Cell[BoxData[
   3.4463006731868668`*^9, 3.446300674069429*^9}, {3.446316875319254*^9, 
   3.446316876237916*^9}, {3.446423752281953*^9, 3.44642375392503*^9}}],
 
-Cell["Complex Perron root with magnitude 1.539 < 1.72 :", "Text",
- CellChangeTimes->{{3.448107721540861*^9, 3.448107736680712*^9}}],
+Cell["Complex Perron root with magnitude 1.539 < 1.72:", "Text"],
 
 Cell[BoxData[
  RowBox[{"wd", "=", 
@@ -117,13 +115,11 @@ Cell[BoxData[
  CellChangeTimes->{{3.446397374997733*^9, 3.4463973863087597`*^9}}],
 
 Cell["\<\
-This one is weird : XTrain says it is pA with dilatation 1.685.  But if we \
+This one is weird: XTrain says it is pA with dilatation 1.685.  But if we \
 look at its output closely, we see that the puncture has a 1-prong, so if we \
 remove the puncture it is no longer a valid pA.  On homology it acts \
 trivially.\
-\>", "Text",
- CellChangeTimes->{{3.446400175730591*^9, 3.446400241108247*^9}, {
-  3.4464012390541477`*^9, 3.446401270233865*^9}}],
+\>", "Text"],
 
 Cell[BoxData[
  RowBox[{"wd", "=", 
@@ -144,11 +140,9 @@ Cell[BoxData[
  CellChangeTimes->{{3.4463972080682373`*^9, 3.44639724179392*^9}}],
 
 Cell["\<\
-This one looks just like a pA from the point of view of homology : what is \
-it?  It has dilatation 1.618 so can't be a pA.  XTrain gives 2.01.\
-\>", "Text",
- CellChangeTimes->{{3.446397693194591*^9, 3.446397728602409*^9}, {
-  3.44639980365985*^9, 3.44639981141998*^9}}],
+This one looks just like a pA from the point of view of homology: what is it? \
+ It has dilatation 1.618 so can't be a pA.  XTrain gives 2.01.\
+\>", "Text"],
 
 Cell[BoxData[
  RowBox[{"wd", "=", 
@@ -282,10 +276,8 @@ Cell[BoxData[
   3.447491040002624*^9, 3.447491047043043*^9}}],
 
 Cell["\<\
-Matt' s superminimizer, dilatation 1.14815 : (acts trivially on homology)\
-\>", "Text",
- CellChangeTimes->{{3.448115964663507*^9, 3.448115984471647*^9}, {
-  3.448116159430847*^9, 3.448116166628659*^9}}],
+Matt's superminimizer, dilatation 1.14815: (acts trivially on homology)\
+\>", "Text"],
 
 Cell[BoxData[
  RowBox[{"wd", "=", 
@@ -320,11 +312,10 @@ Cell["Genus 3 \"old\" minimizer : DOESN'T ALWAYS WORK", "Text",
   3.446426879967045*^9}, {3.447491024937079*^9, 3.447491025306182*^9}}],
 
 Cell["\<\
-There must be two different types : one that stabilizes an orientable \
+There must be two different types: one that stabilizes an orientable \
 foliation, the other nonorientable, but with exactly the same dilatation.  \
 Cool!\
-\>", "Text",
- CellChangeTimes->{{3.446426882905112*^9, 3.446426922568054*^9}}],
+\>", "Text"],
 
 Cell[BoxData[
  RowBox[{"wd", "=", 
@@ -474,9 +465,10 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{818, 689},
-WindowMargins->{{93, Automatic}, {Automatic, 59}},
+WindowMargins->{{83, Automatic}, {-10, Automatic}},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
 ShowSelection->True,
-FrontEndVersion->"7.0 for Linux x86 (64-bit) (November 11, 2008)",
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -491,78 +483,78 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[567, 22, 99, 1, 73, "Section"],
-Cell[669, 25, 257, 5, 32, "Input"],
-Cell[929, 32, 198, 4, 32, "Input"]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[1164, 41, 105, 1, 43, "Section"],
-Cell[1272, 44, 117, 2, 32, "Input"],
-Cell[1392, 48, 127, 2, 32, "Input"],
-Cell[CellGroupData[{
-Cell[1544, 54, 95, 1, 39, "Subsection"],
-Cell[1642, 57, 229, 3, 31, "Text"],
-Cell[1874, 62, 155, 2, 31, "Text"],
-Cell[2032, 66, 223, 5, 32, "Input"],
-Cell[2258, 73, 158, 2, 31, "Text"],
-Cell[2419, 77, 354, 7, 32, "Input"],
-Cell[2776, 86, 131, 1, 31, "Text"],
-Cell[2910, 89, 263, 7, 32, "Input"],
-Cell[3176, 98, 179, 2, 31, "Text"],
-Cell[3358, 102, 273, 6, 31, "Text"],
-Cell[3634, 110, 255, 6, 32, "Input"],
-Cell[3892, 118, 378, 7, 51, "Text"],
-Cell[4273, 127, 365, 9, 32, "Input"],
-Cell[4641, 138, 234, 5, 32, "Input"],
-Cell[4878, 145, 280, 5, 51, "Text"],
-Cell[5161, 152, 378, 9, 32, "Input"]
+Cell[567, 22, 99, 1, 65, "Section"],
+Cell[669, 25, 151, 4, 32, "Input"],
+Cell[823, 31, 198, 4, 32, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[5576, 166, 94, 1, 39, "Subsection"],
-Cell[5673, 169, 220, 3, 31, "Text"],
-Cell[5896, 174, 159, 3, 31, "Text"],
-Cell[6058, 179, 343, 10, 32, "Input"],
-Cell[6404, 191, 348, 10, 32, "Input"],
-Cell[6755, 203, 350, 10, 32, "Input"],
-Cell[7108, 215, 348, 10, 32, "Input"],
-Cell[7459, 227, 348, 10, 32, "Input"],
-Cell[7810, 239, 380, 11, 32, "Input"],
-Cell[8193, 252, 342, 9, 32, "Input"],
-Cell[8538, 263, 189, 4, 31, "Text"],
-Cell[8730, 269, 441, 12, 32, "Input"],
-Cell[9174, 283, 212, 4, 31, "Text"],
-Cell[9389, 289, 351, 8, 32, "Input"],
-Cell[9743, 299, 217, 4, 31, "Text"],
-Cell[9963, 305, 353, 9, 32, "Input"],
-Cell[10319, 316, 277, 3, 31, "Text"],
-Cell[10599, 321, 244, 5, 51, "Text"],
-Cell[10846, 328, 485, 12, 32, "Input"],
-Cell[11334, 342, 437, 12, 32, "Input"]
+Cell[1058, 40, 105, 1, 65, "Section"],
+Cell[1166, 43, 117, 2, 32, "Input"],
+Cell[1286, 47, 127, 2, 32, "Input"],
+Cell[CellGroupData[{
+Cell[1438, 53, 95, 1, 45, "Subsection"],
+Cell[1536, 56, 229, 3, 31, "Text"],
+Cell[1768, 61, 155, 2, 30, "Text"],
+Cell[1926, 65, 223, 5, 32, "Input"],
+Cell[2152, 72, 158, 2, 31, "Text"],
+Cell[2313, 76, 354, 7, 32, "Input"],
+Cell[2670, 85, 64, 0, 31, "Text"],
+Cell[2737, 87, 263, 7, 32, "Input"],
+Cell[3003, 96, 179, 2, 30, "Text"],
+Cell[3185, 100, 273, 6, 31, "Text"],
+Cell[3461, 108, 255, 6, 32, "Input"],
+Cell[3719, 116, 260, 5, 71, "Text"],
+Cell[3982, 123, 365, 9, 32, "Input"],
+Cell[4350, 134, 234, 5, 32, "Input"],
+Cell[4587, 141, 166, 3, 51, "Text"],
+Cell[4756, 146, 378, 9, 32, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[11808, 359, 94, 1, 39, "Subsection"],
-Cell[11905, 362, 169, 2, 31, "Text"],
-Cell[12077, 366, 285, 6, 32, "Input"]
+Cell[5171, 160, 94, 1, 45, "Subsection"],
+Cell[5268, 163, 220, 3, 30, "Text"],
+Cell[5491, 168, 159, 3, 31, "Text"],
+Cell[5653, 173, 343, 10, 32, "Input"],
+Cell[5999, 185, 348, 10, 32, "Input"],
+Cell[6350, 197, 350, 10, 32, "Input"],
+Cell[6703, 209, 348, 10, 32, "Input"],
+Cell[7054, 221, 348, 10, 32, "Input"],
+Cell[7405, 233, 380, 11, 32, "Input"],
+Cell[7788, 246, 342, 9, 32, "Input"],
+Cell[8133, 257, 189, 4, 31, "Text"],
+Cell[8325, 263, 441, 12, 32, "Input"],
+Cell[8769, 277, 95, 2, 31, "Text"],
+Cell[8867, 281, 351, 8, 32, "Input"],
+Cell[9221, 291, 217, 4, 31, "Text"],
+Cell[9441, 297, 353, 9, 32, "Input"],
+Cell[9797, 308, 277, 3, 30, "Text"],
+Cell[10077, 313, 177, 4, 51, "Text"],
+Cell[10257, 319, 485, 12, 32, "Input"],
+Cell[10745, 333, 437, 12, 32, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[12399, 377, 95, 1, 39, "Subsection"],
-Cell[12497, 380, 168, 2, 31, "Text"],
-Cell[12668, 384, 304, 7, 32, "Input"]
+Cell[11219, 350, 94, 1, 45, "Subsection"],
+Cell[11316, 353, 169, 2, 30, "Text"],
+Cell[11488, 357, 285, 6, 32, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[13009, 396, 95, 1, 39, "Subsection"],
-Cell[13107, 399, 237, 5, 31, "Text"],
-Cell[13347, 406, 303, 7, 32, "Input"],
-Cell[13653, 415, 196, 4, 31, "Text"],
-Cell[13852, 421, 314, 7, 32, "Input"]
+Cell[11810, 368, 95, 1, 45, "Subsection"],
+Cell[11908, 371, 168, 2, 30, "Text"],
+Cell[12079, 375, 304, 7, 32, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[14203, 433, 114, 1, 39, "Subsection"],
-Cell[14320, 436, 536, 9, 32, "Input"],
-Cell[14859, 447, 324, 7, 32, "Input"],
-Cell[15186, 456, 134, 2, 32, "Input"],
-Cell[15323, 460, 299, 5, 32, "Input"],
-Cell[15625, 467, 212, 4, 32, "Input"]
+Cell[12420, 387, 95, 1, 45, "Subsection"],
+Cell[12518, 390, 237, 5, 31, "Text"],
+Cell[12758, 397, 303, 7, 32, "Input"],
+Cell[13064, 406, 196, 4, 31, "Text"],
+Cell[13263, 412, 314, 7, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13614, 424, 114, 1, 45, "Subsection"],
+Cell[13731, 427, 536, 9, 32, "Input"],
+Cell[14270, 438, 324, 7, 32, "Input"],
+Cell[14597, 447, 134, 2, 32, "Input"],
+Cell[14734, 451, 299, 5, 32, "Input"],
+Cell[15036, 458, 212, 4, 32, "Input"]
 }, Open  ]]
 }, Open  ]]
 }
