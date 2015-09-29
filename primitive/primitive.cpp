@@ -37,15 +37,9 @@ int main()
 
   typedef jlt::mathmatrix<int>			Mat;
   typedef std::vector<int>			Vec;
-  typedef Vec::iterator				Vecit;
-  typedef Vec::const_iterator			Veccit;
   typedef jlt::polynomial<int>			Poly;
   typedef std::vector<Poly>			PVec;
-  typedef PVec::iterator			PVecit;
-  typedef PVec::const_iterator			PVeccit;
   typedef std::vector<Mat>			MVec;
-  typedef MVec::iterator			MVecit;
-  typedef MVec::const_iterator			MVeccit;
   typedef long long int				llint;
 
 
@@ -326,13 +320,13 @@ template<class S, class T>
 inline T findroot(const jlt::polynomial<S>& p,
 	   const T x0, const T tol)
 {
-  using jlt::Abs;
+  using std::abs;
   T px(p(x0)), x(x0);
 
   int i = 0;
   const int itmax = 100;
 
-  while (Abs(px) > tol && i++ < itmax)
+  while (abs(px) > tol && i++ < itmax)
     {
       x = x - px / p.derivative_at(x);
       px = p(x);
@@ -341,7 +335,7 @@ inline T findroot(const jlt::polynomial<S>& p,
   if (i == itmax)
     throw
       jlt::failed_to_converge<T>
-      ("Failed to converge to specified accuracy.\n",Abs(px));
+      ("Failed to converge to specified accuracy.\n",abs(px));
   else
     return x;
 }
