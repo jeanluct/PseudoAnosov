@@ -140,7 +140,7 @@ pseudoAnosovPerronRootQ[p_,lmax___:0,opts:OptionsPattern[]] := Module[
     ];
     (* Take the first two roots (presorted by magnitude) *)
     (* The way options work in Mathematica is tedious: just because I
-       set the default value to $MachinePrecision below, it doesn't
+       set the default value to MachinePrecision below, it doesn't
        get passed on to PolynomialRoots automatically. *)
     prl = Take[PolynomialRoots[p,
         WorkingPrecision -> OptionValue[WorkingPrecision]]];
@@ -156,7 +156,7 @@ pseudoAnosovPerronRootQ[p_,lmax___:0,opts:OptionsPattern[]] := Module[
     Return[True];
 ]
 Options[pseudoAnosovPerronRootQ] =
-    {WorkingPrecision -> $MachinePrecision, EqualityTolerance -> 10^-8}
+    {WorkingPrecision -> MachinePrecision, EqualityTolerance -> 10^-8}
 
 
 MahlerMeasure[p_,opts:OptionsPattern[]] := Module[
