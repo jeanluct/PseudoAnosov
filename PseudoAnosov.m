@@ -18,7 +18,7 @@ PolynomialRoots::usage = "PolynomialRoots[P] returns the roots of the polynomial
 
 PerronRoot::usage = "PerronRoot[P] returns the largest root (in magnitude) of the polynomial P.";
 
-pseudoAnosovPerronRootQ::usage = "pseudoAnosovPerronRootQ[P] returns True if the largest root of the polynomial P is nondegenerate (in magnitude) and real.  pseudoAnosovPerronRootQ[P,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
+PseudoAnosovPerronRootQ::usage = "PseudoAnosovPerronRootQ[P] returns True if the largest root of the polynomial P is nondegenerate (in magnitude) and real.  PseudoAnosovPerronRootQ[P,xmax] also returns False unless the the Perron root is less than xmax (in magnitude).";
 
 MahlerMeasure::usage = "MahlerMeasure[P] returns the Mahler measure of the polynomial P, which is the absolute value of the product of roots outside the unit circle.";
 
@@ -60,9 +60,9 @@ StratumOrbits::usage = "StratumOrbits[S,P] returns a list of possible orbit stru
 
 StratumOrbitsTable::usage = "StratumOrbitsTable[so] presents the output of StratumOrbits in a table.\nStratumOrbitsTable[so,itmax] displays at most itmax iterates."
 
-(* Test for everything: first call pseudoAnosovPerronRootQ, then
+(* Test for everything: first call PseudoAnosovPerronRootQ, then
 LefschetzNumbersTestQ by strata (for even power). *)
-(* pseudoAnosovPolynomialQ::usage = "" *)
+(* PseudoAnosovPolynomialQ::usage = "" *)
 
 DehnTwist::usage = "DehnTwist[i,{a,b}] applies the Dehn twist i to the curve with homology {a,b} on a closed surface of genus g.  Here a and b are lists of length g and represent the coefficients in the standard homology basis.  The Dehn twists are the standard \"Lickorish generators\", numbers from 1 to 3g-1, with the sign giving the direction of the twist.\nDehnTwist[{i1,i2,...},{a,b}] applies successive generators starting from the first element of the list."
 
@@ -81,7 +81,7 @@ MaxLefschetz::usage = "MaxLefschetz is an option to LefschetzNumbersTestQ and St
 
 PerronRootSign::usage = "PerronRootSign is an option to StratumOrbits (Lefschetz numbers form) to specify whether the Perron root is positive or negative.  Set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic)."
 
-EqualityTolerance::usage = "EqualityTolerance is an option to pseudoAnosovPerronRootQ to decide whether two numbers are \"equal enough\"."
+EqualityTolerance::usage = "EqualityTolerance is an option to PseudoAnosovPerronRootQ to decide whether two numbers are \"equal enough\"."
 
 BasisOrder::usage = "BasisOrder is an option to HomologyAction: set to \"abab\" or \"aabb\" to specify whether the standard basis for homology should be ordered by hole or by type."
 
@@ -129,7 +129,7 @@ Options[PerronRoot] = Options[NSolve]
 
 
 (* Test for the Perron root *)
-pseudoAnosovPerronRootQ[p_,lmax___:0,opts:OptionsPattern[]] := Module[
+PseudoAnosovPerronRootQ[p_,lmax___:0,opts:OptionsPattern[]] := Module[
     {prl, pr, degen, testdegen},
     If[PolynomialDegree[p] < 2, Return[False]];
     degen = OptionValue[EqualityTolerance];
@@ -155,7 +155,7 @@ pseudoAnosovPerronRootQ[p_,lmax___:0,opts:OptionsPattern[]] := Module[
     ];
     Return[True];
 ]
-Options[pseudoAnosovPerronRootQ] =
+Options[PseudoAnosovPerronRootQ] =
     {WorkingPrecision -> MachinePrecision, EqualityTolerance -> 10^-8}
 
 
@@ -250,7 +250,7 @@ Module[
     pl = Pick[pl,sl];
     (* Discard the ones without the proper Perron root (not real or
        too large) *)
-    pl = Pick[pl,pseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
+    pl = Pick[pl,PseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
     (* Make all roots positive, discard duplicates *)
     (* Only do this for even n: for odd n, the leading term changes sign. *)
     If[EvenQ[n],
@@ -260,7 +260,7 @@ Module[
     (* Note that we computed the Perron root many times: a waste *)
     Sort[pl, PerronRoot[#1] < PerronRoot[#2] &]
 ]
-Options[ReciprocalPolynomialBoundedList] = Options[pseudoAnosovPerronRootQ]
+Options[ReciprocalPolynomialBoundedList] = Options[PseudoAnosovPerronRootQ]
 
 
 (* Kludge: list without ruling out non-pA polynomials.  Needed for non-orientable systole. *)
@@ -278,7 +278,7 @@ Module[
 (*
     (* Discard the ones without the proper Perron root (not real or
        too large) *)
-    pl = Pick[pl,pseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
+    pl = Pick[pl,PseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
     (* Make all roots positive, discard duplicates *)
     (* Only do this for even n: for odd n, the leading term changes sign. *)
     If[EvenQ[n],
@@ -289,7 +289,7 @@ Module[
 *)
     Sort[pl, Abs[PerronRoot[#1]] < Abs[PerronRoot[#2]] &]
 ]
-Options[ReciprocalPolynomialBoundedList] = Options[pseudoAnosovPerronRootQ]
+Options[ReciprocalPolynomialBoundedList] = Options[PseudoAnosovPerronRootQ]
 
 
 iPolynomialTracesBounds[n_Integer,r_] := Floor[n r^#] & /@ Range[n-1]
@@ -307,7 +307,7 @@ Module[
     pl = Pick[pl,sl];
     (* Discard the ones without the proper Perron root (not real or
        too large) *)
-    pl = Pick[pl,pseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
+    pl = Pick[pl,PseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
     (* Make all roots positive, discard duplicates *)
     (* Only do this for even n: for odd n, the leading term changes sign. *)
     If[EvenQ[n],
@@ -317,7 +317,7 @@ Module[
     (* Note that we computed the Perron root many times: a waste *)
     Sort[pl, PerronRoot[#1] < PerronRoot[#2] &]
 ]
-Options[PolynomialBoundedList] = Options[pseudoAnosovPerronRootQ]
+Options[PolynomialBoundedList] = Options[PseudoAnosovPerronRootQ]
 
 
 IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
