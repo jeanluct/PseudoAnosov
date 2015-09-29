@@ -10,23 +10,18 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     10027,        286]
-NotebookOptionsPosition[      9278,        260]
-NotebookOutlinePosition[      9714,        277]
-CellTagsIndexPosition[      9671,        274]
+NotebookDataLength[      9859,        280]
+NotebookOptionsPosition[      9146,        255]
+NotebookOutlinePosition[      9582,        272]
+CellTagsIndexPosition[      9539,        269]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-Cell[BoxData[
+Cell[BoxData[{
  RowBox[{"SetDirectory", "[", 
-  RowBox[{
-  "$HomeDirectory", "<>", "\"\</Projects/articles/topo/PseudoAnosov\>\""}], 
-  "]"}]], "Input"],
-
-Cell[BoxData[
- RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
- CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}],
+  RowBox[{"NotebookDirectory", "[", "]"}], "]"}], "\n", 
+ RowBox[{"<<", "PseudoAnosov.m"}]}], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -276,21 +271,19 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 151, 4, 32, "Input"],
-Cell[712, 26, 126, 2, 32, "Input"],
-Cell[841, 30, 507, 8, 32, "Input"],
-Cell[1351, 40, 702, 18, 37, "Input"],
-Cell[2056, 60, 848, 23, 44, "Input"],
-Cell[2907, 85, 2526, 70, 121, "Input"],
-Cell[5436, 157, 2309, 63, 77, "Input"],
-Cell[7748, 222, 239, 4, 77, "Input"],
-Cell[7990, 228, 452, 9, 32, "Input"],
-Cell[8445, 239, 246, 5, 32, "Input"],
-Cell[8694, 246, 276, 5, 32, "Input"],
-Cell[8973, 253, 301, 5, 32, "Input"]
+Cell[558, 20, 148, 3, 55, "Input"],
+Cell[709, 25, 507, 8, 32, "Input"],
+Cell[1219, 35, 702, 18, 37, "Input"],
+Cell[1924, 55, 848, 23, 44, "Input"],
+Cell[2775, 80, 2526, 70, 121, "Input"],
+Cell[5304, 152, 2309, 63, 77, "Input"],
+Cell[7616, 217, 239, 4, 77, "Input"],
+Cell[7858, 223, 452, 9, 32, "Input"],
+Cell[8313, 234, 246, 5, 32, "Input"],
+Cell[8562, 241, 276, 5, 32, "Input"],
+Cell[8841, 248, 301, 5, 32, "Input"]
 }
 ]
 *)
 
 (* End of internal cache information *)
-

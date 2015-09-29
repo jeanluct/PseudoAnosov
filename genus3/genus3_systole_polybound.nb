@@ -10,33 +10,23 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     10360,        299]
-NotebookOptionsPosition[      9224,        263]
-NotebookOutlinePosition[      9659,        280]
-CellTagsIndexPosition[      9616,        277]
+NotebookDataLength[     10046,        287]
+NotebookOptionsPosition[      8985,        253]
+NotebookOutlinePosition[      9419,        270]
+CellTagsIndexPosition[      9376,        267]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-Cell[BoxData[
+Cell[BoxData[{
  RowBox[{
   RowBox[{"AppendTo", "[", 
-   RowBox[{"$Path", ",", " ", 
-    RowBox[{"ToFileName", "[", 
-     RowBox[{"{", 
-      RowBox[{
-      "$HomeDirectory", ",", "\"\<Projects/articles/topo/PseudoAnosov\>\""}], 
-      "}"}], "]"}]}], "]"}], ";"}]], "Input"],
-
-Cell[BoxData[
+   RowBox[{"$Path", ",", 
+    RowBox[{"ParentDirectory", "[", 
+     RowBox[{"NotebookDirectory", "[", "]"}], "]"}]}], "]"}], ";"}], "\n", 
  RowBox[{"SetDirectory", "[", 
-  RowBox[{
-  "$HomeDirectory", "<>", 
-   "\"\</Projects/articles/topo/PseudoAnosov/genus3\>\""}], "]"}]], "Input"],
-
-Cell[BoxData[
- RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
- CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}],
+  RowBox[{"NotebookDirectory", "[", "]"}], "]"}], "\n", 
+ RowBox[{"<<", "PseudoAnosov.m"}]}], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -262,7 +252,7 @@ Cell[BoxData[
  CellChangeTimes->{{3.444909905308641*^9, 3.444909932364853*^9}}]
 },
 WindowSize->{1014, 689},
-WindowMargins->{{Automatic, 206}, {Automatic, 20}},
+WindowMargins->{{71, Automatic}, {-3, Automatic}},
 PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
 ShowSelection->True,
 FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
@@ -279,28 +269,26 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[545, 20, 273, 8, 32, "Input"],
-Cell[821, 30, 159, 4, 32, "Input"],
-Cell[983, 36, 126, 2, 32, "Input"],
-Cell[1112, 40, 278, 9, 55, "Input"],
-Cell[1393, 51, 180, 3, 32, "Input"],
-Cell[1576, 56, 410, 11, 32, "Input"],
-Cell[1989, 69, 855, 18, 32, "Input"],
-Cell[2847, 89, 414, 7, 32, "Input"],
-Cell[3264, 98, 202, 4, 31, "Text"],
-Cell[3469, 104, 908, 19, 32, "Input"],
-Cell[4380, 125, 605, 12, 32, "Input"],
-Cell[4988, 139, 246, 6, 32, "Input"],
-Cell[5237, 147, 158, 3, 32, "Input"],
-Cell[5398, 152, 118, 1, 31, "Text"],
-Cell[5519, 155, 858, 24, 32, "Input"],
-Cell[6380, 181, 863, 21, 32, "Input"],
-Cell[7246, 204, 808, 21, 32, "Input"],
-Cell[8057, 227, 302, 9, 32, "Input"],
-Cell[8362, 238, 133, 2, 32, "Input"],
-Cell[8498, 242, 339, 8, 32, "Input"],
-Cell[8840, 252, 176, 3, 32, "Input"],
-Cell[9019, 257, 201, 4, 32, "Input"]
+Cell[545, 20, 325, 8, 77, "Input"],
+Cell[873, 30, 278, 9, 55, "Input"],
+Cell[1154, 41, 180, 3, 32, "Input"],
+Cell[1337, 46, 410, 11, 32, "Input"],
+Cell[1750, 59, 855, 18, 32, "Input"],
+Cell[2608, 79, 414, 7, 32, "Input"],
+Cell[3025, 88, 202, 4, 31, "Text"],
+Cell[3230, 94, 908, 19, 32, "Input"],
+Cell[4141, 115, 605, 12, 32, "Input"],
+Cell[4749, 129, 246, 6, 32, "Input"],
+Cell[4998, 137, 158, 3, 32, "Input"],
+Cell[5159, 142, 118, 1, 31, "Text"],
+Cell[5280, 145, 858, 24, 32, "Input"],
+Cell[6141, 171, 863, 21, 32, "Input"],
+Cell[7007, 194, 808, 21, 32, "Input"],
+Cell[7818, 217, 302, 9, 32, "Input"],
+Cell[8123, 228, 133, 2, 32, "Input"],
+Cell[8259, 232, 339, 8, 32, "Input"],
+Cell[8601, 242, 176, 3, 32, "Input"],
+Cell[8780, 247, 201, 4, 32, "Input"]
 }
 ]
 *)

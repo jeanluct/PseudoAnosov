@@ -10,41 +10,23 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[      6678,        188]
-NotebookOptionsPosition[      5998,        163]
-NotebookOutlinePosition[      6356,        179]
-CellTagsIndexPosition[      6313,        176]
+NotebookDataLength[      5930,        169]
+NotebookOptionsPosition[      5249,        145]
+NotebookOutlinePosition[      5684,        162]
+CellTagsIndexPosition[      5641,        159]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-Cell[BoxData[
+Cell[BoxData[{
  RowBox[{
   RowBox[{"AppendTo", "[", 
-   RowBox[{"$Path", ",", " ", 
-    RowBox[{"ToFileName", "[", 
-     RowBox[{"{", 
-      RowBox[{
-      "$HomeDirectory", ",", 
-       "\"\<Projects/articles/topo/ttauto/pubs/systole/Mathematica\>\""}], 
-      "}"}], "]"}]}], "]"}], ";"}]], "Input",
- CellChangeTimes->{{3.448100116609247*^9, 3.448100119384217*^9}}],
-
-Cell[BoxData[
+   RowBox[{"$Path", ",", 
+    RowBox[{"ParentDirectory", "[", 
+     RowBox[{"NotebookDirectory", "[", "]"}], "]"}]}], "]"}], ";"}], "\n", 
  RowBox[{"SetDirectory", "[", 
-  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/systole/genus3\>\"", 
-  "]"}]], "Input",
- CellChangeTimes->{
-  3.442796227094639*^9, {3.448100022751694*^9, 3.448100027485006*^9}, {
-   3.448100135534417*^9, 3.448100138782777*^9}, {3.449853115128272*^9, 
-   3.449853123030297*^9}, {3.449853254135535*^9, 3.44985326139461*^9}, {
-   3.449910634346561*^9, 3.4499106442376013`*^9}, {3.450265768619165*^9, 
-   3.450265778530273*^9}, {3.4502666673581533`*^9, 3.450266668509577*^9}, {
-   3.454729154815712*^9, 3.45472915745857*^9}}],
-
-Cell[BoxData[
- RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
- CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}],
+  RowBox[{"NotebookDirectory", "[", "]"}], "]"}], "\n", 
+ RowBox[{"<<", "PseudoAnosov.m"}]}], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -162,9 +144,10 @@ Cell[BoxData[{
   3.455173010348059*^9, 3.455173011322642*^9}}]
 },
 WindowSize->{1014, 689},
-WindowMargins->{{0, Automatic}, {Automatic, 25}},
+WindowMargins->{{-10, Automatic}, {-8, Automatic}},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
 ShowSelection->True,
-FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -178,18 +161,16 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[545, 20, 366, 10, 32, "Input"],
-Cell[914, 32, 576, 10, 32, "Input"],
-Cell[1493, 44, 126, 2, 32, "Input"],
-Cell[1622, 48, 178, 4, 32, "Input"],
-Cell[1803, 54, 126, 2, 32, "Input"],
-Cell[1932, 58, 281, 7, 32, "Input"],
-Cell[2216, 67, 163, 3, 32, "Input"],
-Cell[2382, 72, 374, 8, 55, "Input"],
-Cell[2759, 82, 664, 15, 55, "Input"],
-Cell[3426, 99, 807, 19, 99, "Input"],
-Cell[4236, 120, 853, 19, 99, "Input"],
-Cell[5092, 141, 902, 20, 99, "Input"]
+Cell[545, 20, 325, 8, 77, "Input"],
+Cell[873, 30, 178, 4, 32, "Input"],
+Cell[1054, 36, 126, 2, 32, "Input"],
+Cell[1183, 40, 281, 7, 32, "Input"],
+Cell[1467, 49, 163, 3, 32, "Input"],
+Cell[1633, 54, 374, 8, 55, "Input"],
+Cell[2010, 64, 664, 15, 55, "Input"],
+Cell[2677, 81, 807, 19, 99, "Input"],
+Cell[3487, 102, 853, 19, 99, "Input"],
+Cell[4343, 123, 902, 20, 99, "Input"]
 }
 ]
 *)

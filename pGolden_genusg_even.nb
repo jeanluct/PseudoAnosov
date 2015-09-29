@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[      3871,        134]
-NotebookOptionsPosition[      2867,        100]
-NotebookOutlinePosition[      3568,        123]
-CellTagsIndexPosition[      3525,        120]
+NotebookDataLength[      3546,        122]
+NotebookOptionsPosition[      2614,         90]
+NotebookOutlinePosition[      3315,        113]
+CellTagsIndexPosition[      3272,        110]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -23,20 +23,10 @@ Cell[CellGroupData[{
 Cell["Initialization", "Section",
  CellChangeTimes->{{3.454777938539942*^9, 3.454777941166803*^9}}],
 
-Cell["This is the folder that contains PseudoAnosov.m:", "Text"],
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{"AppendTo", "[", 
-   RowBox[{"$Path", ",", " ", 
-    RowBox[{"ToFileName", "[", 
-     RowBox[{"{", 
-      RowBox[{
-      "$HomeDirectory", ",", "\"\<Projects/articles/topo/PseudoAnosov\>\""}], 
-      "}"}], "]"}]}], "]"}], ";"}]], "Input"],
-
-Cell[BoxData[
- RowBox[{"<<", "PseudoAnosov.m"}]], "Input"]
+Cell[BoxData[{
+ RowBox[{"SetDirectory", "[", 
+  RowBox[{"NotebookDirectory", "[", "]"}], "]"}], "\n", 
+ RowBox[{"<<", "PseudoAnosov.m"}]}], "Input"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -99,7 +89,7 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{1298, 715},
-WindowMargins->{{Automatic, -7}, {-9, Automatic}},
+WindowMargins->{{-7, Automatic}, {Automatic, -9}},
 PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
 ShowSelection->True,
 FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
@@ -124,17 +114,15 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[567, 22, 99, 1, 65, "Section"],
-Cell[669, 25, 64, 0, 46, "Text"],
-Cell[736, 27, 273, 8, 32, "Input"],
-Cell[1012, 37, 58, 1, 32, "Input"]
+Cell[669, 25, 148, 3, 55, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1107, 43, 50, 0, 65, "Section"],
-Cell[1160, 45, 163, 3, 47, "Text"],
-Cell[1326, 50, 333, 11, 34, "Input"],
-Cell[1662, 63, 192, 4, 49, "Text"],
-Cell[1857, 69, 305, 5, 67, "Text"],
-Cell[2165, 76, 686, 21, 32, "Input"]
+Cell[854, 33, 50, 0, 65, "Section"],
+Cell[907, 35, 163, 3, 47, "Text"],
+Cell[1073, 40, 333, 11, 34, "Input"],
+Cell[1409, 53, 192, 4, 49, "Text"],
+Cell[1604, 59, 305, 5, 67, "Text"],
+Cell[1912, 66, 686, 21, 32, "Input"]
 }, Open  ]]
 }
 ]
