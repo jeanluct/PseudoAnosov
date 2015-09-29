@@ -1,0 +1,15 @@
+import os
+
+env = Environment(CC = 'gcc',
+                  HOME = os.environ['HOME'],
+                  CCFLAGS = ['-Wall','-O3','-ffast-math'],
+                  CPPPATH = ['$HOME/C/jlt'],
+                  LIBS = ['gfortran', 'lapack'])
+
+# Use profile=1 on the command-line to turn on profiling.
+profile = ARGUMENTS.get('profile', 0)
+if int(profile):
+   env.PrependUnique(CCFLAGS = ['-pg'])
+   env.PrependUnique(LINKFLAGS = ['-pg'])
+
+env.Program('primitive.cpp')

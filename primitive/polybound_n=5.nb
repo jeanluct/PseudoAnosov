@@ -1,0 +1,276 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[      9651,        267]
+NotebookOptionsPosition[      8704,        235]
+NotebookOutlinePosition[      9062,        251]
+CellTagsIndexPosition[      9019,        248]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AppendTo", "[", 
+   RowBox[{"$Path", ",", " ", 
+    RowBox[{"ToFileName", "[", 
+     RowBox[{"{", 
+      RowBox[{
+      "$HomeDirectory", ",", 
+       "\"\<Projects/articles/topo/ttauto/pubs/systole/Mathematica\>\""}], 
+      "}"}], "]"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.448100116609247*^9, 3.448100119384217*^9}}],
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  "\"\</home/jeanluc/Projects/articles/topo/ttauto/pubs/ttauto \
+paper/primitive\>\"", "]"}]], "Input",
+ CellChangeTimes->{
+  3.442796227094639*^9, {3.448100022751694*^9, 3.448100027485006*^9}, {
+   3.448100135534417*^9, 3.448100138782777*^9}, {3.449853115128272*^9, 
+   3.449853123030297*^9}, {3.449853254135535*^9, 3.44985326139461*^9}, {
+   3.449910634346561*^9, 3.4499106442376013`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"<<", "PseudoAnosov.m"}]], "Input",
+ CellChangeTimes->{{3.4427964320551453`*^9, 3.442796434708651*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"plist", "=", 
+   RowBox[{"<<", "\"\<poly_n=4.m\>\""}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.443288891614571*^9, 3.443288901882801*^9}, {
+   3.443288964891171*^9, 3.4432889651645517`*^9}, {3.443397190251197*^9, 
+   3.443397191620577*^9}, {3.44413060088052*^9, 3.444130623409643*^9}, {
+   3.444217356914565*^9, 3.444217389296995*^9}, {3.444910433880847*^9, 
+   3.4449104348043423`*^9}, 3.44684839981771*^9, {3.446894873886903*^9, 
+   3.446894874717223*^9}, {3.447231962922058*^9, 3.447231963194599*^9}, {
+   3.448100031934766*^9, 3.448100032801493*^9}, 3.448100189451297*^9, {
+   3.449659358429475*^9, 3.449659370823432*^9}, {3.449910613192731*^9, 
+   3.449910613580699*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "plist", "]"}]], "Input",
+ CellChangeTimes->{{3.4432889030661983`*^9, 3.443288905498307*^9}, {
+  3.443289019444895*^9, 3.443289019780917*^9}}],
+
+Cell[BoxData[
+ RowBox[{"n", "=", "5"}]], "Input",
+ CellChangeTimes->{{3.443290179198244*^9, 3.443290205958312*^9}, {
+   3.449853396273355*^9, 3.449853397503903*^9}, 3.449910679558868*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"proots", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Take", "[", 
+      RowBox[{
+       RowBox[{"PolynomialRoots", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{"WorkingPrecision", "\[Rule]", "15"}]}], "]"}], ",", "2"}], 
+      "]"}], "&"}], "/@", "plist"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.442248171808828*^9, 3.442248183421637*^9}, {
+   3.442248218739623*^9, 3.442248277233069*^9}, {3.442310088651073*^9, 
+   3.4423100893230667`*^9}, {3.442310128910417*^9, 3.442310167708371*^9}, {
+   3.442322112947317*^9, 3.442322117729853*^9}, 3.442852926486377*^9, {
+   3.442853259164143*^9, 3.442853292440425*^9}, {3.442855617389571*^9, 
+   3.442855618986949*^9}, {3.443290745929936*^9, 3.443290747877041*^9}, {
+   3.4433576762539787`*^9, 3.4433576771057673`*^9}, {3.4464457251202307`*^9, 
+   3.446445725418442*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"s", "=", "2"}], ";"}]], "Input",
+ CellChangeTimes->{{3.447260148204906*^9, 3.4472601957541037`*^9}, {
+   3.4472602296265383`*^9, 3.447260232632257*^9}, {3.447260332988616*^9, 
+   3.44726033499853*^9}, {3.447260371085779*^9, 3.447260379592307*^9}, {
+   3.449659396404648*^9, 3.4496594042676992`*^9}, {3.449911053272504*^9, 
+   3.44991105923496*^9}, 3.44991120358747*^9}],
+
+Cell["\<\
+Eliminate polynomials with maximum root < 1 or > \[Lambda]max, as well as \
+those with degenerate largest roots.\
+\>", "Text",
+ CellChangeTimes->{{3.442311390744789*^9, 3.442311435474143*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"plistmin", "=", 
+   RowBox[{
+    RowBox[{"Pick", "[", 
+     RowBox[{"plist", ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"pseudoAnosovPerronRootQ", "[", 
+         RowBox[{"#", ",", "s", ",", 
+          RowBox[{"WorkingPrecision", "\[Rule]", "15"}]}], "]"}], "&"}], "/@",
+        "plist"}]}], "]"}], "//", "Factor"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.442248692426225*^9, 3.442248727557484*^9}, {
+   3.442248775062218*^9, 3.44224877829194*^9}, {3.442248845556428*^9, 
+   3.442248848434854*^9}, {3.442248975153884*^9, 3.442248987918772*^9}, {
+   3.442249053983895*^9, 3.44224907722944*^9}, {3.442249143581579*^9, 
+   3.44224914485939*^9}, 3.442249586754534*^9, {3.442310192310348*^9, 
+   3.442310194161594*^9}, {3.442311208924211*^9, 3.442311210370511*^9}, {
+   3.444909641830901*^9, 3.444909650438586*^9}, {3.446445754955481*^9, 
+   3.4464457551628103`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"prootsmin", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"PerronRoot", "[", "#", "]"}], "&"}], "/@", "plistmin"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.442248950095929*^9, 3.442248958879148*^9}, {
+   3.442248994288923*^9, 3.442248997230977*^9}, {3.442249058623475*^9, 
+   3.442249082397703*^9}, 3.442249583506363*^9, {3.442310200263754*^9, 
+   3.44231020201011*^9}, {3.442310244181097*^9, 3.4423102588154097`*^9}, {
+   3.442310778669518*^9, 3.4423107800273523`*^9}, {3.444909673781685*^9, 
+   3.444909698855097*^9}, {3.446445762269167*^9, 3.4464457625451393`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pdlistmin", "=", 
+   RowBox[{"Transpose", "[", 
+    RowBox[{"{", 
+     RowBox[{"plistmin", ",", "prootsmin"}], "}"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.4468495131204433`*^9, 3.446849531763174*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "pdlistmin", "]"}]], "Input",
+ CellChangeTimes->{{3.44224937418284*^9, 3.442249378867746*^9}, 
+   3.442249515314154*^9}],
+
+Cell["Make all the dominant roots positive.", "Text",
+ CellChangeTimes->{{3.44286769478136*^9, 3.442867702471696*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pdlistmin", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+        "<", "0"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+           "/.", 
+          RowBox[{"x", "\[Rule]", 
+           RowBox[{"-", "x"}]}]}], ",", 
+         RowBox[{"-", 
+          RowBox[{
+          "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}]}], 
+        "}"}], ",", "#"}], "]"}], "&"}], "/@", "pdlistmin"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.442867501414827*^9, 3.442867579277871*^9}, {
+   3.442867626719321*^9, 3.442867688365192*^9}, {3.4449097777669497`*^9, 
+   3.444909844269858*^9}, 3.444910136605102*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pdlistmin", "=", 
+   RowBox[{"Union", "[", 
+    RowBox[{"pdlistmin", ",", 
+     RowBox[{"SameTest", "\[Rule]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Simplify", "[", 
+          RowBox[{
+           RowBox[{
+           "#1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "-", 
+           
+           RowBox[{
+           "#2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+          "]"}], "===", "0"}], "&"}], ")"}]}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.4468488893217087`*^9, 3.446848940850553*^9}, {
+   3.446849216569168*^9, 3.4468492327530537`*^9}, {3.446849283329369*^9, 
+   3.4468493191316957`*^9}, 3.446849363295857*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pdlistmin", "=", 
+   RowBox[{"SortBy", "[", 
+    RowBox[{"pdlistmin", ",", 
+     RowBox[{
+      RowBox[{"Abs", "[", 
+       RowBox[{"Last", "[", "#", "]"}], "]"}], "&"}]}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.446849560151297*^9, 3.446849575181772*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "pdlistmin", "]"}]], "Input",
+ CellChangeTimes->{{3.449853331222938*^9, 3.449853334335298*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pdlistmin", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Expand", "[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"x", "+", "1"}], ")"}], 
+        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}],
+        "]"}], ",", 
+      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+     "}"}], "&"}], "/@", "pdlistmin"}]}]], "Input",
+ CellChangeTimes->{{3.449909804708583*^9, 3.449909835484873*^9}, {
+   3.4499099493818827`*^9, 3.449909972083529*^9}, 3.449910699565061*^9}]
+},
+WindowSize->{1014, 689},
+WindowMargins->{{0, Automatic}, {Automatic, 25}},
+ShowSelection->True,
+FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 366, 10, 32, "Input"],
+Cell[914, 32, 436, 8, 32, "Input"],
+Cell[1353, 42, 126, 2, 32, "Input"],
+Cell[1482, 46, 712, 12, 32, "Input"],
+Cell[2197, 60, 180, 3, 32, "Input"],
+Cell[2380, 65, 187, 3, 32, "Input"],
+Cell[2570, 70, 855, 18, 32, "Input"],
+Cell[3428, 90, 404, 7, 32, "Input"],
+Cell[3835, 99, 202, 4, 31, "Text"],
+Cell[4040, 105, 908, 19, 32, "Input"],
+Cell[4951, 126, 605, 12, 32, "Input"],
+Cell[5559, 140, 246, 6, 32, "Input"],
+Cell[5808, 148, 158, 3, 32, "Input"],
+Cell[5969, 153, 118, 1, 31, "Text"],
+Cell[6090, 156, 858, 24, 32, "Input"],
+Cell[6951, 182, 729, 19, 32, "Input"],
+Cell[7683, 203, 302, 9, 32, "Input"],
+Cell[7988, 214, 133, 2, 32, "Input"],
+Cell[8124, 218, 576, 15, 32, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
