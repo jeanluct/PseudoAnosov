@@ -1,7 +1,10 @@
+import os
+
 env = Environment(CC = 'gcc',
+                  HOME = os.environ['HOME'],
                   CCFLAGS = ['-Wall','-O3','-ffast-math'],
-		  CPPPATH = ['../../../ttauto-code/extern/jlt'],
-		  LIBS = ['gfortran', 'lapack'])
+                  CPPPATH = ['$HOME/C/jlt'],
+                  LIBS = ['gfortran', 'lapack'])
 
 # Use profile=1 on the command-line to turn on profiling.
 profile = ARGUMENTS.get('profile', 0)
