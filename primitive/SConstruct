@@ -1,0 +1,13 @@
+env = Environment(CC = 'gcc',
+                  CCFLAGS = ['-Wall','-O3','-ffast-math'],
+		  CPPPATH = ['../../../code'],
+		  LIBS = ['g2c', 'lapack'])
+
+# Use profile=1 on the command-line to turn on profiling.
+profile = ARGUMENTS.get('profile', 0)
+if int(profile):
+   env.PrependUnique(CCFLAGS = ['-pg'])
+   env.PrependUnique(LINKFLAGS = ['-pg'])
+
+env.Program('polybound.cpp')
+env.Program('primitive.cpp')
