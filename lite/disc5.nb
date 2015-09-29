@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     16404,        465]
-NotebookOptionsPosition[     14380,        398]
-NotebookOutlinePosition[     14717,        413]
-CellTagsIndexPosition[     14674,        410]
+NotebookDataLength[     16230,        464]
+NotebookOptionsPosition[     14098,        395]
+NotebookOutlinePosition[     14509,        411]
+CellTagsIndexPosition[     14466,        408]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -29,8 +29,8 @@ Cell["Copyright", "Subsection",
  CellChangeTimes->{{3.455962823423869*^9, 3.455962824453886*^9}}],
 
 Cell["\<\
-Copyright 2009 Jean-Luc Thiffeault (jeanluc@mailaps.org)
-                               Erwan Lanneau        (lanneau@cpt.univ-mrs.fr)
+Copyright 2010 Jean-Luc Thiffeault (jeanluc@mailaps.org)
+                          Erwan Lanneau        (lanneau@cpt.univ-mrs.fr)
 
 This file is part of PseudoAnosov.
 
@@ -44,9 +44,7 @@ details.
 
 You should have received a copy of the GNU General Public License along with \
 PseudoAnosov. If not, see < http : // www.gnu.org/licenses/ > .\
-\>", "Text",
- CellChangeTimes->{{3.455962844090739*^9, 3.455962920902326*^9}, {
-  3.45604140069648*^9, 3.456041427536824*^9}}]
+\>", "Text"]
 }, Closed]],
 
 Cell[CellGroupData[{
@@ -55,6 +53,8 @@ Cell["Initialization", "Subsection",
  CellChangeTimes->{{3.428440492914269*^9, 3.428440495831313*^9}, {
   3.428540333832511*^9, 3.428540338498201*^9}}],
 
+Cell["Update this for your own directory structure:", "Text"],
+
 Cell[BoxData[
  RowBox[{
   RowBox[{"SetDirectory", "[", 
@@ -62,11 +62,8 @@ Cell[BoxData[
     RowBox[{"{", 
      RowBox[{
      "$HomeDirectory", ",", 
-      "\"\<Projects/articles/topo/ttauto/pubs/braids/code_abridged\>\""}], 
-     "}"}], "]"}], "]"}], ";"}]], "Input",
- CellChangeTimes->{{3.428884774763236*^9, 3.428884825673253*^9}, 
-   3.428884881303703*^9, 3.455191060337423*^9, {3.455516230403562*^9, 
-   3.455516261772574*^9}, {3.455806960649579*^9, 3.455806987942188*^9}}],
+      "\"\<Projects/articles/topo/PseudoAnosov/lite\>\""}], "}"}], "]"}], 
+   "]"}], ";"}]], "Input"],
 
 Cell[BoxData[
  RowBox[{"<<", "PseudoAnosovLite.m"}]], "Input",
@@ -397,8 +394,9 @@ Cell["These must be eliminated via other means (see paper).", "Text",
 }, Open  ]]
 },
 WindowSize->{640, 623},
-WindowMargins->{{59, Automatic}, {Automatic, 25}},
-FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+WindowMargins->{{39, Automatic}, {Automatic, 5}},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -413,58 +411,59 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[567, 22, 123, 1, 53, "Subtitle"],
+Cell[567, 22, 123, 1, 51, "Subtitle"],
 Cell[CellGroupData[{
-Cell[715, 27, 97, 1, 39, "Subsection"],
-Cell[815, 30, 937, 18, 291, "Text"]
+Cell[715, 27, 97, 1, 45, "Subsection"],
+Cell[815, 30, 818, 16, 306, "Text"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[1789, 53, 151, 2, 31, "Subsection"],
-Cell[1943, 57, 476, 11, 99, "Input"],
-Cell[2422, 70, 177, 3, 32, "Input"]
+Cell[1670, 51, 151, 2, 36, "Subsection"],
+Cell[1824, 55, 61, 0, 31, "Text"],
+Cell[1888, 57, 249, 8, 77, "Input"],
+Cell[2140, 67, 177, 3, 32, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[2636, 78, 286, 4, 31, "Subsection"],
-Cell[2925, 84, 298, 6, 51, "Text"],
-Cell[3226, 92, 581, 15, 77, "Input"],
-Cell[3810, 109, 250, 5, 51, "Text"],
-Cell[4063, 116, 331, 7, 32, "Input"]
+Cell[2354, 75, 286, 4, 36, "Subsection"],
+Cell[2643, 81, 298, 6, 71, "Text"],
+Cell[2944, 89, 581, 15, 77, "Input"],
+Cell[3528, 106, 250, 5, 51, "Text"],
+Cell[3781, 113, 331, 7, 32, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[4431, 128, 335, 5, 39, "Subsection"],
-Cell[4769, 135, 379, 7, 71, "Text"],
-Cell[5151, 144, 693, 18, 77, "Input"],
-Cell[5847, 164, 175, 2, 31, "Text"],
-Cell[6025, 168, 331, 7, 32, "Input"]
+Cell[4149, 125, 335, 5, 44, "Subsection"],
+Cell[4487, 132, 379, 7, 71, "Text"],
+Cell[4869, 141, 693, 18, 77, "Input"],
+Cell[5565, 161, 175, 2, 31, "Text"],
+Cell[5743, 165, 331, 7, 32, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[6393, 180, 287, 4, 39, "Subsection"],
-Cell[6683, 186, 97, 1, 31, "Text"],
-Cell[6783, 189, 741, 19, 77, "Input"],
-Cell[7527, 210, 413, 8, 32, "Input"],
-Cell[7943, 220, 196, 4, 51, "Text"],
-Cell[8142, 226, 125, 2, 32, "Input"],
-Cell[8270, 230, 252, 5, 51, "Text"],
-Cell[8525, 237, 369, 8, 32, "Input"]
+Cell[6111, 177, 287, 4, 44, "Subsection"],
+Cell[6401, 183, 97, 1, 30, "Text"],
+Cell[6501, 186, 741, 19, 77, "Input"],
+Cell[7245, 207, 413, 8, 55, "Input"],
+Cell[7661, 217, 196, 4, 50, "Text"],
+Cell[7860, 223, 125, 2, 32, "Input"],
+Cell[7988, 227, 252, 5, 51, "Text"],
+Cell[8243, 234, 369, 8, 32, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[8931, 250, 238, 3, 39, "Subsection"],
-Cell[9172, 255, 166, 3, 31, "Text"],
-Cell[9341, 260, 642, 17, 77, "Input"],
-Cell[9986, 279, 553, 11, 55, "Input"],
-Cell[10542, 292, 194, 4, 31, "Text"],
-Cell[10739, 298, 125, 2, 32, "Input"],
-Cell[10867, 302, 376, 7, 51, "Text"],
-Cell[11246, 311, 228, 5, 32, "Input"],
-Cell[11477, 318, 114, 1, 31, "Text"],
-Cell[11594, 321, 666, 16, 55, "Input"],
-Cell[12263, 339, 130, 1, 31, "Text"],
-Cell[12396, 342, 254, 6, 32, "Input"],
-Cell[12653, 350, 301, 5, 71, "Text"],
-Cell[12957, 357, 810, 20, 55, "Input"],
-Cell[13770, 379, 188, 4, 51, "Text"],
-Cell[13961, 385, 254, 6, 32, "Input"],
-Cell[14218, 393, 134, 1, 31, "Text"]
+Cell[8649, 247, 238, 3, 44, "Subsection"],
+Cell[8890, 252, 166, 3, 31, "Text"],
+Cell[9059, 257, 642, 17, 77, "Input"],
+Cell[9704, 276, 553, 11, 77, "Input"],
+Cell[10260, 289, 194, 4, 31, "Text"],
+Cell[10457, 295, 125, 2, 32, "Input"],
+Cell[10585, 299, 376, 7, 51, "Text"],
+Cell[10964, 308, 228, 5, 32, "Input"],
+Cell[11195, 315, 114, 1, 31, "Text"],
+Cell[11312, 318, 666, 16, 55, "Input"],
+Cell[11981, 336, 130, 1, 31, "Text"],
+Cell[12114, 339, 254, 6, 32, "Input"],
+Cell[12371, 347, 301, 5, 71, "Text"],
+Cell[12675, 354, 810, 20, 55, "Input"],
+Cell[13488, 376, 188, 4, 51, "Text"],
+Cell[13679, 382, 254, 6, 32, "Input"],
+Cell[13936, 390, 134, 1, 31, "Text"]
 }, Open  ]]
 }, Open  ]]
 }
