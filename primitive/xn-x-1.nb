@@ -1,0 +1,242 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[      8215,        233]
+NotebookOptionsPosition[      7512,        208]
+NotebookOutlinePosition[      7850,        223]
+CellTagsIndexPosition[      7807,        220]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"nmax", "=", "200"}]], "Input",
+ CellChangeTimes->{{3.4495726899857817`*^9, 3.449572690879457*^9}, {
+  3.449572801489523*^9, 3.449572801682218*^9}, {3.449572838518539*^9, 
+  3.449572877205083*^9}, {3.449572915319565*^9, 3.4495729155149593`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"p", "=", 
+  RowBox[{
+   SuperscriptBox["x", "n"], "-", "x", "-", "1"}]}]], "Input",
+ CellChangeTimes->{{3.449572939962311*^9, 3.44957294017752*^9}}],
+
+Cell[BoxData[
+ RowBox[{"rts", "=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"n", ",", 
+      RowBox[{"Max", "[", 
+       RowBox[{"Select", "[", 
+        RowBox[{
+         RowBox[{"x", "/.", 
+          RowBox[{"NSolve", "[", 
+           RowBox[{
+            RowBox[{"p", "\[Equal]", "0"}], ",", "x"}], "]"}]}], ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Im", "[", "#", "]"}], "\[Equal]", "0"}], "&"}]}], "]"}], 
+       "]"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"n", ",", "3", ",", "nmax"}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.449572495055853*^9, 3.449572515433195*^9}, {
+   3.449572547020096*^9, 3.449572654489839*^9}, {3.449572699045896*^9, 
+   3.4495727292820187`*^9}, 3.449572944623014*^9}],
+
+Cell[BoxData[
+ RowBox[{"pl1", "=", 
+  RowBox[{"ListLogLogPlot", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+        ",", 
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+         "-", "1"}]}], "}"}], "&"}], "/@", "rts"}], ",", 
+    RowBox[{"Joined", "\[Rule]", "False"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.449572633370727*^9, 3.449572675062669*^9}, {
+  3.449572740867271*^9, 3.44957274627465*^9}, {3.4495735037558002`*^9, 
+  3.449573522839807*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl2a", "=", 
+  RowBox[{"LogLogPlot", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Log", "[", "2", "]"}], "/", "n"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"n", ",", "3", ",", "nmax"}], "}"}], ",", 
+    RowBox[{"PlotStyle", "\[Rule]", "Magenta"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.449572676783236*^9, 3.449572712183343*^9}, {
+   3.449572775901802*^9, 3.449572781354834*^9}, {3.4495728160231123`*^9, 
+   3.449572832660644*^9}, {3.4495730610022707`*^9, 3.4495730617688932`*^9}, {
+   3.449573357283037*^9, 3.449573359617339*^9}, 3.4495734598003607`*^9, 
+   3.449573530534399*^9, {3.449574413073835*^9, 3.449574424936376*^9}, {
+   3.449574507882175*^9, 3.449574518613323*^9}}],
+
+Cell[BoxData[
+ RowBox[{"pl2b", "=", 
+  RowBox[{"LogLogPlot", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"Log", "[", "2", "]"}], "/", "n"}], "+", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      RowBox[{"Log", "[", "2", "]"}], " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Log", "[", "2", "]"}]}], ")"}], "/", 
+       SuperscriptBox["n", "2"]}]}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"n", ",", "3", ",", "nmax"}], "}"}], ",", 
+    RowBox[{"PlotStyle", "\[Rule]", "Red"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.449572676783236*^9, 3.449572712183343*^9}, {
+   3.449572775901802*^9, 3.449572781354834*^9}, {3.4495728160231123`*^9, 
+   3.449572832660644*^9}, {3.4495730610022707`*^9, 3.4495730617688932`*^9}, {
+   3.449573357283037*^9, 3.449573359617339*^9}, 3.4495734598003607`*^9, 
+   3.449573530534399*^9, {3.449574413073835*^9, 3.449574424936376*^9}, 
+   3.449574509807435*^9}],
+
+Cell[BoxData[
+ RowBox[{"pl3", "=", 
+  RowBox[{"LogLogPlot", "[", 
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["2", 
+      RowBox[{"1", "/", "n"}]], "-", "1"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"n", ",", "3", ",", "nmax"}], "}"}], ",", 
+    RowBox[{"PlotStyle", "\[Rule]", "Green"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.449572676783236*^9, 3.449572712183343*^9}, {
+   3.449572775901802*^9, 3.449572781354834*^9}, {3.4495728160231123`*^9, 
+   3.449572832660644*^9}, {3.4495730610022707`*^9, 3.4495730617688932`*^9}, {
+   3.449573357283037*^9, 3.449573359617339*^9}, 3.4495734598003607`*^9, 
+   3.449573530534399*^9, {3.4495740905666723`*^9, 3.449574115329782*^9}, 
+   3.449574162433545*^9, 3.449574274315914*^9, {3.449574377917227*^9, 
+   3.449574378121895*^9}, {3.449574427842016*^9, 3.449574429237529*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{"pl1", ",", "pl2a", ",", "pl2b", ",", "pl3"}], "]"}]], "Input",
+ CellChangeTimes->{{3.449572793936638*^9, 3.449572796063407*^9}, {
+  3.449574108974554*^9, 3.44957410937901*^9}, {3.449574526520122*^9, 
+  3.449574529078506*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Collect", "[", 
+  RowBox[{
+   RowBox[{"Normal", "[", 
+    RowBox[{"Series", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "/.", 
+        RowBox[{"{", 
+         RowBox[{"x", "\[Rule]", 
+          RowBox[{"1", "+", 
+           FractionBox["a", "n"], "+", 
+           FractionBox["b", 
+            SuperscriptBox["n", "2"]]}]}], "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"n", "\[Rule]", 
+         RowBox[{"1", "/", "\[Epsilon]"}]}], "}"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\[Epsilon]", ",", "0", ",", "2"}], "}"}]}], "]"}], "]"}], ",",
+    "\[Epsilon]", ",", "Simplify"}], "]"}]], "Input",
+ CellChangeTimes->{{3.4495729536446466`*^9, 3.449573043556614*^9}, {
+   3.449573208190526*^9, 3.4495732112740383`*^9}, 3.4495734316845512`*^9}],
+
+Cell[BoxData[
+ RowBox[{"cl", "=", 
+  RowBox[{"CoefficientList", "[", 
+   RowBox[{"%", ",", "\[Epsilon]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.449573222169107*^9, 3.4495732366448803`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"asol", "=", 
+  RowBox[{
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"cl", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "==",
+       "0"}], ",", "a"}], "]"}], "\[LeftDoubleBracket]", "1", 
+   "\[RightDoubleBracket]"}]}]], "Input",
+ CellChangeTimes->{{3.4495732399849787`*^9, 3.449573258468635*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Simplify", "[", 
+  RowBox[{
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"cl", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+        "/.", "asol"}], ")"}], "\[Equal]", "0"}], ",", "b"}], "]"}], 
+   "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.449573260452582*^9, 3.449573286508109*^9}, {
+  3.449573331871426*^9, 3.4495733341331453`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Collect", "[", 
+  RowBox[{
+   RowBox[{"Normal", "[", 
+    RowBox[{"Series", "[", 
+     RowBox[{
+      SuperscriptBox[
+       RowBox[{"(", "a", ")"}], "\[Epsilon]"], ",", 
+      RowBox[{"{", 
+       RowBox[{"\[Epsilon]", ",", "0", ",", "5"}], "}"}]}], "]"}], "]"}], ",",
+    "\[Epsilon]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.449573878527323*^9, 3.449573943943408*^9}, {
+  3.4495739954370747`*^9, 3.449574004455854*^9}, {3.44957419458961*^9, 
+  3.4495741974914293`*^9}, {3.449574240367175*^9, 3.449574245894038*^9}}]
+},
+WindowSize->{640, 689},
+WindowMargins->{{Automatic, 172}, {Automatic, 25}},
+FrontEndVersion->"7.0 for Linux x86 (32-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 268, 4, 32, "Input"],
+Cell[816, 26, 172, 4, 32, "Input"],
+Cell[991, 32, 766, 21, 55, "Input"],
+Cell[1760, 55, 620, 16, 32, "Input"],
+Cell[2383, 73, 704, 14, 32, "Input"],
+Cell[3090, 89, 948, 23, 84, "Input"],
+Cell[4041, 114, 818, 16, 32, "Input"],
+Cell[4862, 132, 273, 5, 32, "Input"],
+Cell[5138, 139, 785, 21, 85, "Input"],
+Cell[5926, 162, 193, 4, 32, "Input"],
+Cell[6122, 168, 355, 9, 32, "Input"],
+Cell[6480, 179, 482, 12, 32, "Input"],
+Cell[6965, 193, 543, 13, 32, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

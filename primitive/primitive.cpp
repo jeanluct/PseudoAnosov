@@ -48,13 +48,13 @@ int main()
   typedef MVec::const_iterator			MVeccit;
   typedef long long int				llint;
 
-  std::ifstream indata;
-  indata.open("polycoeffs_n=6.m");
-
-  PVec pl;
 
 #if 1
-  const int n = 6;
+  std::ifstream indata;
+  indata.open("polycoeffs_n=7.m");
+  const int n = 7;
+
+  PVec pl;
 
   // Read in Mathematica file of polynomials.
   skipstring(indata,
@@ -77,44 +77,7 @@ int main()
     }
   while (skipstring(indata,","));
 
-#if 0
-  // x^6 - x^4 - x^3 - x^2 + 1
-  // 1710 matrices: all of type (0^28,1^8) or (0^27,1^9)
   Poly p = pl[0];
-#endif
-#if 0
-  // x^6 - x^5 + x^4 - 3 x^3 + x^2 - x + 1
-  // No matrices found!  But it can clearly be realized with 7x7.
-  Poly p = pl[1];
-#endif
-#if 0
-  // x^6 - x^5 - x^3 - x + 1
-  // 1129 matrices: type (0^28,1^8), (0^27,1^9), (0^26,1^10), (0^26,1^9,2^1)
-  Poly p = pl[2];
-#endif
-#if 0
-  // x^6 - x^5 - x^4 + x^3 - x^2 - x + 1
-  Poly p = pl[3];
-#endif
-#if 0
-  // x^6 - 2 x^5 + x^3 - 2 x - x + 1
-  // 9241 matrices:
-  // (0^26,1^9,2^1)
-  // (0^26,1^10)
-  // (0^25,1^10,3^1)
-  // (0^25,1^10,2^1)
-  // (0^25,1^11)
-  // (0^24,1^11,3^1)
-  // (0^24,1^11,2^1)
-  // (0^24,1^12)
-  // (0^23,1^12,2^1)
-  // (0^23,1^13)
-  Poly p = pl[17];
-#endif
-#if 1
-  // x^6 - x^4 - 4 x^3 - x^2 + 1
-  Poly p = pl.back();
-#endif
 
 #else
   const int n = 4;
