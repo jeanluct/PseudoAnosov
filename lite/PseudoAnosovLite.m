@@ -1,8 +1,8 @@
 (* PseudoAnosovLite Mathematica Package *)
 
 (*
-    Copyright 2010 Jean-Luc Thiffeault (jeanluc@mailaps.org)
-                   Erwan Lanneau       (lanneau@cpt.univ-mrs.fr)
+    Copyright 2009-2015 Jean-Luc Thiffeault (jeanluc@mailaps.org)
+                        Erwan Lanneau       (erwan.lanneau@ujf-grenoble.fr)
 
     This file is part of PseudoAnosov.
 
