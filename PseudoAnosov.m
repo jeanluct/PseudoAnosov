@@ -97,21 +97,21 @@ Begin["`Private`"]
 
 (* Helper function to get a polynomial's independent variable, with
    some checks *)
-polynomialvariable[p_] := Module[{x = Variables[p]},
+iPolynomialVariable[p_] := Module[{x = Variables[p]},
     If[x == {}, (* || Length[x] > 1, *)
-        Message[polynomialvariable::notapolynomial,p,x]; Abort[]];
+        Message[iPolynomialVariable::notapolynomial,p,x]; Abort[]];
     Return[First[x]]
 ]
-polynomialvariable::notapolynomial = "Input argument `1` is not a polynomial in `2`."
+iPolynomialVariable::notapolynomial = "Input argument `1` is not a polynomial in `2`."
 
 
-PolynomialDegree[p_] := Module[{x = polynomialvariable[p]},
+PolynomialDegree[p_] := Module[{x = iPolynomialVariable[p]},
     Length[CoefficientList[Collect[p,x],x]]-1
 ]
 
 
 PolynomialRoots[p_,opts:OptionsPattern[]] := Module[
-    {x = polynomialvariable[p]},
+    {x = iPolynomialVariable[p]},
     Sort[x/.NSolve[p == 0, x, Sequence @@ FilterRules[{opts},Options[NSolve]]],
         Abs[#2] < Abs[#1] &]
 ]
@@ -156,7 +156,7 @@ Options[PseudoAnosovPerronRootQ] =
 
 
 MahlerMeasure[p_,opts:OptionsPattern[]] := Module[
-    {x = polynomialvariable[p]},
+    {x = iPolynomialVariable[p]},
     Times @@ Select[Abs/@PolynomialRoots[p,opts],#>1&]
 ]
 (* MahlerMeasure inherits the options for NSolve *)
@@ -164,7 +164,7 @@ Options[MahlerMeasure] = Options[PolynomialRoots]
 
 
 TracesPower[p_,mm_List:{10}] := Module[
-    {x = polynomialvariable[p], n, T, ml},
+    {x = iPolynomialVariable[p], n, T, ml},
     (* Polynomial is x^n + c[1]x^(n-1) + ... + c[n-1]x + c[n] *)
     c = Reverse[CoefficientList[Collect[p,x],x]];
     (* Make sure leading coefficient is 1, then drop it. *)
@@ -200,7 +200,7 @@ ReciprocalPolynomial[x_,n_,c_:Global`a] :=
 
 
 ReciprocalPolynomialQ[p_] := Module[
-    {x = polynomialvariable[p], c, n},
+    {x = iPolynomialVariable[p], c, n},
     c = CoefficientList[Collect[p,x],x];
     n = Length[c]-1;
     Return[Simplify[p - x^n (p/.x->1/x)] === 0]
@@ -350,15 +350,15 @@ Begin["`Tests`"]
 Allowable = "Allowable"
 
 
-singularitytostring[k_Integer, m_Integer] :=
+iSingularityToString[k_Integer, m_Integer] :=
     ToString[k] <> "^" <> ToString[m]
 
 
-lefschetztostring[L_Integer, n_Integer] :=
+iLefschetzToString[L_Integer, n_Integer] :=
     "L[" <> ToString[n] <> "]=" <> ToString[L]
 
 
-lcmtostring[k_Integer] := "LCM(partitions of " <> ToString[k] <> ")"
+iLCMToString[k_Integer] := "LCM(partitions of " <> ToString[k] <> ")"
 
 
 (*
@@ -367,19 +367,19 @@ lcmtostring[k_Integer] := "LCM(partitions of " <> ToString[k] <> ")"
 
 (* Test whether there are enough singularities on a stratum to support
    this pseudo-Anosov (when Perron root is positive). *)
-MinimumSingularitiesQ[s_List,L_List] := Module[{idx},
+iMinimumSingularitiesQ[s_List,L_List] := Module[{idx},
     idx = Flatten[Position[# >= 0 & /@ (Length[s] - L), False]];
     If[idx == {},
         Return[Allowable]
     ,
         idx = First[idx];
         Return["Not enough singularities for " <>
-               lefschetztostring[L[[idx]],idx]]
+               iLefschetzToString[L[[idx]],idx]]
     ]
 ]
 
 
-SingularityPermutationsAQ[s_List,L_List, OptionsPattern[]] := Module[
+iSingularityPermutationsAQ[s_List,L_List, OptionsPattern[]] := Module[
     {d, m, Nn = Length[s], pow, idx},
     (* Group singularities by multiplicity *)
     d = #[[1]]/2& /@ Tally[s];
@@ -398,17 +398,17 @@ SingularityPermutationsAQ[s_List,L_List, OptionsPattern[]] := Module[
             Return[Allowable]
         ,
             idx = First[idx];
-            Return[singularitytostring[2d[[idx]],m[[idx]]] <>
+            Return[iSingularityToString[2d[[idx]],m[[idx]]] <>
                 " incompatible with " <>
-                lefschetztostring[L[[pow[[idx]]]],pow[[idx]]]]
+                iLefschetzToString[L[[pow[[idx]]]],pow[[idx]]]]
         ]
     ];
     Return[Allowable]
 ]
-Options[SingularityPermutationsAQ] = {IterateTest -> (True &)}
+Options[iSingularityPermutationsAQ] = {IterateTest -> (True &)}
 
 
-SingularityPermutationsBQ[s_List,L_List] := Module[
+iSingularityPermutationsBQ[s_List,L_List] := Module[
     {k, m, Nn = Length[s], idx},
     (* Group singularities by multiplicity *)
     k = #[[1]]& /@ Tally[s];
@@ -416,19 +416,19 @@ SingularityPermutationsBQ[s_List,L_List] := Module[
     (* Check if the formula is satisfied for each singularity type,
        logical-And the results. *)
     idx = Flatten[Position[Table[
-            SingularityPermutationsBQ1[k[[j]]/2,m[[j]],Nn,L]
+            iSingularityPermutationsBQ1[k[[j]]/2,m[[j]],Nn,L]
         ,{j,Length[k]}], False]];
     If[idx == {},
         Return[Allowable]
     ,
         idx = First[idx];
-        Return[singularitytostring[k[[idx]],m[[idx]]] <>
-            " incompatible with " <> lefschetztostring[L[[idx]],idx] <>
-            " and " <> lcmtostring[m[[idx]]]]
+        Return[iSingularityToString[k[[idx]],m[[idx]]] <>
+            " incompatible with " <> iLefschetzToString[L[[idx]],idx] <>
+            " and " <> iLCMToString[m[[idx]]]]
     ]
 ]
-(* Private helper function for SingularityPermutationsBQ. *)
-SingularityPermutationsBQ1[d_Integer,m_Integer,Nn_,L_] := Module[
+(* Private helper function for iSingularityPermutationsBQ. *)
+iSingularityPermutationsBQ1[d_Integer,m_Integer,Nn_,L_] := Module[
     (* Compute the (unique) LCMs of integer partitions of m *)
     {lcm = Union[LCM @@ # & /@ IntegerPartitions[m]]},
     (* Test for each LCM in the list and Or the result, since at least
@@ -438,7 +438,7 @@ SingularityPermutationsBQ1[d_Integer,m_Integer,Nn_,L_] := Module[
 ]
 
 
-PureStratumAQ[s_List,L_List] := Module[
+iPureStratumAQ[s_List,L_List] := Module[
     {d, m, t = Tally[s]},
     (* If there is more than one singularity type, return Allowable. *)
     If[Length[t] > 1, Return[Allowable]];
@@ -450,14 +450,14 @@ PureStratumAQ[s_List,L_List] := Module[
     If[L[[d+1]] <= m - 2 (d+1) L[[1]],
         Return[Allowable]
     ,
-        Return[singularitytostring[2d,m] <>
-            " incompatible with " <> lefschetztostring[L[[1]],1] <> " and " <>
-            lefschetztostring[L[[d+1]],d+1]]
+        Return[iSingularityToString[2d,m] <>
+            " incompatible with " <> iLefschetzToString[L[[1]],1] <> " and " <>
+            iLefschetzToString[L[[d+1]],d+1]]
     ]
 ]
 
 
-PureStratumBQ[s_List,L_List] := Module[
+iPureStratumBQ[s_List,L_List] := Module[
     {d, m, t = Tally[s], k},
     (* If there is more than one singularity type, return Allowable. *)
     If[Length[t] > 1, Return[Allowable]];
@@ -470,14 +470,14 @@ PureStratumBQ[s_List,L_List] := Module[
     If[Or @@ (L[[#(d+1)]] <= m - 2m(d+1) & /@ k),
         Return[Allowable]
     ,
-        Return[singularitytostring[2d,m] <>
-            " incompatible with " <> lefschetztostring[L[[1]],1] <>
-            " and " <> lcmtostring[m-L[[1]]]]
+        Return[iSingularityToString[2d,m] <>
+            " incompatible with " <> iLefschetzToString[L[[1]],1] <>
+            " and " <> iLCMToString[m-L[[1]]]]
     ]
 ]
 
 
-AlmostPureStratumAQ[s_List,L_List] := Module[
+iAlmostPureStratumAQ[s_List,L_List] := Module[
     {d2, m2, f, Nn = Length[s],
      (* Group and sort strata by increasing multiplicity *)
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
@@ -495,14 +495,14 @@ AlmostPureStratumAQ[s_List,L_List] := Module[
     If[L[[d2+1]] <= Nn - 2f (d2+1),
         Return[Allowable]
     ,
-        Return[singularitytostring[2d2,m2] <>
-            " incompatible with " <> lefschetztostring[L[[1]],1] <> " and " <>
-            lefschetztostring[L[[d2+1]],d2+1]]
+        Return[iSingularityToString[2d2,m2] <>
+            " incompatible with " <> iLefschetzToString[L[[1]],1] <> " and " <>
+            iLefschetzToString[L[[d2+1]],d2+1]]
     ]
 ]
 
 
-AlmostPureStratumBQ[s_List,L_List] := Module[
+iAlmostPureStratumBQ[s_List,L_List] := Module[
     {d2, m2, f, Nn = Length[s], k,
      (* Group and sort strata by increasing multiplicity *)
      t = Sort[Tally[s], #1[[2]] < #2[[2]] &]},
@@ -521,14 +521,14 @@ AlmostPureStratumBQ[s_List,L_List] := Module[
     If[Or @@ (L[[#(d2+1)]] <= Nn - 2m2 (d2+1) & /@ k),
         Return[Allowable]
     ,
-        Return[singularitytostring[2d2,m] <>
-            " incompatible with " <> lefschetztostring[L[[1]],1] <>
-            " and " <> lcmtostring[m2-L[[1]]+1]]
+        Return[iSingularityToString[2d2,m] <>
+            " incompatible with " <> iLefschetzToString[L[[1]],1] <>
+            " and " <> iLCMToString[m2-L[[1]]+1]]
     ]
 ]
 
 
-StratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[
+iStratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[
     {prs = OptionValue[PerronRootSign], opts2 = opts},
     (* If the sign of the Perron root is unspecified, try and guess *)
     If[prs == Automatic,
@@ -545,7 +545,7 @@ StratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[
     On[StratumOrbits::manyallowableperms];
 ]
 Options[StratumOrbits] = {PerronRootSign -> Automatic, MaxLefschetz -> 50}
-Options[StratumOrbitsTestQ] = Options[StratumOrbits]
+Options[iStratumOrbitsTestQ] = Options[StratumOrbits]
 
 
 (*
@@ -554,22 +554,22 @@ Options[StratumOrbitsTestQ] = Options[StratumOrbits]
 
 LefschetzNumbersTestQ[s_List,p_, opts:OptionsPattern[]] := Module[
     {t,
-     opts2 = Sequence @@ FilterRules[{opts},Options[TestListQ]],
-     opts3 = Sequence @@ FilterRules[{opts},Options[StratumOrbitsTestQ]]},
+     opts2 = Sequence @@ FilterRules[{opts},Options[iTestListQ]],
+     opts3 = Sequence @@ FilterRules[{opts},Options[iStratumOrbitsTestQ]]},
     If[PerronRoot[p] > 0,
         L = LefschetzNumbers[p,{OptionValue[MaxLefschetz]}];
-        t = TestPositiveQ[s,L,opts2]
+        t = iTestPositiveQ[s,L,opts2]
     ,
         (* Generate twice as many Lefschetz numbers, since we need to
            apply the even tests to half the list *)
         L = LefschetzNumbers[p,{2 OptionValue[MaxLefschetz]}];
-        t = TestNegativeQ[s,L,opts2]
+        t = iTestNegativeQ[s,L,opts2]
     ];
     (* If all the tests have failed so far, try the ultimate one, but
        only as a last resort! *)
     If[t == Allowable,
-        tests = {StratumOrbitsTestQ[##,opts3]&};
-        t = TestListQ[s,L,tests,opts2,MaxIterate -> 1];
+        tests = {iStratumOrbitsTestQ[##,opts3]&};
+        t = iTestListQ[s,L,tests,opts2,MaxIterate -> 1];
     ];
     If[OptionValue[GiveReasonForRejection],
         Return[{t == Allowable,t}]
@@ -582,7 +582,7 @@ Options[LefschetzNumbersTestQ] =
 
 
 (* Private helper function for LefschetzNumbersTestQ *)
-TestListQ[s_List,L_List,tests_List, OptionsPattern[]] :=
+iTestListQ[s_List,L_List,tests_List, OptionsPattern[]] :=
 Module[
     {Lm, reason = Allowable, funcname, dm = 1},
     If[OptionValue[OnlyOddIterates], dm = 2];
@@ -596,14 +596,14 @@ Module[
                     Lm = L[[#]]& /@ Range[m,Length[L],m];
                     (* If fails once, exit loops to avoid the other tests *)
                     reason = tests[[k]][s,Lm];
-                    If[!StringQ[reason], Message[TestListQ::notastring,
+                    If[!StringQ[reason], Message[iTestListQ::notastring,
                         SymbolName[tests[[k]]]]; Abort[]];
                     If[reason != Allowable,
                         (* For the reason string, append the reason
                            returned by the test to the test's function
                            name. *)
                         (* Had to modify this: SymbolName no longer
-                           works, since StratumOrbitsTestQ is passed
+                           works, since iStratumOrbitsTestQ is passed
                            with options as a pure function.  Hence,
                            use ToString, which does not remove the
                            context: we have to do it manually. *)
@@ -619,45 +619,45 @@ Module[
                         (* Throw exception to escape both loops *)
                         Throw[k, testfailed];
                     ];
-                , oor, Message[TestListQ::moreLefschetz,#1,m] &]
+                , oor, Message[iTestListQ::moreLefschetz,#1,m] &]
             , {m, 1, OptionValue[MaxIterate], dm}]
         , {k,Length[tests]}];
     , testfailed];
     Return[reason]
 ]
-Options[TestListQ] =
+Options[iTestListQ] =
     Append[FilterRules[Options[LefschetzNumbersTestQ], MaxIterate],
            OnlyOddIterates -> False]
-TestListQ::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th power."
-TestListQ::notastring = "Function `1` did not return a proper string."
+iTestListQ::moreLefschetz = "Need at least `1` Lefschetz numbers at `2`th power."
+iTestListQ::notastring = "Function `1` did not return a proper string."
 
 
 (* Private helper function for LefschetzNumbersTestQ *)
-TestPositiveQ[s_List,L_, opts:OptionsPattern[]] := Module[
+iTestPositiveQ[s_List,L_, opts:OptionsPattern[]] := Module[
     {tests =
-        {MinimumSingularitiesQ,
-         SingularityPermutationsAQ,
-         SingularityPermutationsBQ,
-         PureStratumAQ,
-         PureStratumBQ,
-         AlmostPureStratumAQ,
-         AlmostPureStratumBQ}},
-    TestListQ[UnTally[s],L,tests,
-              Sequence @@ FilterRules[{opts},Options[TestListQ]]]
+        {iMinimumSingularitiesQ,
+         iSingularityPermutationsAQ,
+         iSingularityPermutationsBQ,
+         iPureStratumAQ,
+         iPureStratumBQ,
+         iAlmostPureStratumAQ,
+         iAlmostPureStratumBQ}},
+    iTestListQ[UnTally[s],L,tests,
+              Sequence @@ FilterRules[{opts},Options[iTestListQ]]]
 ]
-Options[TestPositiveQ] = Options[TestListQ]
+Options[iTestPositiveQ] = Options[iTestListQ]
 
 
 (* Private helper function for LefschetzNumbersTestQ *)
-TestNegativeQ[s_List,L_, opts:OptionsPattern[]] := Module[
+iTestNegativeQ[s_List,L_, opts:OptionsPattern[]] := Module[
     {L2},
     (* There are no separate tests for negative Perron root *)
     (* List of Lefschetz numbers of phi^2 *)
     L2 = L[[#]] & /@ Range[2,Length[L],2];
     (* Do the test with p2, which has positive Perron root *)
-    TestPositiveQ[s,L2,opts]
+    iTestPositiveQ[s,L2,opts]
 ]
-Options[TestNegativeQ] = Options[TestListQ]
+Options[iTestNegativeQ] = Options[iTestListQ]
 
 
 End[(* "`Tests`" *)]
@@ -666,9 +666,9 @@ End[(* "`Tests`" *)]
 Begin["`Orbits`"]
 
 
-allpossibilities::usage = "allpossibilities[L1,L2,...] generates all possible ordered combinations of elements of the given lists with repetition."
+iAllPossibilities::usage = "iAllPossibilities[L1,L2,...] generates all possible ordered combinations of elements of the given lists with repetition."
 
-allpossibilities[L__List, OptionsPattern[]] := Module[{f, pos},
+iAllPossibilities[L__List, OptionsPattern[]] := Module[{f, pos},
     (* The function f helps generate all possible combinations of
        elements of given lists *)
     f[l_, a_] := Flatten[Table[
@@ -678,24 +678,24 @@ allpossibilities[L__List, OptionsPattern[]] := Module[{f, pos},
     (* If Ordered is False, order doesn't matter *)
     If[OptionValue[Ordered], pos, Union[Sort/@pos]]
 ]
-Options[allpossibilities] = {Ordered -> True}
+Options[iAllPossibilities] = {Ordered -> True}
 
 
-sumorbits::usage = "sumorbits[p,l] with p an integer and l a list of nonnegative integers, returns the sum of (k l[[k]]), where k is a divisor of p."
+iSumOrbits::usage = "iSumOrbits[p,l] with p an integer and l a list of nonnegative integers, returns the sum of (k l[[k]]), where k is a divisor of p."
 
-sumorbits[p_Integer, rpo_List, OptionsPattern[]] := Module[
+iSumOrbits[p_Integer, rpo_List, OptionsPattern[]] := Module[
     {dl = Divisors[p]},
     If[!OptionValue[IncludeLast], dl = Most[dl]];
     Plus @@ (# rpo[[#]] & /@ dl)
 ]
-Options[sumorbits] = {IncludeLast -> True}
+Options[iSumOrbits] = {IncludeLast -> True}
 
-IncludeLast::usage = "Option to sumorbits: set to True to include the final iterate's contribution to the sum from (default True)."
+IncludeLast::usage = "Option to iSumOrbits: set to True to include the final iterate's contribution to the sum from (default True)."
 
 
 (* Groups the list l according to an integer partition of Length[l].
-   Example: groupbypartition[{1,2,3,4},{1,3}] = {{1},{2,3,4}} *)
-groupbypartition[l_, part_] := Module[{g = {}},
+   Example: iGroupByPartition[{1,2,3,4},{1,3}] = {{1},{2,3,4}} *)
+iGroupByPartition[l_, part_] := Module[{g = {}},
     Fold[(AppendTo[g, Take[#1, #2]]; Drop[#1, #2]) &, l, part];
     Return[g]
 ]
@@ -732,7 +732,7 @@ StratumOrbits::manyallowableperms = "More than one allowable permutation type on
 
 
 StratumOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
-    {L, x = polynomialvariable[p], prs = opts2},
+    {L, x = iPolynomialVariable[p], prs = opts2},
     (* Find the sign of the Perron root, add it to options *)
     prs = Sign[PerronRoot[p]];
     If[OptionValue[PerronRootSign] != Automatic,
@@ -756,7 +756,7 @@ SingularStratum[s_List, prs_Integer:-1] := Module[
     (* Lists of Lefschetz numbers for each singularity type *)
     L = ((Singular[##,prs]&) @@ # &) /@ t;
     (* Take all possibilities *)
-    L = allpossibilities @@ L;
+    L = iAllPossibilities @@ L;
     L = Transpose /@ L;
     (* Combine the lists of Lefschetz, repeating blocks as needed *)
     L = {Reverse[Transpose[#[[1]]]],LefschetzCombine @@ #[[2]]} & /@ L;
@@ -784,9 +784,9 @@ Regular[L_List, OptionsPattern[]] := Module[
     ];
     Do[
         If[prs < 0,
-            def = (-1)^(p+1) L[[p]] - sumorbits[p,rpo,IncludeLast->False]
+            def = (-1)^(p+1) L[[p]] - iSumOrbits[p,rpo,IncludeLast->False]
         ,
-            def = -L[[p]] - sumorbits[p,rpo,IncludeLast->False]
+            def = -L[[p]] - iSumOrbits[p,rpo,IncludeLast->False]
         ];
         AppendTo[rpo, def/p];
         If[!IntegerQ[def/p] || def < 0,
@@ -812,7 +812,7 @@ Module[
     clen[perm_] := Sort[Length/@ToCycles[perm]];
     Pk = Union[Pk, SameTest -> (clen[#1] == clen[#2] &)];
     (* Possible permutations of singularities *)
-    Pm = groupbypartition[Range[m],#] & /@ IntegerPartitions[m];
+    Pm = iGroupByPartition[Range[m],#] & /@ IntegerPartitions[m];
     blk = Tally /@ ((Length/@#)&/@Pm);
     all = {};
     (* Loop over each possible Pm *)
@@ -822,10 +822,10 @@ Module[
              blk[[i,j,2]] gives the multiplicity (# of blocks of that length)
            Generate a list of combinations of permutations,
              allowing for symmetry do to multiplicity *)
-        alpo = ((allpossibilities[##,Ordered->False]&) @@
+        alpo = ((iAllPossibilities[##,Ordered->False]&) @@
                     Table[Pk,{#[[2]]}]& ) /@ blk[[i]];
         (* Now combine the multiplicities together *)
-        alpo = allpossibilities[##]& @@ alpo;
+        alpo = iAllPossibilities[##]& @@ alpo;
         alpo = {#,Pm[[i]]}& /@ (Flatten[#,1]& /@ alpo);
         all = Join[all,alpo];
     ,{i,Length[Pm]}];
@@ -840,17 +840,17 @@ SingularPermutations::usage = "PseudoAnosov`Lefschetz`Orbits`SingularPermutation
 SingularPermutations[Pk_List, Pm_List:{{1}}, prs_Integer:-1] := Module[
     {k = 2Length[Pk]-2, m = Length[Flatten[Pm]], Pmc = Length /@ Pm},
     If[Length[Pk] != Length[Pmc], Message[PseudoAnosov::bad]];
-    (* Apply SingularCyclic to each subcycle, with Pk specifying a
+    (* Apply iSingularCyclic to each subcycle, with Pk specifying a
        permutation on the separatrices for each subcycle *)
     LefschetzCombine @@
-        ((SingularCyclic[##,prs]&) @@ # & /@ Transpose[{Pk,Pmc}])
+        ((iSingularCyclic[##,prs]&) @@ # & /@ Transpose[{Pk,Pmc}])
 ]
 
 
 (* Private helper function for Singular *)
 (* Special case of Singular for the m singularities
    being permuted cyclically *)
-SingularCyclic[Pk_List, m_Integer:1, prs_Integer:-1] := Module[
+iSingularCyclic[Pk_List, m_Integer:1, prs_Integer:-1] := Module[
     {k = 2Length[Pk]-2, period, L, Pm, Pm1, Pk1 = Pk},
     (* Generate a cyclic permutation for the singularities *)
     Pm = RotateLeft[Range[m]]; Pm1 = Pm;
@@ -896,7 +896,7 @@ StratumOrbitsTable[so_, itmax_: 20] := Module[
     ps[str_] := Style[str,Italic,12];
     (* Regular orbits *)
     ro = Take[RegularOrbits /. so, itmx];
-    Lro = sumorbits[#,ro, IncludeLast->True] & /@ Range[itmx];
+    Lro = iSumOrbits[#,ro, IncludeLast->True] & /@ Range[itmx];
     pr = PerronRoot[Polynomial/.so];
     If[pr < 0,
         Lro = MapAt[-#&, Lro, {#}&/@Range[2,itmx,2]]
@@ -929,7 +929,7 @@ StratumOrbitsTable[so_, itmax_: 20] := Module[
 
     sp = Row[{ps["L"],"(",Superscript @@ #,")"}] & /@
         Table[{k[[i]],Length[sip[[i]]]}, {i,Length[k]}];
-    ln = Table[SingularCyclic[sep[[i]], Length[sip[[i]]], Sign[pr]],
+    ln = Table[iSingularCyclic[sep[[i]], Length[sip[[i]]], Sign[pr]],
             {i,Length[k]}];
     ln = PadRight[#,itmx,#]& /@ ln;
     ln = Flatten /@ Transpose[{sp,ln}];

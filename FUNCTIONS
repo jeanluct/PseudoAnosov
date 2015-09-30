@@ -31,7 +31,7 @@ HomologyAction
 
 (Definitions in `Private` context)
 
-polynomialvariable (helper)
+iPolynomialVariable (helper)
 PolynomialDegree
 PolynomialRoots
 PerronRoot
@@ -55,29 +55,27 @@ UnTally
 
 (***** Lefschetz` context *****
 
-=== Helper ===
-
 LefschetzCombine
 LefschetzNumbers
 
 (***** `Lefschetz`Tests context *****
 
-singularitytostring (helper)
-lefschetztostring (helper)
-lcmtostring (helper)
-MinimumSingularitiesQ (helper)
-SingularityPermutationsAQ (helper)
-SingularityPermutationsBQ (helper)
-SingularityPermutationsBQ1 (helper)
-PureStratumAQ (helper)
-PureStratumBQ (helper)
-AlmostPureStratumAQ (helper)
-AlmostPureStratumBQ (helper)
-StratumOrbitsTestQ (helper)
+iSingularityToString (helper)
+iLefschetzToString (helper)
+iLCMToString (helper)
+iMinimumSingularitiesQ (helper)
+iSingularityPermutationsAQ (helper)
+iSingularityPermutationsBQ (helper)
+iSingularityPermutationsBQ1 (helper)
+iPureStratumAQ (helper)
+iPureStratumBQ (helper)
+iAlmostPureStratumAQ (helper)
+iAlmostPureStratumBQ (helper)
+iStratumOrbitsTestQ (helper)
 LefschetzNumbersTestQ
-TestListQ (helper)
-TestPositiveQ (helper)
-TestNegativeQ (helper)
+iTestListQ (helper)
+iTestPositiveQ (helper)
+iTestNegativeQ (helper)
 
 ***** `Lefschetz`Tests context *****)
 
@@ -85,15 +83,15 @@ TestNegativeQ (helper)
 
 === Orbit structure (Lefschetz`Orbits`) ===
 
-allpossibilities (helper)
-sumorbits (helper)
-groupbypartition (helper)
+iAllPossibilities (helper, but has usage string)
+iSumOrbits (helper, but has usage string)
+iGroupByPartition (helper)
 StratumOrbits
-SingularStratum (helper)
-Regular (helper)
-Singular (helper)
-SingularPermutations (helper)
-SingularCyclic (helper)
+SingularStratum (expert; has usage string but not in Global)
+Regular (expert; has usage string but not in Global)
+Singular (expert; has usage string but not in Global)
+SingularPermutations (expert; has usage string but not in Global)
+iSingularCyclic (helper)
 StratumOrbitsTable
 
 ***** `Lefschetz`Orbits context *****)
@@ -103,12 +101,9 @@ StratumOrbitsTable
 
 (***** Homology` context *****
 
-Helper:
-
 iDehnA (helper)
 iDehnB (helper)
 iDehnC (helper)
-
 DehnTwist
 HomologyAction
 
