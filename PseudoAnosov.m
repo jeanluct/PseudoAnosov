@@ -259,7 +259,7 @@ Module[
 Options[ReciprocalPolynomialBoundedList] = Options[PseudoAnosovPerronRootQ]
 
 
-(* Kludge: list without ruling out non-pA polynomials.  Needed for non-orientable systole. *)
+(* Kludge: list without ruling out non-pA polynomials.  Needed for non-orientable systole.  (Modify so it uses option instead.) *)
 ReciprocalPolynomialBoundedList2[x_,n_Integer,r_,opts:OptionsPattern[]] :=
 Module[
     {p,pl,sl,T,Tm = iReciprocalPolynomialTracesBounds[n,r]},
