@@ -7,7 +7,7 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 
 - `DehnTwist[i,{a,b}]` applies the Dehn twist `i` to the curve with homology `{a,b}` on a closed surface of genus `g`.  Here `a` and `b` are lists of length `g` and represent the coefficients in the standard homology basis.  The Dehn twists are the standard "Lickorish generators", numbers from `1` to `3g-1`, with the sign giving the direction of the twist.  `DehnTwist[{i1,i2,...},{a,b}]` applies successive generators starting from the first element of the list.
 
-- `HomologyAction[{i1,i2,...}]` returns the matrix of the action on homology of a sequence of Dehn twists `{i1,i2,...}`.  (See `DehnTwist` for a description of the generators.)  `HomologyAction[{i1,i2,...},g]` specifies the genus `g` explictly, which is otherwise taken as small as possible.  The option `BasisOrder` can be set to "`abab`" or "`aabb`" to specify whether the standard basis for homology should be ordered by hole or by type.
+- `HomologyAction[{i1,i2,...}]` returns the matrix of the action on homology of a sequence of Dehn twists `{i1,i2,...}`.  (See `DehnTwist` for a description of the generators.)  `HomologyAction[{i1,i2,...},g]` specifies the genus `g` explictly, which is otherwise taken as small as possible.  The option `BasisOrder` can be set to `"abab"` or `"aabb"` to specify whether the standard basis for homology should be ordered by hole or by type.
 
 - `LefschetzNumbers[P,k]`, where `P` is the characteristic polynomial of some matrix `M`, returns the Lefschetz number `2-Tr[M^k]`.  `LefschetzNumbers[P,{k2}]` returns a list of Lefschetz numbers `2-Tr[M^k]` for `1 <= k <= k2`.  `LefschetzNumbers[P,{k1,k2}]` returns a list of Lefschetz numbers `2-Tr[M^k]` for `k1 <= k <= k2`.
 

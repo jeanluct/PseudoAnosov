@@ -344,6 +344,12 @@ LefschetzCombine[Ll__List, n_Integer:0] := Module[{L = List[Ll], len},
 ]
 
 
+(* Guess at the sign of the Perron root: the Lefschetz numbers must
+   eventually alternate sign.  This can fail if we don't have a long
+   enough sequence.*)
+iGuessPerronRootSign[L_List] := Sign[Times @@ Take[L,-2]]
+
+
 Begin["`Tests`"]
 
 
@@ -532,7 +538,7 @@ iStratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[
     {prs = OptionValue[PerronRootSign], opts2 = opts},
     (* If the sign of the Perron root is unspecified, try and guess *)
     If[prs == Automatic,
-        prs = Sign[Times @@ Take[L,-2]];
+        prs = iGuessPerronRootSign[L];
         opts2 = FilterRules[{opts},Except[PerronRootSign]];
         opts2 = Sequence @@ Join[opts2,{PerronRootSign -> prs}];
     ];
@@ -710,7 +716,7 @@ iGroupByPartition[l_, part_] := Module[{g = {}},
 StratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     {Ls, ro, prs = OptionValue[PerronRootSign], opts2, len},
     (* If the sign of the Perron root is unspecified, try and guess *)
-    If[prs == Automatic, prs = Sign[Times @@ Take[L,-2]]];
+    If[prs == Automatic, prs = iGuessPerronRootSign[L]];
     Ls = SingularStratum[s,prs];
     Off[Regular::badLefschetz];
     opts2 = Sequence @@ FilterRules[{opts},Options[Regular]];
@@ -773,13 +779,13 @@ Regular::usage = "PseudoAnosov`Lefschetz`Orbits`Regular[L], where L is a list of
 Regular[L_List, OptionsPattern[]] := Module[
     {rpo, def, prs = OptionValue[PerronRootSign]},
     (* If the sign of the Perron root is unspecified, try and guess *)
-    If[prs == Automatic, prs = Sign[Times @@ Take[L,-2]]];
+    If[prs == Automatic, prs = iGuessPerronRootSign[L]];
     rpo = {-prs L[[1]]};
     If[rpo[[1]] < 0, Message[Regular::badLefschetz]; Return[rpo]];
-    If[prs < 0 && ((Times @@ Take[L,-2]) > 0),
+    If[prs < 0 && (iGuessPerronRootSign[L] > 0),
         Message[Regular::neednegativePerron]; Abort[]
     ];
-    If[prs > 0 && ((Times @@ Take[L,-2] < 0) || Last[L] > 0),
+    If[prs > 0 && (iGuessPerronRootSign[L] < 0) || Last[L] > 0),
         Message[Regular::needpositivePerron]; Abort[]
     ];
     Do[
