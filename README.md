@@ -23,7 +23,7 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 
 - `ReciprocalPolynomialBoundedList[x,n,r]` returns a list of reciprocal polynomials `x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1` with Perron root less than `r`.  For `n` even, only one of each polynomial pair `P(-x)=P(x)` is listed.
 
-- `StrataList[g]` gives the list of orientable strata for a hyperbolic surface of genus `g`.  Each stratum in the list is of the form `{k_1,...,k_m}`, where `k_i` is the degree of each singularity, and the sum over the `k_i` gives -2(Euler Characteristic).  Use `Tally/@StrataList[g]` to group singularities by multiplicity.  (Punctures not yet implemented.)
+- `StrataList[g]` gives the list of all strata for a hyperbolic surface of genus `g`.  Each stratum in the list is of the form `{k_1,...,k_m}`, where `k_i` is the degree of each singularity, and the sum over the `k_i` gives -2(Euler Characteristic).  Use `Tally/@StrataList[g]` to group singularities by multiplicity.  (Punctures not yet implemented.)
 
 - `StratumDoubleCover[S]` gives the stratum corresponding to the orientating double-cover of the stratum `S={k_1,...,k_m}`.
 
@@ -73,35 +73,34 @@ These advanced functions are used internally, but may also be useful on their ow
 
 ### ``Private`` context
 
+- `iPolynomialTracesBounds`
 - `iPolynomialVariable`
 - `iReciprocalPolynomialTracesBounds`
-- `iPolynomialTracesBounds`
 
 ### ``Lefschetz`Tests`` context
 
-- `iSingularityToString`
-- `iLefschetzToString`
-- `iLCMToString`
-- `iMinimumSingularitiesQ`
-- `iSingularityPermutationsAQ`
-- `iSingularityPermutationsBQ`
-- `iSingularityPermutationsBQ1`
-- `iPureStratumAQ`
-- `iPureStratumBQ`
 - `iAlmostPureStratumAQ`
 - `iAlmostPureStratumBQ`
+- `iLCMToString`
+- `iLefschetzToString`
+- `iMinimumSingularitiesQ`
+- `iPureStratumAQ`
+- `iPureStratumBQ`
+- `iSingularityPermutationsAQ`
+- `iSingularityPermutationsBQ1`
+- `iSingularityPermutationsBQ`
+- `iSingularityToString`
 - `iStratumOrbitsTestQ`
-- `LefschetzNumbersTestQ`
 - `iTestListQ`
-- `iTestPositiveQ`
 - `iTestNegativeQ`
+- `iTestPositiveQ`
 
 ### ``Lefschetz`Orbits`` context
 
 - `iAllPossibilities`
-- `iSumOrbits`
 - `iGroupByPartition`
 - `iSingularCyclic`
+- `iSumOrbits`
 
 ### ``Homology`` context
 
