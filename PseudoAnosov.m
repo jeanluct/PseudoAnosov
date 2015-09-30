@@ -60,10 +60,6 @@ StratumOrbits::usage = "StratumOrbits[S,P] returns a list of possible orbit stru
 
 StratumOrbitsTable::usage = "StratumOrbitsTable[so] presents the output of StratumOrbits in a table.\nStratumOrbitsTable[so,itmax] displays at most itmax iterates."
 
-(* Test for everything: first call PseudoAnosovPerronRootQ, then
-LefschetzNumbersTestQ by strata (for even power). *)
-(* PseudoAnosovPolynomialQ::usage = "" *)
-
 DehnTwist::usage = "DehnTwist[i,{a,b}] applies the Dehn twist i to the curve with homology {a,b} on a closed surface of genus g.  Here a and b are lists of length g and represent the coefficients in the standard homology basis.  The Dehn twists are the standard \"Lickorish generators\", numbers from 1 to 3g-1, with the sign giving the direction of the twist.\nDehnTwist[{i1,i2,...},{a,b}] applies successive generators starting from the first element of the list."
 
 HomologyAction::usage = "HomologyAction[{i1,i2,...}] returns the matrix of the action on homology of a sequence of Dehn twists {i1,i2,...}.  (See DehnTwist for a description of the generators.)  HomologyAction[{i1,i2,...},g] specifies the genus g explictly, which is otherwise taken as small as possible.  The option BasisOrder can be set to \"abab\" or \"aabb\" to specify whether the standard basis for homology should be ordered by hole or by type."
