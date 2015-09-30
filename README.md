@@ -41,6 +41,8 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 
 ## Utility functions
 
+- `GuessPerronRootSign[L]` guesses the Perron root sign by checking for alternating Lefschetz numbers in `L`.
+
 - `IrreducibleMatrixQ[M]` returns `True` if the matrix `M` is irreducible.
 
 - `MahlerMeasure[P]` returns the Mahler measure of the polynomial `P`, which is the absolute value of the product of roots outside the unit circle.
