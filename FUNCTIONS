@@ -19,12 +19,16 @@ IrreducibleMatrixQ
 OrientableStrataList
 StrataList
 StratumDoubleCover
-StratumToGenus [modify to test what form the stratum is in -- tallied or not]
+StratumToGenus
 UnTally
 LefschetzNumbers
 LefschetzCombine
+GuessPerronRootSign
 LefschetzNumbersTestQ
 StratumOrbits
+LefschetzNumbersSingularitiesStratum
+LefschetzRegularOrbits
+LefschetzNumbersSingularities
 StratumOrbitsTable
 DehnTwist
 HomologyAction
@@ -50,13 +54,14 @@ IrreducibleMatrixQ
 OrientableStrataList
 StrataList
 StratumDoubleCover
-StratumToGenus [modify to test what form the stratum is in -- tallied or not]
+StratumToGenus
 UnTally
 
 (***** Lefschetz` context *****
 
-LefschetzCombine
 LefschetzNumbers
+LefschetzCombine
+GuessPerronRootSign
 
 (***** `Lefschetz`Tests context *****
 
@@ -87,10 +92,10 @@ iAllPossibilities (helper, but has usage string)
 iSumOrbits (helper, but has usage string)
 iGroupByPartition (helper)
 StratumOrbits
-SingularStratum (expert; has usage string but not in Global)
-Regular (expert; has usage string but not in Global)
-Singular (expert; has usage string but not in Global)
-SingularPermutations (expert; has usage string but not in Global)
+LefschetzNumbersSingularitiesStratum
+LefschetzRegularOrbits
+LefschetzNumbersSingularities
+iSingularPermutations (helper)
 iSingularCyclic (helper)
 StratumOrbitsTable
 

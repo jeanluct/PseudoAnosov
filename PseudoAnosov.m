@@ -52,9 +52,17 @@ LefschetzNumbers::usage = "LefschetzNumbers[P,k], where P is the characteristic 
 
 LefschetzCombine::usage = "LefschetzCombine[L1,L2,...] adds lists of Lefschetz number.  If they are not the same length, then the blocks are repeated to the length of the longest list.\nLefschetzCombine[L1,L2,...,Lm,n] caps the total length at an integer n."
 
+GuessPerronRootSign::usage = "GuessPerronRootSign[L] guesses the Perron root sign by checking for alternating Lefschetz numbers in L."
+
 LefschetzNumbersTestQ::usage = "LefschetzNumbersTestQ[S,P] returns True if the polynomial P is compatible with the stratum S.  Possible options are GiveReasonForRejection (default False), MaxIterate (default 1), and MaxLefschetz (default 50)."
 
 StratumOrbits::usage = "StratumOrbits[S,P] returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial P on stratum S.  Returns an empty list if this proves impossible.\nStratumOrbits[S,L] does the same for a list of Lefschetz numbers L."
+
+LefschetzNumbersSingularitiesStratum::usage = "LefschetzNumbersSingularitiesStratum[S,prs], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}}).  The sign of the Perron root is given by prs (default -1)."
+
+LefschetzRegularOrbits::usage = "LefschetzRegularOrbits[L], where L is a list of Lefschetz numbers, returns the list of regular periodic orbits compatible with L, unless an incompatible orbit is detected, in which cases the function stops and returns what it found.  The sign of the Perron root can be specified by the option PerronRootSign (default Automatic)."
+
+LefschetzNumbersSingularities::usage = "LefschetzNumbersSingularities[k,m,prs], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1).  The sign of the Perron root is given by prs (default -1)."
 
 StratumOrbitsTable::usage = "StratumOrbitsTable[so] presents the output of StratumOrbits in a table.\nStratumOrbitsTable[so,itmax] displays at most itmax iterates."
 
@@ -346,8 +354,8 @@ LefschetzCombine[Ll__List, n_Integer:0] := Module[{L = List[Ll], len},
 
 (* Guess at the sign of the Perron root: the Lefschetz numbers must
    eventually alternate sign.  This can fail if we don't have a long
-   enough sequence.*)
-iGuessPerronRootSign[L_List] := Sign[Times @@ Take[L,-2]]
+   enough sequence. *)
+GuessPerronRootSign[L_List] := Sign[Times @@ Take[L,-2]]
 
 
 Begin["`Tests`"]
@@ -538,7 +546,7 @@ iStratumOrbitsTestQ[s_List,L_List, opts:OptionsPattern[]] := Module[
     {prs = OptionValue[PerronRootSign], opts2 = opts},
     (* If the sign of the Perron root is unspecified, try and guess *)
     If[prs == Automatic,
-        prs = iGuessPerronRootSign[L];
+        prs = GuessPerronRootSign[L];
         opts2 = FilterRules[{opts},Except[PerronRootSign]];
         opts2 = Sequence @@ Join[opts2,{PerronRootSign -> prs}];
     ];
@@ -622,6 +630,8 @@ Module[
                              RegularExpression["AQ$"] -> "(a)",
                              RegularExpression["BQ$"] -> "(b)"}]
                              <> ": " <> reason;
+                        reason = StringReplace[reason,
+                             RegularExpression["^i"] -> ""];
                         (* Throw exception to escape both loops *)
                         Throw[k, testfailed];
                     ];
@@ -716,18 +726,18 @@ iGroupByPartition[l_, part_] := Module[{g = {}},
 StratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     {Ls, ro, prs = OptionValue[PerronRootSign], opts2, len},
     (* If the sign of the Perron root is unspecified, try and guess *)
-    If[prs == Automatic, prs = iGuessPerronRootSign[L]];
-    Ls = SingularStratum[s,prs];
-    Off[Regular::badLefschetz];
-    opts2 = Sequence @@ FilterRules[{opts},Options[Regular]];
+    If[prs == Automatic, prs = GuessPerronRootSign[L]];
+    Ls = LefschetzNumbersSingularitiesStratum[s,prs];
+    Off[LefschetzRegularOrbits::badLefschetz];
+    opts2 = Sequence @@ FilterRules[{opts},Options[LefschetzRegularOrbits]];
     len = Min[Length[L],OptionValue[MaxLefschetz]];
     (* TODO: Need more checking here. If Ls is garbage because MaxLefschetz
        is not large enough, or because the polynomial is not Perron, then the
        error messages are not very helpful. *)
-    ro = Regular[
+    ro = LefschetzRegularOrbits[
         LefschetzCombine[Take[L,len],
             -SingularitiesLefschetzBlock/.#,len],opts2] & /@ Ls;
-    On[Regular::badLefschetz];
+    On[LefschetzRegularOrbits::badLefschetz];
     (* Eliminate bad orbits: look for a negative or nonintegral last element *)
     ro = Transpose[{Ls,ro}];
     ro = Pick[ro, Last[#[[2]]] > 0 && IntegerQ[Last[#[[2]]]] & /@ ro];
@@ -753,14 +763,12 @@ StratumOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
 StratumOrbits::noprs = "PerronRootSign option contradicts actual Perron root of polynomial.  Do not use PerronRootSign with a polynomial."
 
 
-SingularStratum::usage = "PseudoAnosov`Lefschetz`Orbits`SingularStratum[S,prs], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}}).  The sign of the Perron root is given by prs (default -1)."
-
-SingularStratum[s_List, prs_Integer:-1] := Module[
+LefschetzNumbersSingularitiesStratum[s_List, prs_Integer:-1] := Module[
     {t, L, f},
     (* Accept s in either explicit or tallied form *)
     If[ListQ[s[[1]]], t = s, t = Tally[s]];
     (* Lists of Lefschetz numbers for each singularity type *)
-    L = ((Singular[##,prs]&) @@ # &) /@ t;
+    L = ((LefschetzNumbersSingularities[##,prs]&) @@ # &) /@ t;
     (* Take all possibilities *)
     L = iAllPossibilities @@ L;
     L = Transpose /@ L;
@@ -774,19 +782,22 @@ SingularStratum[s_List, prs_Integer:-1] := Module[
 ]
 
 
-Regular::usage = "PseudoAnosov`Lefschetz`Orbits`Regular[L], where L is a list of Lefschetz numbers, returns the list of regular periodic orbits compatible with L, unless an incompatible orbit is detected, in which cases the function stops and returns what it found.  The sign of the Perron root can be specified by the option PerronRootSign (default Automatic)."
+LefschetzRegularOrbits::usage = "PseudoAnosov`Lefschetz`Orbits`LefschetzRegularOrbits[L], where L is a list of Lefschetz numbers, returns the list of regular periodic orbits compatible with L, unless an incompatible orbit is detected, in which cases the function stops and returns what it found.  The sign of the Perron root can be specified by the option PerronRootSign (default Automatic)."
 
-Regular[L_List, OptionsPattern[]] := Module[
+LefschetzRegularOrbits[L_List, OptionsPattern[]] := Module[
     {rpo, def, prs = OptionValue[PerronRootSign]},
     (* If the sign of the Perron root is unspecified, try and guess *)
-    If[prs == Automatic, prs = iGuessPerronRootSign[L]];
+    If[prs == Automatic, prs = GuessPerronRootSign[L]];
     rpo = {-prs L[[1]]};
-    If[rpo[[1]] < 0, Message[Regular::badLefschetz]; Return[rpo]];
-    If[prs < 0 && (iGuessPerronRootSign[L] > 0),
-        Message[Regular::neednegativePerron]; Abort[]
+    If[rpo[[1]] < 0,
+        Message[LefschetzRegularOrbits::badLefschetz];
+        Return[rpo]
     ];
-    If[prs > 0 && (iGuessPerronRootSign[L] < 0) || Last[L] > 0),
-        Message[Regular::needpositivePerron]; Abort[]
+    If[prs < 0 && (GuessPerronRootSign[L] > 0),
+        Message[LefschetzRegularOrbits::neednegativePerron]; Abort[]
+    ];
+    If[prs > 0 && ((GuessPerronRootSign[L] < 0) || Last[L] > 0),
+        Message[LefschetzRegularOrbits::needpositivePerron]; Abort[]
     ];
     Do[
         If[prs < 0,
@@ -796,20 +807,20 @@ Regular[L_List, OptionsPattern[]] := Module[
         ];
         AppendTo[rpo, def/p];
         If[!IntegerQ[def/p] || def < 0,
-            Message[Regular::badLefschetz]; Break[]
+            Message[LefschetzRegularOrbits::badLefschetz]; Break[]
         ]
     ,{p, 2, Length[L]}];
     rpo
 ]
-Options[Regular] = {PerronRootSign -> Automatic}
-Regular::needpositivePerron = "Error: This function only applies to positive Perron root, and the Lefschetz numbers sequence suggests a negative root.  Increasing the sequence length with the MaxLefschetz option might help if this is spurious."
-Regular::neednegativePerron = "Error: This function only applies to negative Perron root, and the Lefschetz numbers sequence suggests a positive root.  Increasing the sequence length with the MaxLefschetz option might help if this is spurious."
-Regular::badLefschetz = "Bad sequence of Lefschetz numbers."
+Options[LefschetzRegularOrbits] = {PerronRootSign -> Automatic}
+LefschetzRegularOrbits::needpositivePerron = "Error: This function only applies to positive Perron root, and the Lefschetz numbers sequence suggests a negative root.  Increasing the sequence length with the MaxLefschetz option might help if this is spurious."
+LefschetzRegularOrbits::neednegativePerron = "Error: This function only applies to negative Perron root, and the Lefschetz numbers sequence suggests a positive root.  Increasing the sequence length with the MaxLefschetz option might help if this is spurious."
+LefschetzRegularOrbits::badLefschetz = "Bad sequence of Lefschetz numbers."
 
 
-Singular::usage = "PseudoAnosov`Lefschetz`Orbits`Singular[k,m,prs], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1).  The sign of the Perron root is given by prs (default -1)."
+LefschetzNumbersSingularities::usage = "LefschetzNumbersSingularities[k,m,prs], where k and m are integers, lists all possible Lefschetz number sequences for m singularities of degree k (m defaults to 1).  The sign of the Perron root is given by prs (default -1)."
 
-Singular[k_Integer, m_Integer:1, prs_Integer:-1] :=
+LefschetzNumbersSingularities[k_Integer, m_Integer:1, prs_Integer:-1] :=
 Module[
     {pr = k/2+1, Pk, Pm, clen, blk, alpo, all},
     (* All possible cyclic permutations of separatrices *)
@@ -837,13 +848,13 @@ Module[
     ,{i,Length[Pm]}];
     (* Return a list of entries of the form
        {permutations,Lefschetznumbers} *)
-    ({{##},SingularPermutations[##,prs]}&) @@ # & /@ all
+    ({{##},iSingularPermutations[##,prs]}&) @@ # & /@ all
 ]
 
 
-SingularPermutations::usage = "PseudoAnosov`Lefschetz`Orbits`SingularPermutations[Pk,Pm,prs] returns a list of Lefschetz numbers corresponding to singularity of degree k with m-fold degeneracy.  Pk is a list of permutations on the (k+2)/2 in or outgoing separatrices of the singularities, and Pm a permutation on the m singularities.  Pm must be in cycles form.  Note that Pk must be a power of a cyclic permutation.  The sign of the Perron root is given by prs (default -1)."
+iSingularPermutations::usage = "iSingularPermutations[Pk,Pm,prs] returns a list of Lefschetz numbers corresponding to singularities of degree k with m-fold degeneracy.  Pk is a list of permutations on the (k+2)/2 in or outgoing separatrices of the singularities, and Pm a permutation on the m singularities.  Pm must be in cycles form.  Note that Pk must be a power of a cyclic permutation.  The sign of the Perron root is given by prs (default -1)."
 
-SingularPermutations[Pk_List, Pm_List:{{1}}, prs_Integer:-1] := Module[
+iSingularPermutations[Pk_List, Pm_List:{{1}}, prs_Integer:-1] := Module[
     {k = 2Length[Pk]-2, m = Length[Flatten[Pm]], Pmc = Length /@ Pm},
     If[Length[Pk] != Length[Pmc], Message[PseudoAnosov::bad]];
     (* Apply iSingularCyclic to each subcycle, with Pk specifying a
