@@ -15,7 +15,6 @@ PolynomialFromTraces
 ReciprocalPolynomialPolynomialFromTraces
 PolynomialBoundedList
 ReciprocalPolynomialBoundedList
-ReciprocalPolynomialBoundedList2 (kludge)
 IrreducibleMatrixQ
 OrientableStrataList
 StrataList
@@ -45,7 +44,6 @@ PolynomialFromTraces
 ReciprocalPolynomialPolynomialFromTraces
 iReciprocalPolynomialTracesBounds (helper)
 ReciprocalPolynomialBoundedList
-ReciprocalPolynomialBoundedList2 (kludge)
 iPolynomialTracesBounds (helper)
 PolynomialBoundedList
 IrreducibleMatrixQ

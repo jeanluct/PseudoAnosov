@@ -36,8 +36,6 @@ PolynomialBoundedList::usage = "PolynomialBoundedList[x,n,r,a[n]] returns a list
 
 ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,r] returns a list of reciprocal polynomials x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1 with Perron root less than r.  For n even, only one of each polynomial pair P(-x)=P(x) is listed.";
 
-ReciprocalPolynomialBoundedList2::usage = "Kludge: list without ruling out non-pA polynomials.  Needed for non-orientable systole.";
-
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns true if the matrix M is irreducible.";
 
 OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a hyperbolic surface of genus g.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the (even) degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity.";
@@ -69,6 +67,10 @@ HomologyAction::usage = "HomologyAction[{i1,i2,...}] returns the matrix of the a
    Options
 *)
 
+EqualityTolerance::usage = "EqualityTolerance is an option to PseudoAnosovPerronRootQ to decide whether two numbers are \"equal enough\"."
+
+PerronRootCheck::usage = "PerronRootCheck is an option to ReciprocalPolynomialBoundedList to check for a positive real root (default True)."
+
 GiveReasonForRejection::usage = "GiveReasonForRejection is an option to LefschetzNumbersTestQ: Set to True to return the reason for rejecting a stratum (default False)."
 
 MaxIterate::usage = "MaxIterate is an option to LefschetzNumbersTestQ: Set to an integer giving the largest power of the map to test (default 1)."
@@ -76,8 +78,6 @@ MaxIterate::usage = "MaxIterate is an option to LefschetzNumbersTestQ: Set to an
 MaxLefschetz::usage = "MaxLefschetz is an option to LefschetzNumbersTestQ and StratumOrbits, specifying how many Lefschetz numbers to compute."
 
 PerronRootSign::usage = "PerronRootSign is an option to StratumOrbits (Lefschetz numbers form) to specify whether the Perron root is positive or negative.  Set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic)."
-
-EqualityTolerance::usage = "EqualityTolerance is an option to PseudoAnosovPerronRootQ to decide whether two numbers are \"equal enough\"."
 
 BasisOrder::usage = "BasisOrder is an option to HomologyAction: set to \"abab\" or \"aabb\" to specify whether the standard basis for homology should be ordered by hole or by type."
 
@@ -244,48 +244,25 @@ Module[
     (* Discard the polynomials that don't have integer coefficients *)
     sl = And @@ # & /@  (IntegerQ /@ # & /@ (CoefficientList[#,x] & /@ pl));
     pl = Pick[pl,sl];
-    (* Discard the ones without the proper Perron root (not real or
-       too large) *)
-    pl = Pick[pl,PseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
-    (* Make all roots positive, discard duplicates *)
-    (* Only do this for even n: for odd n, the leading term changes sign. *)
-    If[EvenQ[n],
-      pl = Union[If[PerronRoot[#] > 0, #, #/.x->-x] & /@ pl]
+    If[OptionValue[PerronRootCheck],
+        (* Discard the ones without the proper Perron root (not real or
+           too large) *)
+        pl = Pick[pl,PseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
+        (* Make all roots positive, discard duplicates *)
+        (* Only do this for even n: for odd n, the leading term changes sign. *)
+        If[EvenQ[n],
+          pl = Union[If[PerronRoot[#] > 0, #, #/.x->-x] & /@ pl]
+        ];
+    ,
+        (* Discard roots that are too large *)
+        pl = Select[pl, Abs[PerronRoot[#]] <= r &];
     ];
-    (* Sort by Perron root *)
+    (* Sort by roots by magnitude *)
     (* Note that we computed the Perron root many times: a waste *)
-    Sort[pl, PerronRoot[#1] < PerronRoot[#2] &]
-]
-Options[ReciprocalPolynomialBoundedList] = Options[PseudoAnosovPerronRootQ]
-
-
-(* Kludge: list without ruling out non-pA polynomials.  Needed for non-orientable systole.  (Modify so it uses option instead.) *)
-ReciprocalPolynomialBoundedList2[x_,n_Integer,r_,opts:OptionsPattern[]] :=
-Module[
-    {p,pl,sl,T,Tm = iReciprocalPolynomialTracesBounds[n,r]},
-    p = ReciprocalPolynomialFromTraces[x,n,Table[T[k],{k,Floor[n/2]}]];
-    pl = Flatten[Fold[
-        Table[#1,{T[#2],-Tm[[#2]],Tm[[#2]]}]&, p, Range[Floor[n/2]]
-    ]];
-    (* Discard the polynomials that don't have integer coefficients *)
-    sl = And @@ # & /@  (IntegerQ /@ # & /@ (CoefficientList[#,x] & /@ pl));
-    pl = Pick[pl,sl];
-    pl = Select[pl, Abs[PerronRoot[#]] <= r &];
-(*
-    (* Discard the ones without the proper Perron root (not real or
-       too large) *)
-    pl = Pick[pl,PseudoAnosovPerronRootQ[#,r,opts] & /@ pl];
-    (* Make all roots positive, discard duplicates *)
-    (* Only do this for even n: for odd n, the leading term changes sign. *)
-    If[EvenQ[n],
-      pl = Union[If[PerronRoot[#] > 0, #, #/.x->-x] & /@ pl]
-    ];
-    (* Sort by Perron root *)
-    (* Note that we computed the Perron root many times: a waste *)
-*)
     Sort[pl, Abs[PerronRoot[#1]] < Abs[PerronRoot[#2]] &]
 ]
-Options[ReciprocalPolynomialBoundedList] = Options[PseudoAnosovPerronRootQ]
+Options[ReciprocalPolynomialBoundedList] =
+    Append[Options[PseudoAnosovPerronRootQ], PerronRootCheck -> True]
 
 
 iPolynomialTracesBounds[n_Integer,r_] := Floor[n r^#] & /@ Range[n-1]
