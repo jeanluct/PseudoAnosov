@@ -1,0 +1,117 @@
+FUNCTIONS
+=========
+
+Global context functions:
+
+PolynomialDegree
+PolynomialRoots
+PerronRoot
+PseudoAnosovPerronRootQ
+MahlerMeasure
+TracesPower
+ReciprocalPolynomial
+ReciprocalPolynomialQ
+PolynomialFromTraces
+ReciprocalPolynomialPolynomialFromTraces
+PolynomialBoundedList
+ReciprocalPolynomialBoundedList
+ReciprocalPolynomialBoundedList2 (kludge)
+IrreducibleMatrixQ
+OrientableStrataList
+StrataList
+StratumDoubleCover
+StratumToGenus [modify to test what form the stratum is in -- tallied or not]
+UnTally
+LefschetzNumbers
+LefschetzCombine
+LefschetzNumbersTestQ
+StratumOrbits
+StratumOrbitsTable
+DehnTwist
+HomologyAction
+
+(Definitions in `Private` context)
+
+polynomialvariable (helper)
+PolynomialDegree
+PolynomialRoots
+PerronRoot
+PseudoAnosovPerronRootQ
+MahlerMeasure
+TracesPower
+ReciprocalPolynomial
+ReciprocalPolynomialQ
+PolynomialFromTraces
+ReciprocalPolynomialPolynomialFromTraces
+iReciprocalPolynomialTracesBounds (helper)
+ReciprocalPolynomialBoundedList
+ReciprocalPolynomialBoundedList2 (kludge)
+iPolynomialTracesBounds (helper)
+PolynomialBoundedList
+IrreducibleMatrixQ
+OrientableStrataList
+StrataList
+StratumDoubleCover
+StratumToGenus [modify to test what form the stratum is in -- tallied or not]
+UnTally
+
+(***** Lefschetz` context *****
+
+=== Helper ===
+
+LefschetzCombine
+LefschetzNumbers
+
+(***** `Lefschetz`Tests context *****
+
+singularitytostring (helper)
+lefschetztostring (helper)
+lcmtostring (helper)
+MinimumSingularitiesQ (helper)
+SingularityPermutationsAQ (helper)
+SingularityPermutationsBQ (helper)
+SingularityPermutationsBQ1 (helper)
+PureStratumAQ (helper)
+PureStratumBQ (helper)
+AlmostPureStratumAQ (helper)
+AlmostPureStratumBQ (helper)
+StratumOrbitsTestQ (helper)
+LefschetzNumbersTestQ
+TestListQ (helper)
+TestPositiveQ (helper)
+TestNegativeQ (helper)
+
+***** `Lefschetz`Tests context *****)
+
+(***** `Lefschetz`Orbits context *****
+
+=== Orbit structure (Lefschetz`Orbits`) ===
+
+allpossibilities (helper)
+sumorbits (helper)
+groupbypartition (helper)
+StratumOrbits
+SingularStratum (helper)
+Regular (helper)
+Singular (helper)
+SingularPermutations (helper)
+SingularCyclic (helper)
+StratumOrbitsTable
+
+***** `Lefschetz`Orbits context *****)
+
+***** Lefschetz` context *****)
+
+
+(***** Homology` context *****
+
+Helper:
+
+iDehnA (helper)
+iDehnB (helper)
+iDehnC (helper)
+
+DehnTwist
+HomologyAction
+
+***** Homology` context *****)
