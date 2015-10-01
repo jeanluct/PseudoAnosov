@@ -137,7 +137,10 @@ Options[PerronRoot] = Options[NSolve]
 
 
 (* Test for the Perron root *)
-PseudoAnosovPerronRootQ[p_,lmax___:0,opts:OptionsPattern[]] := Module[
+(* The three underscores for lmax match 0 or more arguments.
+   This is needed to get to the optional pattern arguments
+   if lmax is omitted. *)
+PseudoAnosovPerronRootQ[p_,lmax___,opts:OptionsPattern[]] := Module[
     {prl, pr, degen, testdegen},
     If[PolynomialDegree[p] < 2, Return[False]];
     degen = OptionValue[EqualityTolerance];
@@ -157,7 +160,7 @@ PseudoAnosovPerronRootQ[p_,lmax___:0,opts:OptionsPattern[]] := Module[
     If[!testdegen[Abs[pr-1]], Return[False]];
     (* Second criterion: largest eigenvalue is separated from the second *)
     If[!testdegen[pr - Abs[prl[[2]]]], Return[False]];
-    If[lmax != 0,
+    If[{lmax} =!= {}, (* lmax is empty if it was not included as argument *)
         (* Third criterion: largest eigenvalue is less than lmax *)
         If[!testdegen[Abs[lmax] - pr], Return[False]];
     ];
