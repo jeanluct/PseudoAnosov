@@ -31,6 +31,8 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 
 - `StrataList[g]` gives the list of all strata for a closed surface of genus `g>1`.  Each stratum in the list is of the form `{k_1,...,k_m}`, where `k_i` is the degree of each singularity, and the sum over the `k_i` gives -2(Euler Characteristic).  Use `Tally/@StrataList[g]` to group singularities by multiplicity.
 
+- `StrataListTestTable[P,S]` runs all tests for a list of polynomials `P` and a list of strata `S` for a given surface.  The results are displayed in several tables, with tabs giving the reason why each polynomial was rejected for each stratum.
+
 - `StratumDoubleCover[S]` gives the stratum corresponding to the orientating double-cover of the stratum `S={k_1,...,k_m}`.
 
 - `StratumToGenus[S]` gives the genus of the surface containing a stratum `S={k_1,...,k_m}`.
@@ -97,6 +99,12 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 - `iGroupByPartition`
 - `iSingularCyclic`
 - `iSumOrbits`
+
+### ``DisplayResults`` context
+
+- `iAllowableStrata`
+- `iResultsTable`
+- `iScoreTable`
 
 ### ``Homology`` context
 

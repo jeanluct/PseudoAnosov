@@ -70,6 +70,8 @@ DehnTwist::usage = "DehnTwist[i,{a,b}] applies the Dehn twist i to the curve wit
 
 HomologyAction::usage = "HomologyAction[{i1,i2,...}] returns the matrix of the action on homology of a sequence of Dehn twists {i1,i2,...}.  (See DehnTwist for a description of the generators.)  HomologyAction[{i1,i2,...},g] specifies the genus g explictly, which is otherwise taken as small as possible.  The option BasisOrder can be set to \"abab\" or \"aabb\" to specify whether the standard basis for homology should be ordered by hole or by type."
 
+StrataListTestTable::usage = "StrataListTestTable[P,S] runs all tests for a list of polynomials P and a list of strata S for a given surface.  The results are displayed in several tables, with tabs giving the reason why each polynomial was rejected for each stratum."
+
 
 (*
    Options
@@ -88,6 +90,8 @@ MaxLefschetz::usage = "MaxLefschetz is an option to LefschetzNumbersTestQ and St
 PerronRootSign::usage = "PerronRootSign is an option to StratumOrbits (Lefschetz numbers form) to specify whether the Perron root is positive or negative.  Set to Automatic to try and guess by looking at the last two Lefschetz numbers (default Automatic)."
 
 BasisOrder::usage = "BasisOrder is an option to HomologyAction: set to \"abab\" or \"aabb\" to specify whether the standard basis for homology should be ordered by hole or by type."
+
+ResultsByPolynomial::usage = "ResultsByPolynomial is an option to StrataListTestTable to specify the detailed display of results for each polynomial (default True).";
 
 (* Rule labels for orbit structure of a stratum *)
 Polynomial::usage = "Polynomial is a rule label to specify the polynomial in the output of StratumOrbits."
@@ -975,6 +979,66 @@ End[(* "`Orbits`" *)]
 End[(* "`Lefschetz`" *)]
 
 
+Begin["`DisplayResults`"]
+
+
+iScoreTable[t_List] :=
+    Framed[TableForm[
+        Tally[Sort[(StringCases[#1[[2]],
+            RegularExpression["^[A-Za-z_0-9()]+(?=:?)"]] &) /@ Flatten[t, 1]]]
+    ], Background -> LightRed, FrameStyle -> None]
+
+
+iResultsTable[P_, S_List, t_List] := Module[{r},
+    TabView[Flatten[
+        Table[{
+            If[Count[t[[k, All, 2]], "Allowable"] > 0,
+            Style[ToString[k], Bold, FontFamily -> "Helvetica"],
+            Style[ToString[k], FontFamily -> "Helvetica"]] ->
+                Column[{Framed[P[[k]], Background -> White, FrameStyle -> None],
+                    Grid[Table[
+                        {S[[j]],
+                         If[(r = t[[k,j,2]]) == "Allowable", Style[r,Bold], r]
+                        }, {j, Length[S]}
+                    ],
+                Alignment -> Left]}]
+    }, {k, Length[P]}]]]]
+
+
+iAllowableStrata[P_List, S_List, t_List] := Module[{st},
+    Framed[Grid[
+        Table[{P[[k]],
+            Column[st = Pick[S, (#1[[1]] &) /@ t[[k]]];
+            If[st == {}, {Style["none", Italic]}, st]]},
+        {k, Length[t]}],
+        Spacings -> {2, 1}, Alignment -> {Left, Top}],
+        Background -> LightGreen, FrameStyle -> None]]
+
+
+(* TODO: Take genus g for second option instead of S *)
+StrataListTestTable[P_List, S_List, opts:OptionsPattern[]] := Module[
+    {t, rt, opts2},
+    opts2 = FilterRules[{opts}, Options[LefschetzNumbersTestQ]];
+    t = Table[
+        (LefschetzNumbersTestQ[#1, P[[k]],
+        GiveReasonForRejection -> True, Sequence @@ opts2] &) /@ S,
+    {k, Length[P]}];
+    If[OptionValue[ResultsByPolynomial],
+        rt = {iAllowableStrata[P,S,t], iResultsTable[P,S,t], iScoreTable[t]}
+    , (* else *)
+        rt = {iAllowableStrata[P,S,t], iScoreTable[t]}
+    ];
+    Print[Column[rt, Left, 1.5]];
+    Select[Table[{P[[k]], Pick[S, #[[1]]& /@ t[[k]]]}, {k,Length[P]}],
+        #[[2]] != {} &]
+]
+Options[StrataListTestTable] =
+    Join[{ResultsByPolynomial -> True}, Options[LefschetzNumbersTestQ]];
+
+
+End[(* "`DisplayResults`" *)]
+
+
 Begin["`Homology`"]
 
 (*
@@ -1050,7 +1114,7 @@ HomologyAction[ii_List, genus_Integer:0, OptionsPattern[]] := Module[
     ,
         (* Order of rows/columns : ab ab ab ab *)
         sub = Flatten @
-            Table[{a[k] -> ab[2k-1], b[k] -> ab[2k], ap[k] -> abp[2k-1], 
+            Table[{a[k] -> ab[2k-1], b[k] -> ab[2k], ap[k] -> abp[2k-1],
                 bp[k] -> abp[2k]}, {k,g}]
     ];
 
