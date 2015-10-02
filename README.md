@@ -64,7 +64,7 @@ In[8]:= StratumOrbitsTable[so[[1]]]
 
 Out[8]=
 ```
-![output of StratumOrbitsTable[so[[1]]]](http://i62.tinypic.com/23w1dw0.png)
+![output of StratumOrbitsTable[so[[1]]]](/images/sotable.png/)
 
 The table shows the polynomial and its Perron root.  The stratum is `4^1` or `{{4,1}}`, which means degree `4` with multiplicity `1`, i.e., the same as `{4}`.  There is thus only one singularity, so the permutation of singularities by the map can only be `{1}`.  The singularity has six prongs or separatrices, 3 of which are labeled 'ingoing' and the other 3 'outgoing'.  These ingoing/outgoing separatrices are permuted as `{2,3,1}` by the (hypothetical) pseudo-Anosov map.  The table then gives Lefschetz number sequences for iterates `n` of the map.  The last row gives the number of regular orbits (`#ro`).  We see that there are no regular fixed points (`n=1`), one period-2 orbit (`n=2`), and so on.  A pseudo-Anosov map having this polynomial does exist, and we just deduced that it must have the minimum dilatation for a genus 2 surface, as was first shown by Zhirov (1995), since there are no candidate polynomials with a lower dilatation.
 
