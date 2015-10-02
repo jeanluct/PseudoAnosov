@@ -35,7 +35,7 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 
 - `StratumDoubleCover[S]` gives the stratum corresponding to the orientating double-cover of the stratum `S={k_1,...,k_m}`.
 
-- `StratumToGenus[S]` gives the genus of the surface containing a stratum `S={k_1,...,k_m}`.
+- `StratumToGenus[S]` gives the genus of the surface containing a stratum `S={k_1,...,k_m}`, or in tallied form giving singularities and their multiplicity `S={{k_1,m_1},...,{k_n,m_n}}`.
 
 - `StratumOrbits[S,P]` returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial `P` on stratum `S`.  Returns an empty list if this proves impossible.  `StratumOrbits[S,L]` does the same for a list of Lefschetz numbers `L`.
 

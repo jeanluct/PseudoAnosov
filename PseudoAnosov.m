@@ -44,7 +44,7 @@ StrataList::usage = "StrataList[g] gives the list of all strata for a closed sur
 
 StratumDoubleCover::usage := "StratumDoubleCover[S] gives the stratum corresponding to the orientating double-cover of the stratum S={k_1,...,k_m}."
 
-StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k_1,...,k_m}."
+StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k_1,...,k_m}, or in tallied form giving singularities and their multiplicity S={{k_1,m_1},...,{k_n,m_n}}."
 
 UnTally::usage = "UnTally[L] where L is a tallied list (see Tally) undoes Tally, or leaves L alone if already untallied."
 
