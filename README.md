@@ -6,7 +6,7 @@ This package is an extension of the code used in papers by [Erwan Lanneau][1] an
 
 See the [complete list of functions](/functions.md/) in the PseudoAnosov package.  There are also several sample notebooks in the repository.
 
-### A Sample Mathematica Session
+### A sample Mathematica session
 
 First we load the package:
 ```mathematica
