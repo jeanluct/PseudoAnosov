@@ -1,113 +1,100 @@
 # PseudoAnosov Mathematica Package
 
-The PseudoAnosov package consists of Mathematica functions for
-manipulating characteristic polynomials of pseudo-Anosov maps.
+The PseudoAnosov package contains Mathematica functions for extracting
+properties of characteristic polynomials of pseudo-Anosov maps.  The
+goal is to determine whether a given polynomial is *allowable* on a
+given stratum.  A stratum is a collection of singularities for a
+closed surface of genus *g*.  A polynomial is allowable if it arises
+as the characteristic polynomial associated with a pseudo-Anosov map
+on that surface, where the map preserves the singularities (up to
+permutations).  Most of the functions assume that the pseudo-Anosov
+map stabilizes an *orientable* foliation, so the singularities must
+all have even degree.
 
-## Main functions
+This package is an extension of the code used in papers by [Erwan
+Lanneau][1] and [Jean-Luc Thiffeault][2] to place bounds on the lowest
+dilatation on [closed surfaces][3] and [braids][4].  A simplified
+version was included as part of the latter paper as
+`PseudoAnosovLite`.
 
-- `DehnTwist[i,{a,b}]` applies the Dehn twist `i` to the curve with homology `{a,b}` on a closed surface of genus `g`.  Here `a` and `b` are lists of length `g` and represent the coefficients in the standard homology basis.  The Dehn twists are the standard "Lickorish generators", numbers from `1` to `3g-1`, with the sign giving the direction of the twist.  `DehnTwist[{i1,i2,...},{a,b}]` applies successive generators starting from the first element of the list.
+## A Sample Mathematica Session
 
-- `HomologyAction[{i1,i2,...}]` returns the matrix of the action on homology of a sequence of Dehn twists `{i1,i2,...}`.  (See `DehnTwist` for a description of the generators.)  `HomologyAction[{i1,i2,...},g]` specifies the genus `g` explictly, which is otherwise taken as small as possible.  The option `BasisOrder` can be set to `"abab"` or `"aabb"` to specify whether the standard basis for homology should be ordered by hole or by type.
+First we load the package:
+```mathematica
+In[1]:= <<PseudoAnosov.m
+```
+Let's start with the torus, where we are dealing with Anosov maps (no singularities).  We can list all the reciprocal monic polynomials (with integer coefficients) with dilatation less than 3:
+```mathematica
+In[2]:= P = ReciprocalPolynomialBoundedList[x,2,3]
 
-- `LefschetzCombine[L1,L2,...]` adds lists of Lefschetz number.  If they are not the same length, then the blocks are repeated to the length of the longest list. `LefschetzCombine[L1,L2,...,Lm,n]` caps the total length at an integer `n`.
+                    2
+Out[2]= {1 - 3 x + x }
+```
+There is only one such polynomial, and it gives the lowest dilatation on that surface.
 
-- `LefschetzNumbers[P,k]`, where `P` is the characteristic polynomial of some matrix `M`, returns the Lefschetz number `2-Tr[M^k]`.  `LefschetzNumbers[P,{k2}]` returns a list of Lefschetz numbers `2-Tr[M^k]` for `1 <= k <= k2`.  `LefschetzNumbers[P,{k1,k2}]` returns a list of Lefschetz numbers `2-Tr[M^k]` for `k1 <= k <= k2`.
+Genus 2 surfaces are more interesting.  First we can list all the possible strate (singularity data) for the case were the foliation is orientable:
+```mathematica
+In[3]:= s = OrientableStrataList[2]
 
-- `LefschetzNumbersSingularities[k,m,prs]`, where `k` and `m` are integers, lists all possible Lefschetz number sequences for `m` singularities of degree `k` (`m` defaults to `1`).  The sign of the Perron root is given by `prs` (default `-1`).
+Out[3]= {{4}, {2, 2}}
+```
+There are two strata, one with a degree-4 singularity (6 prongs), the other with two degree-2 singularities (4 prongs).  The sum of the degrees in each case is `4=4g-4`, where `g=2` is the genus.  Next we find all monic reciprocal polynomials of degree `2g=4` with dilatations less than 1.75:
+```mathematica
+In[4]:= P = ReciprocalPolynomialBoundedList[x,4,1.75]
 
-- `LefschetzNumbersSingularitiesStratum[S,prs]`, where `S` is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  `S` can be specified as an explicit list (i.e., `{4,2,2,2}`) or in tallied form (`{{4,1},{2,3}}`).  The sign of the Perron root is given by `prs` (default `-1`).
+                  2    3    4
+Out[4]= {1 - x - x  - x  + x }
+```
+There is only one such polynomial.  Its root with the largest magnitude (Perron root) is
+```mathematica
+In[5]:= PerronRoot /@ P
 
-- `LefschetzNumbersTestQ[S,P]` returns `True` if the polynomial `P` is compatible with the stratum `S`.  Possible options are `GiveReasonForRejection` (default `False`), `MaxIterate` (default `1`), and `MaxLefschetz` (default `50`).
+Out[5]= {1.72208}
+```
+Let's see if this polynomial is a good candidate for a pseudo-Anosov map.  The command `StratumOrbits` tries to find a set of regular periodic orbits that is compatible with a polynomial on a given stratum.  If we try the polynomial `P[[1]]` on the second stratum `s[[2]]`,
+```mathematica
+In[6]:= StratumOrbits[s[[2]],P[[1]]]
 
-- `LefschetzRegularOrbits[L]`, where `L` is a list of Lefschetz numbers, returns the list of regular periodic orbits compatible with `L`, unless an incompatible orbit is detected, in which cases the function stops and returns what it found.  The sign of the Perron root can be specified by the option `PerronRootSign` (default `Automatic`).
+Out[6]= {}
+```
+we get nothing, suggesting that this polynomial is not associated with any pseudo-Anosov maps on the stratum `s[[2]]={2,2}`.  However, on the stratum `s[[1]]` we get
+```mathematica
+In[7]:= so = StratumOrbits[s[[1]],P[[1]]]
 
-- `OrientableStrataList[g]` gives the list of orientable strata for a closed surface of genus `g>1`.  Each stratum in the list is of the form `{k1,...,km}`, where `ki` is the (even) degree of each singularity, and the sum over the `ki` gives -2(Euler Characteristic).  Use `Tally/@OrientableStrataList[g]` to group singularities by multiplicity.
+                                 2    3    4
+Out[7]= {{Polynomial -> 1 - x - x  - x  + x , Stratum -> {{4, 1}},
+     SingularitiesPermutation -> {{{1}}},
+     SeparatricesPermutation -> {{{2, 3, 1}}},
+     SingularitiesLefschetzBlock -> {1, 1, -5},
+     RegularOrbits ->
+      {0, 1, 0, 1, 3, 3, 6, 9, 14, 21, 36, 54, 90, 141, 230, 369, 606, 977, 1608, 2619, 4312, 7074, 11682, 19248, 31872, 52731, 87514, 145260, 241644, 402137, 670380, 1118187, 1867560, 3121221, 5221938, 8742312, 14648958, 24562068, 41214696, 69199515, 116263056, 195445504, 328749954, 553264722, 931601482, 1569414123, 2645169030, 4460292930, 7524259626, 12698241600}}}
+```
+This is a candidate pseudo-Anosov.  We can present the information better with
+```mathematica
+In[8]:= StratumOrbitsTable[so[[1]]]
 
-- `PolynomialBoundedList[x,n,r,a[n]]` returns a list of polynomials `x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[n-2] x^2 + a[n-1] x + a[n]` with Perron root less than `r`.  For `n` even, only one of each polynomial pair `P(-x)=P(x)` is listed.  If not specified, `a[n]` (determinant) defaults to `1`.
+Out[8]=
+```
+![output of StratumOrbitsTable[so[[1]]]](http://i62.tinypic.com/23w1dw0.png)
 
-- `PseudoAnosovPerronRootQ[P]` returns `True` if the largest root of the polynomial `P` is nondegenerate (in magnitude) and real.  `PseudoAnosovPerronRootQ[P,xmax]` also returns `False` unless the the Perron root is less than `xmax` (in magnitude).
+The table shows the polynomial and its Perron root.  The stratum is `{{4,1}}`, which means degree `4` with multiplicity `1`.  There is thus only one singularity, so the permutation of singularities by the map can only be `{1}`.  The singularity has six prongs or separatrices, 3 of which are labeled 'outgoing' and the other 3 'ingoing'.  These ingoing/outgoing separatrices are permuted as `{2,3,1}` by the (hypothetical) pseudo-Anosov map.  The table then gives Lefschetz number sequences for iterates `n` of the map.  The last row gives the number of regular orbits (`#ro`).  We see that there are no regular fixed points (`n=1`), one period-2 orbit (`n=2`), and so on.  A pseudo-Anosov map having this polynomial does exist, and we just deduced that it must have the minimum dilatation for a genus 2 surface, as was first shown by Zhirov (1995), since there are no candidate polynomials with a lower dilatation.
 
-- `ReciprocalPolynomialBoundedList[x,n,r]` returns a list of reciprocal polynomials `x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1` with Perron root less than `r`.  For `n` even, only one of each polynomial pair `P(-x)=P(x)` is listed.
+See the [complete list of functions](/functions/) in the PseudoAnosov package.  There are also several sample notebooks in the repository.
 
-- `StrataList[g]` gives the list of all strata for a closed surface of genus `g>1`.  Each stratum in the list is of the form `{k1,...,km}`, where `ki` is the degree of each singularity, and the sum over the `ki` gives -2(Euler Characteristic).  Use `Tally/@StrataList[g]` to group singularities by multiplicity.
+### License
 
-- `StrataListTestTable[P,S]` runs all tests for a list of polynomials `P` and a list of strata `S` for a given surface.  The results are displayed in several tables, with tabs giving the reason why each polynomial was rejected for each stratum.
+PseudoAnosov is released under the [GNU General Public License v3][14].  See [COPYING][15] and [LICENSE][16].
 
-- `StratumDoubleCover[S]` gives the stratum corresponding to the orientating double-cover of the stratum `S={k1,...,km}`.
+### Support
 
-- `StratumToGenus[S]` gives the genus of the surface containing a stratum `S={k1,...,km}`, or in tallied form giving singularities and their multiplicity `S={{k1,m1},...,{kn,mn}}`.
+The development of PseudoAnosov was supported by the [US National Science Foundation][17], under grants [DMS-0806821][18].
 
-- `StratumOrbits[S,P]` returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial `P` on stratum `S`.  Returns an empty list if this proves impossible.  `StratumOrbits[S,L]` does the same for a list of Lefschetz numbers `L`.
-
-- `StratumOrbitsTable[so]` presents the output of `StratumOrbits` in a table. `StratumOrbitsTable[so,itmax]` displays at most `itmax` iterates.
-
-## Utility functions
-
-- `GuessPerronRootSign[L]` guesses the Perron root sign by checking for alternating Lefschetz numbers in `L`.
-
-- `IrreducibleMatrixQ[M]` returns `True` if the matrix `M` is irreducible.
-
-- `MahlerMeasure[P]` returns the Mahler measure of the polynomial `P`, which is the absolute value of the product of roots outside the unit circle.
-
-- `PerronRoot[P]` returns the largest root (in magnitude) of the polynomial `P`.
-
-- `PolynomialDegree[P]` returns the degree of the polynomial `P(x)`.
-
-- `PolynomialFromTraces[x,T,det]` creates a polynomial of degree `Length[T]+1` from the determinant `det` (defaults to `1`) and a list `T` of traces of powers of its associated matrix.
-
-- `PolynomialRoots[P]` returns the roots of the polynomial `P`, sorted in decreasing order of magnitude.
-
-- `ReciprocalPolynomial[x,n]` returns a reciprocal polynomial `x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1`.  `ReciprocalPolynomial[x,n,c]` uses `c` as the base name for coefficients.  `ReciprocalPolynomial[x,n,{a1,...,a(n/2)}]` uses a list for the coefficient, where `(n/2)` denotes `Floor[n/2]`.
-
-- `ReciprocalPolynomialFromTraces[x,n,T]` creates a reciprocal polynomial of degree `n` from a list of traces of powers of its associated matrix.  `ReciprocalPolynomialFromTraces[x,T]` creates a polynomial of degree `2 Length[T]`.
-
-- `ReciprocalPolynomialQ[P]` returns `True` if `P` is a reciprocal polynomial, i.e. of the form `a[0] x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + a[0]`.
-
-- `TracesPower[P,k]`, where `P` is the characteristic polynomial of some matrix `M`, returns the trace `Tr[M^k]`.  `TracesPower[P,{k2}]` returns a list of traces `Tr[M^k]` for `1 <= k <= k2`.  `TracesPower[P,{k1,k2}]` returns a list of traces `Tr[M^k]` for `k1 <= k <= k2`.
-
-- `UnTally[L]` where `L` is a tallied list (see `Tally`) undoes `Tally`, or leaves `L` alone if already untallied.
-
-## Internal helper functions
-
-### ``Private`` context
-
-- `iPolynomialTracesBounds`
-- `iPolynomialVariable`
-- `iReciprocalPolynomialTracesBounds`
-
-### ``Lefschetz`Tests`` context
-
-- `iAlmostPureStratumAQ`
-- `iAlmostPureStratumBQ`
-- `iLCMToString`
-- `iLefschetzToString`
-- `iMinimumSingularitiesQ`
-- `iPureStratumAQ`
-- `iPureStratumBQ`
-- `iSingularityPermutationsAQ`
-- `iSingularityPermutationsBQ1`
-- `iSingularityPermutationsBQ`
-- `iSingularityToString`
-- `iStratumOrbitsTestQ`
-- `iTestListQ`
-- `iTestNegativeQ`
-- `iTestPositiveQ`
-
-### ``Lefschetz`Orbits`` context
-
-- `iAllPossibilities`
-- `iGroupByPartition`
-- `iSingularCyclic`
-- `iSumOrbits`
-
-### ``DisplayResults`` context
-
-- `iAllowableStrata`
-- `iResultsTable`
-- `iScoreTable`
-
-### ``Homology`` context
-
-- `iDehnA`
-- `iDehnB`
-- `iDehnC`
+[1]: https://www-fourier.ujf-grenoble.fr/~lanneau/
+[2]: http://www.math.wisc.edu/~jeanluc/
+[3]: http://arxiv.org/abs/0905.1302 "On the minimum dilatation of pseudo-Anosov homeomorphisms on surfaces of small genus, Annales de l'Institut Fourier 61, 105–144, 2011"
+[4]: http://arxiv.org/abs/1004.5344 "On the minimum dilatation of braids on the punctured disc, Geometriae Dedicata 152, 165–182, 2011."
+[14]: http://www.gnu.org/licenses/gpl-3.0.html
+[15]: http://github.com/jeanluct/pseudoanosov/raw/master/COPYING
+[16]: http://github.com/jeanluct/pseudoanosov/raw/master/LICENSE
+[17]: http://www.nsf.gov
+[18]: http://www.nsf.gov/awardsearch/showAward?AWD_ID=0806821
