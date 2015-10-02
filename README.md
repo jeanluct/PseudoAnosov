@@ -2,7 +2,9 @@
 
 The PseudoAnosov package contains Mathematica functions for extracting properties of characteristic polynomials of pseudo-Anosov maps.  The goal is to determine whether a given polynomial is *allowable* on a given stratum.  A stratum is a collection of singularities for a closed surface of genus *g*.  A polynomial is allowable if it arises as the characteristic polynomial associated with a pseudo-Anosov map on that surface, where the map preserves the singularities (up to permutations).  Most of the functions assume that the pseudo-Anosov map stabilizes an *orientable* foliation, so the singularities must all have even degree.
 
-This package is an extension of the code used in papers by [Erwan Lanneau][1] and [Jean-Luc Thiffeault][2] to place bounds on the lowest dilatation on [closed surfaces][3] and [braids][4].  A simplified version was included as part of the latter paper as PseudoAnosovLite.
+This package is an extension of the code used in papers by [Erwan Lanneau][1] and [Jean-Luc Thiffeault][2] to place bounds on the lowest dilatation on [closed surfaces][3] and [braids][4].  A minimal version was included as part of the latter paper as [PseudoAnosovLite](http://www.math.wisc.edu/~jeanluc/pubs/braids_mindil.zip).
+
+The PseudoAnosov package is maintained by [Jean-Luc Thiffeault][2].
 
 See the [complete list of functions](/functions.md/) in the PseudoAnosov package.  There are also several sample notebooks in the repository.
 
