@@ -1,20 +1,8 @@
 # PseudoAnosov Mathematica Package
 
-The PseudoAnosov package contains Mathematica functions for extracting
-properties of characteristic polynomials of pseudo-Anosov maps.  The
-goal is to determine whether a given polynomial is *allowable* on a
-given stratum.  A stratum is a collection of singularities for a
-closed surface of genus *g*.  A polynomial is allowable if it arises
-as the characteristic polynomial associated with a pseudo-Anosov map
-on that surface, where the map preserves the singularities (up to
-permutations).  Most of the functions assume that the pseudo-Anosov
-map stabilizes an *orientable* foliation, so the singularities must
-all have even degree.
+The PseudoAnosov package contains Mathematica functions for extracting properties of characteristic polynomials of pseudo-Anosov maps.  The goal is to determine whether a given polynomial is *allowable* on a given stratum.  A stratum is a collection of singularities for a closed surface of genus *g*.  A polynomial is allowable if it arises as the characteristic polynomial associated with a pseudo-Anosov map on that surface, where the map preserves the singularities (up to permutations).  Most of the functions assume that the pseudo-Anosov map stabilizes an *orientable* foliation, so the singularities must all have even degree.
 
-This package is an extension of the code used in papers by [Erwan
-Lanneau][1] and [Jean-Luc Thiffeault][2] to place bounds on the lowest
-dilatation on [closed surfaces][3] and [braids][4].  A simplified
-version was included as part of the latter paper as PseudoAnosovLite.
+This package is an extension of the code used in papers by [Erwan Lanneau][1] and [Jean-Luc Thiffeault][2] to place bounds on the lowest dilatation on [closed surfaces][3] and [braids][4].  A simplified version was included as part of the latter paper as PseudoAnosovLite.
 
 See the [complete list of functions](/functions.md/) in the PseudoAnosov package.  There are also several sample notebooks in the repository.
 
@@ -24,7 +12,7 @@ First we load the package:
 ```mathematica
 In[1]:= <<PseudoAnosov.m
 ```
-Let's start with the torus, where we are dealing with Anosov maps (no singularities).  We can list all the reciprocal monic polynomials (with integer coefficients) with dilatation less than 3:
+Let's start with the torus (genus `g=1`), where we are dealing with Anosov maps (no singularities).  We can list all the reciprocal monic polynomials of degree `2g=2` (with integer coefficients) with dilatation less than 3:
 ```mathematica
 In[2]:= P = ReciprocalPolynomialBoundedList[x,2,3]
 
@@ -58,7 +46,7 @@ In[6]:= StratumOrbits[s[[2]],P[[1]]]
 
 Out[6]= {}
 ```
-we get nothing, suggesting that this polynomial is not associated with any pseudo-Anosov maps on the stratum `s[[2]]={2,2}`.  However, on the stratum `s[[1]]` we get
+we get nothing, suggesting that this polynomial is not associated with any pseudo-Anosov maps on the stratum `s[[2]]={2,2}`.  However, on the stratum `s[[1]]={4}` we get
 ```mathematica
 In[7]:= so = StratumOrbits[s[[1]],P[[1]]]
 
@@ -78,7 +66,7 @@ Out[8]=
 ```
 ![output of StratumOrbitsTable[so[[1]]]](http://i62.tinypic.com/23w1dw0.png)
 
-The table shows the polynomial and its Perron root.  The stratum is `{{4,1}}`, which means degree `4` with multiplicity `1`.  There is thus only one singularity, so the permutation of singularities by the map can only be `{1}`.  The singularity has six prongs or separatrices, 3 of which are labeled 'outgoing' and the other 3 'ingoing'.  These ingoing/outgoing separatrices are permuted as `{2,3,1}` by the (hypothetical) pseudo-Anosov map.  The table then gives Lefschetz number sequences for iterates `n` of the map.  The last row gives the number of regular orbits (`#ro`).  We see that there are no regular fixed points (`n=1`), one period-2 orbit (`n=2`), and so on.  A pseudo-Anosov map having this polynomial does exist, and we just deduced that it must have the minimum dilatation for a genus 2 surface, as was first shown by Zhirov (1995), since there are no candidate polynomials with a lower dilatation.
+The table shows the polynomial and its Perron root.  The stratum is `4^1` or `{{4,1}}`, which means degree `4` with multiplicity `1`, i.e., the same as `{4}`.  There is thus only one singularity, so the permutation of singularities by the map can only be `{1}`.  The singularity has six prongs or separatrices, 3 of which are labeled 'ingoing' and the other 3 'outgoing'.  These ingoing/outgoing separatrices are permuted as `{2,3,1}` by the (hypothetical) pseudo-Anosov map.  The table then gives Lefschetz number sequences for iterates `n` of the map.  The last row gives the number of regular orbits (`#ro`).  We see that there are no regular fixed points (`n=1`), one period-2 orbit (`n=2`), and so on.  A pseudo-Anosov map having this polynomial does exist, and we just deduced that it must have the minimum dilatation for a genus 2 surface, as was first shown by Zhirov (1995), since there are no candidate polynomials with a lower dilatation.
 
 ### License
 
