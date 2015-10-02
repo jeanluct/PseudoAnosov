@@ -24,7 +24,7 @@ MahlerMeasure::usage = "MahlerMeasure[P] returns the Mahler measure of the polyn
 
 TracesPower::usage = "TracesPower[P,k], where P is the characteristic polynomial of some matrix M, returns the trace Tr[M^k].  TracesPower[P,{k2}] returns a list of traces Tr[M^k] for 1 <= k <= k2.  TracesPower[P,{k1,k2}] returns a list of traces Tr[M^k] for k1 <= k <= k2."
 
-ReciprocalPolynomial::usage = "ReciprocalPolynomial[x,n] returns a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1.  ReciprocalPolynomial[x,n,c] uses c as the base name for coefficients.  ReciprocalPolynomial[x,n,{a_1,...,a_(n/2)}] uses a list for the coefficient, where (n/2) denotes Floor[n/2]."
+ReciprocalPolynomial::usage = "ReciprocalPolynomial[x,n] returns a reciprocal polynomial x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1.  ReciprocalPolynomial[x,n,c] uses c as the base name for coefficients.  ReciprocalPolynomial[x,n,{a1,...,a(n/2)}] uses a list for the coefficient, where (n/2) denotes Floor[n/2]."
 
 ReciprocalPolynomialQ::usage = "ReciprocalPolynomialQ[P] returns True if P is a reciprocal polynomial, i.e. of the form a[0] x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + a[0]."
 
@@ -38,13 +38,13 @@ ReciprocalPolynomialBoundedList::usage = "ReciprocalPolynomialBoundedList[x,n,r]
 
 IrreducibleMatrixQ::usage = "IrreducibleMatrixQ[M] returns True if the matrix M is irreducible."
 
-OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a closed surface of genus g>1.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the (even) degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity."
+OrientableStrataList::usage = "OrientableStrataList[g] gives the list of orientable strata for a closed surface of genus g>1.  Each stratum in the list is of the form {k1,...,km}, where ki is the (even) degree of each singularity, and the sum over the ki gives -2(Euler Characteristic).  Use Tally/@OrientableStrataList[g] to group singularities by multiplicity."
 
-StrataList::usage = "StrataList[g] gives the list of all strata for a closed surface of genus g>1.  Each stratum in the list is of the form {k_1,...,k_m}, where k_i is the degree of each singularity, and the sum over the k_i gives -2(Euler Characteristic).  Use Tally/@StrataList[g] to group singularities by multiplicity."
+StrataList::usage = "StrataList[g] gives the list of all strata for a closed surface of genus g>1.  Each stratum in the list is of the form {k1,...,km}, where ki is the degree of each singularity, and the sum over the ki gives -2(Euler Characteristic).  Use Tally/@StrataList[g] to group singularities by multiplicity."
 
-StratumDoubleCover::usage := "StratumDoubleCover[S] gives the stratum corresponding to the orientating double-cover of the stratum S={k_1,...,k_m}."
+StratumDoubleCover::usage := "StratumDoubleCover[S] gives the stratum corresponding to the orientating double-cover of the stratum S={k1,...,km}."
 
-StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k_1,...,k_m}, or in tallied form giving singularities and their multiplicity S={{k_1,m_1},...,{k_n,m_n}}."
+StratumToGenus::usage = "StratumToGenus[S] gives the genus of the surface containing a stratum S={k1,...,km}, or in tallied form giving singularities and their multiplicity S={{k1,m1},...,{kn,mn}}."
 
 UnTally::usage = "UnTally[L] where L is a tallied list (see Tally) undoes Tally, or leaves L alone if already untallied."
 

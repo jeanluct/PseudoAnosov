@@ -21,7 +21,7 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 
 - `LefschetzRegularOrbits[L]`, where `L` is a list of Lefschetz numbers, returns the list of regular periodic orbits compatible with `L`, unless an incompatible orbit is detected, in which cases the function stops and returns what it found.  The sign of the Perron root can be specified by the option `PerronRootSign` (default `Automatic`).
 
-- `OrientableStrataList[g]` gives the list of orientable strata for a closed surface of genus `g>1`.  Each stratum in the list is of the form `{k_1,...,k_m}`, where `k_i` is the (even) degree of each singularity, and the sum over the `k_i` gives -2(Euler Characteristic).  Use `Tally/@OrientableStrataList[g]` to group singularities by multiplicity.
+- `OrientableStrataList[g]` gives the list of orientable strata for a closed surface of genus `g>1`.  Each stratum in the list is of the form `{k1,...,km}`, where `ki` is the (even) degree of each singularity, and the sum over the `ki` gives -2(Euler Characteristic).  Use `Tally/@OrientableStrataList[g]` to group singularities by multiplicity.
 
 - `PolynomialBoundedList[x,n,r,a[n]]` returns a list of polynomials `x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[n-2] x^2 + a[n-1] x + a[n]` with Perron root less than `r`.  For `n` even, only one of each polynomial pair `P(-x)=P(x)` is listed.  If not specified, `a[n]` (determinant) defaults to `1`.
 
@@ -29,13 +29,13 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 
 - `ReciprocalPolynomialBoundedList[x,n,r]` returns a list of reciprocal polynomials `x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1` with Perron root less than `r`.  For `n` even, only one of each polynomial pair `P(-x)=P(x)` is listed.
 
-- `StrataList[g]` gives the list of all strata for a closed surface of genus `g>1`.  Each stratum in the list is of the form `{k_1,...,k_m}`, where `k_i` is the degree of each singularity, and the sum over the `k_i` gives -2(Euler Characteristic).  Use `Tally/@StrataList[g]` to group singularities by multiplicity.
+- `StrataList[g]` gives the list of all strata for a closed surface of genus `g>1`.  Each stratum in the list is of the form `{k1,...,km}`, where `ki` is the degree of each singularity, and the sum over the `ki` gives -2(Euler Characteristic).  Use `Tally/@StrataList[g]` to group singularities by multiplicity.
 
 - `StrataListTestTable[P,S]` runs all tests for a list of polynomials `P` and a list of strata `S` for a given surface.  The results are displayed in several tables, with tabs giving the reason why each polynomial was rejected for each stratum.
 
-- `StratumDoubleCover[S]` gives the stratum corresponding to the orientating double-cover of the stratum `S={k_1,...,k_m}`.
+- `StratumDoubleCover[S]` gives the stratum corresponding to the orientating double-cover of the stratum `S={k1,...,km}`.
 
-- `StratumToGenus[S]` gives the genus of the surface containing a stratum `S={k_1,...,k_m}`, or in tallied form giving singularities and their multiplicity `S={{k_1,m_1},...,{k_n,m_n}}`.
+- `StratumToGenus[S]` gives the genus of the surface containing a stratum `S={k1,...,km}`, or in tallied form giving singularities and their multiplicity `S={{k1,m1},...,{kn,mn}}`.
 
 - `StratumOrbits[S,P]` returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial `P` on stratum `S`.  Returns an empty list if this proves impossible.  `StratumOrbits[S,L]` does the same for a list of Lefschetz numbers `L`.
 
@@ -57,7 +57,7 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 
 - `PolynomialRoots[P]` returns the roots of the polynomial `P`, sorted in decreasing order of magnitude.
 
-- `ReciprocalPolynomial[x,n]` returns a reciprocal polynomial `x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1`.  `ReciprocalPolynomial[x,n,c]` uses `c` as the base name for coefficients.  `ReciprocalPolynomial[x,n,{a_1,...,a_(n/2)}]` uses a list for the coefficient, where `(n/2)` denotes `Floor[n/2]`.
+- `ReciprocalPolynomial[x,n]` returns a reciprocal polynomial `x^n + a[1] x^(n-1) + a[2] x^(n-2) + ... + a[2] x^2 + a[1] x + 1`.  `ReciprocalPolynomial[x,n,c]` uses `c` as the base name for coefficients.  `ReciprocalPolynomial[x,n,{a1,...,a(n/2)}]` uses a list for the coefficient, where `(n/2)` denotes `Floor[n/2]`.
 
 - `ReciprocalPolynomialFromTraces[x,n,T]` creates a reciprocal polynomial of degree `n` from a list of traces of powers of its associated matrix.  `ReciprocalPolynomialFromTraces[x,T]` creates a polynomial of degree `2 Length[T]`.
 
