@@ -3,7 +3,7 @@
 (*
     PseudoAnosov Package
 
-    https://bitbucket.org/jeanluc/pseudoanosov
+    https://github.com/jeanluct/PseudoAnosov
 
     Copyright 2009-2015 Jean-Luc Thiffeault <jeanluc@math.wisc.edu>
                         Erwan Lanneau       <erwan.lanneau@ujf-grenoble.fr>
