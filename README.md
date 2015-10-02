@@ -16,6 +16,8 @@ Lanneau][1] and [Jean-Luc Thiffeault][2] to place bounds on the lowest
 dilatation on [closed surfaces][3] and [braids][4].  A simplified
 version was included as part of the latter paper as PseudoAnosovLite.
 
+See the [complete list of functions](/functions.md/) in the PseudoAnosov package.  There are also several sample notebooks in the repository.
+
 ### A Sample Mathematica Session
 
 First we load the package:
@@ -78,11 +80,9 @@ Out[8]=
 
 The table shows the polynomial and its Perron root.  The stratum is `{{4,1}}`, which means degree `4` with multiplicity `1`.  There is thus only one singularity, so the permutation of singularities by the map can only be `{1}`.  The singularity has six prongs or separatrices, 3 of which are labeled 'outgoing' and the other 3 'ingoing'.  These ingoing/outgoing separatrices are permuted as `{2,3,1}` by the (hypothetical) pseudo-Anosov map.  The table then gives Lefschetz number sequences for iterates `n` of the map.  The last row gives the number of regular orbits (`#ro`).  We see that there are no regular fixed points (`n=1`), one period-2 orbit (`n=2`), and so on.  A pseudo-Anosov map having this polynomial does exist, and we just deduced that it must have the minimum dilatation for a genus 2 surface, as was first shown by Zhirov (1995), since there are no candidate polynomials with a lower dilatation.
 
-See the [complete list of functions](/functions.md/) in the PseudoAnosov package.  There are also several sample notebooks in the repository.
-
 ### License
 
-PseudoAnosov is released under the [GNU General Public License v3][5].  See [COPYING](\COPYING\) and [LICENSE](\LICENSE\).
+PseudoAnosov is released under the [GNU General Public License v3][5].  See [COPYING](/COPYING/) and [LICENSE](/LICENSE/).
 
 ### Support
 
