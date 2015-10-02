@@ -150,7 +150,7 @@ PseudoAnosovPerronRootQ[p_,lmax___,opts:OptionsPattern[]] := Module[
         Return[True]
     ];
     (* Take the first two roots (presorted by magnitude) *)
-    (* The way options work in Mathematica is tedious: just because I
+    (* The way options work in Mathematica is tedious: just because we
        set the default value to MachinePrecision below, it doesn't
        get passed on to PolynomialRoots automatically. *)
     prl = Take[PolynomialRoots[p,
@@ -187,7 +187,7 @@ TracesPower[p_,mm_List:{10}] := Module[
     n = Length[c]; (* Degree of polynomial *)
     If[Length[mm] == 1, ml = {1,mm[[1]]}, ml = mm];
     (* Recursively compute the traces. *)
-    (*   Note that I used to have Table instead of the Do, but
+    (*   Note that this used to have Table instead of the Do, but
          Mathematica must sometimes construct tables out of order,
          because this sometimes caused a crash. *)
     (* Ideally, the function would not store the T's that are not requested. *)
@@ -311,7 +311,7 @@ Options[PolynomialBoundedList] = Options[PseudoAnosovPerronRootQ]
 IrreducibleMatrixQ[M_List] := Module[{n = Length[M], powmax},
     (* See Ham and Song paper (2007), p. 172; Seneta 73. Theorem 2.8 *)
     powmax = n^2 - 2n + 2;
-    (* I'm not sure it's not better to take the Abs value of the
+    (* Not sure it's not better to take the Abs value of the
        elements.  Depends on what we want. *)
     Fold[#1 && #2 != 0 &, True, Flatten[MatrixPower[M, powmax]]]
 ]
