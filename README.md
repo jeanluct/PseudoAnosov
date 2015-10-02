@@ -14,10 +14,9 @@ all have even degree.
 This package is an extension of the code used in papers by [Erwan
 Lanneau][1] and [Jean-Luc Thiffeault][2] to place bounds on the lowest
 dilatation on [closed surfaces][3] and [braids][4].  A simplified
-version was included as part of the latter paper as
-`PseudoAnosovLite`.
+version was included as part of the latter paper as PseudoAnosovLite.
 
-## A Sample Mathematica Session
+### A Sample Mathematica Session
 
 First we load the package:
 ```mathematica
@@ -79,22 +78,21 @@ Out[8]=
 
 The table shows the polynomial and its Perron root.  The stratum is `{{4,1}}`, which means degree `4` with multiplicity `1`.  There is thus only one singularity, so the permutation of singularities by the map can only be `{1}`.  The singularity has six prongs or separatrices, 3 of which are labeled 'outgoing' and the other 3 'ingoing'.  These ingoing/outgoing separatrices are permuted as `{2,3,1}` by the (hypothetical) pseudo-Anosov map.  The table then gives Lefschetz number sequences for iterates `n` of the map.  The last row gives the number of regular orbits (`#ro`).  We see that there are no regular fixed points (`n=1`), one period-2 orbit (`n=2`), and so on.  A pseudo-Anosov map having this polynomial does exist, and we just deduced that it must have the minimum dilatation for a genus 2 surface, as was first shown by Zhirov (1995), since there are no candidate polynomials with a lower dilatation.
 
-See the [complete list of functions](/functions/) in the PseudoAnosov package.  There are also several sample notebooks in the repository.
+See the [complete list of functions](/functions.md/) in the PseudoAnosov package.  There are also several sample notebooks in the repository.
 
 ### License
 
-PseudoAnosov is released under the [GNU General Public License v3][14].  See [COPYING][15] and [LICENSE][16].
+PseudoAnosov is released under the [GNU General Public License v3][5].  See [COPYING](\COPYING\) and [LICENSE](\LICENSE\).
 
 ### Support
 
-The development of PseudoAnosov was supported by the [US National Science Foundation][17], under grants [DMS-0806821][18].
+The development of PseudoAnosov was supported by the [US National Science Foundation][6], under grants [DMS-0806821][7] and [CMMI-1233935][8].
 
 [1]: https://www-fourier.ujf-grenoble.fr/~lanneau/
 [2]: http://www.math.wisc.edu/~jeanluc/
 [3]: http://arxiv.org/abs/0905.1302 "On the minimum dilatation of pseudo-Anosov homeomorphisms on surfaces of small genus, Annales de l'Institut Fourier 61, 105–144, 2011"
 [4]: http://arxiv.org/abs/1004.5344 "On the minimum dilatation of braids on the punctured disc, Geometriae Dedicata 152, 165–182, 2011."
-[14]: http://www.gnu.org/licenses/gpl-3.0.html
-[15]: http://github.com/jeanluct/pseudoanosov/raw/master/COPYING
-[16]: http://github.com/jeanluct/pseudoanosov/raw/master/LICENSE
-[17]: http://www.nsf.gov
-[18]: http://www.nsf.gov/awardsearch/showAward?AWD_ID=0806821
+[5]: http://www.gnu.org/licenses/gpl-3.0.html
+[6]: http://www.nsf.gov
+[7]: http://www.nsf.gov/awardsearch/showAward?AWD_ID=0806821
+[8]: http://www.nsf.gov/awardsearch/showAward?AWD_ID=1233935
