@@ -37,7 +37,7 @@ manipulating characteristic polynomials of pseudo-Anosov maps.
 
 - `StratumToGenus[S]` gives the genus of the surface containing a stratum `S={k1,...,km}`, or in tallied form giving singularities and their multiplicity `S={{k1,m1},...,{kn,mn}}`.
 
-- `StratumOrbits[S,P]` returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial `P` on stratum `S`.  Returns an empty list if this proves impossible.  `StratumOrbits[S,L]` does the same for a list of Lefschetz numbers `L`.
+- `StratumOrbits[S,P]` returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial `P` on stratum `S`.  Returns an empty list if this proves impossible.  `StratumOrbits[S,L]` does the same for a list of Lefschetz numbers `L`.  Marked points can be specified as "fake singularities" (regular points) such as `{{0,2}}`, or `{{0,2},{0,3}}` to restrict permutations among certain groups.  Since an empty list is not allowed, a torus can be given as a single marked point, `{0}` or `{{0,1}}`.
 
 - `StratumOrbitsTable[so]` presents the output of `StratumOrbits` in a table. `StratumOrbitsTable[so,itmax]` displays at most `itmax` iterates.
 

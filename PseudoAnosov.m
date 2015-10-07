@@ -81,7 +81,7 @@ GuessPerronRootSign::usage = "GuessPerronRootSign[L] guesses the Perron root sig
 
 LefschetzNumbersTestQ::usage = "LefschetzNumbersTestQ[S,P] returns True if the polynomial P is compatible with the stratum S.  Possible options are GiveReasonForRejection (default False), MaxIterate (default 1), and MaxLefschetz (default 50)."
 
-StratumOrbits::usage = "StratumOrbits[S,P] returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial P on stratum S.  Returns an empty list if this proves impossible.\nStratumOrbits[S,L] does the same for a list of Lefschetz numbers L."
+StratumOrbits::usage = "StratumOrbits[S,P] returns a list of possible orbit structure (singular and regular periodic orbits) for the polynomial P on stratum S.  Returns an empty list if this proves impossible.\nStratumOrbits[S,L] does the same for a list of Lefschetz numbers L.\n\nMarked points can be specified as \"fake singularities\" (regular points) such as {{0,2}}, or {{0,2},{0,3}} to restrict permutations among certain groups.  Since an empty list is not allowed, a torus can be given as a single marked point, {0} or {{0,1}}."
 
 LefschetzNumbersSingularitiesStratum::usage = "LefschetzNumbersSingularitiesStratum[S,prs], where S is a list of the degrees of singularities in a stratum, returns a list of all possible Lefschetz number sequences corresponding to the singularities, without taking into account regular orbits.  S can be specified as an explicit list (i.e., {4,2,2,2}) or in tallied form ({{4,1},{2,3}}).  The sign of the Perron root is given by prs (default -1)."
 
@@ -757,6 +757,9 @@ iGroupByPartition[l_, part_] := Module[{g = {}},
    "specific" version is matched first *)
 StratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     {Ls, ro, prs = OptionValue[PerronRootSign], opts2, len},
+    If[s === {} || s === {{}},
+        Message[StratumOrbits::emptystratum]; Abort[]
+    ]
     (* If the sign of the Perron root is unspecified, try and guess *)
     If[prs == Automatic, prs = GuessPerronRootSign[L]];
     Ls = LefschetzNumbersSingularitiesStratum[s,prs];
@@ -777,6 +780,7 @@ StratumOrbits[s_List,L_List, opts:OptionsPattern[]] := Module[
     Join[#[[1]],{RegularOrbits -> #[[2]]}] & /@ ro
 ]
 StratumOrbits::manyallowableperms = "More than one allowable permutation type on stratum `1`."
+StratumOrbits::emptystratum = "Error: Cannot specify empty stratum; use {0} or {{0,1}} for the torus."
 
 
 StratumOrbits[s_List,p_, opts:OptionsPattern[]] := Module[
