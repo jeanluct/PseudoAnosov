@@ -31,7 +31,7 @@ In[3]:= s = OrientableStrataList[2]
 
 Out[3]= {{4}, {2, 2}}
 ```
-There are two strata, one with a degree-4 singularity (6 prongs), the other with two degree-2 singularities (4 prongs).  The sum of the degrees in each case is `4=4g-4`=-2(Euler characteristic), where `g=2` is the genus.  Next we find all monic reciprocal polynomials of degree `2g=4` with dilatations less than 1.75:
+There are two strata, one with a degree-4 singularity (6 prongs), the other with two degree-2 singularities (4 prongs).  The sum of the degrees in each case is `4=4g-4=-2` (Euler characteristic), where `g=2` is the genus.  Next we find all monic reciprocal polynomials of degree `2g=4` with dilatations less than 1.75:
 ```mathematica
 In[4]:= P = ReciprocalPolynomialBoundedList[x,4,1.75]
 
